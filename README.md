@@ -44,3 +44,8 @@ source .venv/bin/activate
 pip install -r requirements.txt
 streamlit run Chatbot.py
 ```
+## Reference
+1. Set up to use Amazon EC2: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/get-set-up-for-amazon-ec2.html
+2. How to Deploy a Streamlit Application on Amazon Linux EC2: https://towardsaws.com/how-to-deploy-a-streamlit-application-on-amazon-linux-ec2-9a71593b434
+3. streamlit: https://streamlit.io/gallery?category=llms 
+
