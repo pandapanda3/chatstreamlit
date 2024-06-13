@@ -1,34 +1,21 @@
-from st_pages import hide_pages
-from time import sleep
 import streamlit as st
+from time import sleep
+from navigation import make_sidebar
 
+make_sidebar()
 
-def log_in():
-    st.session_state["logged_in"] = True
-    hide_pages([])
-    st.success("Logged in!")
-    sleep(0.5)
-    st.switch_page("pages/2Communication.py")
+st.title("Welcome to The Platform")
 
+st.write("Please log in to continue (username `test`, password `test`).")
 
-def log_out():
-    st.session_state["logged_in"] = False
-    st.success("Logged out!")
-    sleep(0.5)
+username = st.text_input("Username")
+password = st.text_input("Password", type="password")
 
-
-if not st.session_state.get("logged_in", False):
-    hide_pages(["1Profile", "2Communication", "3History Conversation"])
-    username = st.text_input("Username", key="username")
-    password = st.text_input("Password", key="password", type="password")
-
+if st.button("Log in", type="primary"):
     if username == "test" and password == "test":
-        st.session_state["logged_in"] = True
-        hide_pages([])
-        st.success("Logged in!")
+        st.session_state.logged_in = True
+        st.success("Logged in successfully!")
         sleep(0.5)
         st.switch_page("pages/2Communication.py")
-
-else:
-    st.write("Logged in!")
-    st.button("log out", on_click=log_out)
+    else:
+        st.error("Incorrect username or password")
