@@ -1,6 +1,7 @@
 import streamlit as st
+from navigation import make_sidebar
 
-
+make_sidebar()
 def main():
     st.set_page_config(
         page_title="Profile",
