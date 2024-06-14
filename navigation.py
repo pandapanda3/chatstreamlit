@@ -1,5 +1,4 @@
 import streamlit as st
-from time import sleep
 from streamlit.runtime.scriptrunner import get_script_run_ctx
 from streamlit.source_util import get_pages
 
@@ -14,13 +13,13 @@ def get_current_page_name():
 
 def make_sidebar():
     with st.sidebar:
-        st.title("💎 Welcome to dentist")
+        st.title("🦷 Welcome to dentist")
         
 
         if st.session_state.get("logged_in", False):
-            st.page_link("pages/1Profile.py", label="Profile", icon="👤")
-            st.page_link("pages/2Communication.py", label="Communication", icon="🕵️")
-            st.page_link("pages/3History Conversation.py", label="History Conversation", icon="💎")
+            st.page_link("pages/1Profile.py", label="Profile", icon="🧑‍‍")
+            st.page_link("pages/2Communication.py", label="Communication", icon="💬")
+            st.page_link("pages/3History Conversation.py", label="History Conversation", icon="📝")
             st.write("")
             st.write("")
 
@@ -36,5 +35,5 @@ def make_sidebar():
 def logout():
     st.session_state.logged_in = False
     st.info("Logged out successfully!")
-    sleep(0.5)
+
     st.switch_page("login.py")
