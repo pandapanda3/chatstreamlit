@@ -1,1 +1,1 @@
-web: streamlit run chatbot.py --server.port $PORT
+web: streamlit run login.py --server.port $PORT
