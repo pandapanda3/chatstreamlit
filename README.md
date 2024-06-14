@@ -16,7 +16,7 @@ Current examples include:
 - Chat with user feedback
 
 ## Demo App
-
+open the link and click the button of Open app: https://dashboard.heroku.com/apps/chatstreamlit
 ### Get an OpenAI API key
 
 You can get your own OpenAI API key by following the following instructions:
