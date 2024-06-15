@@ -13,7 +13,7 @@ def get_connection():
         password=db_secrets["RDS_PASSWORD"],
         database=db_secrets["RDS_DB"],
         port=db_secrets["RDS_PORT"],
-        charset=db_secrets["query"]["charset"]
+        charset=db_secrets["RDS_CHARTSET"]
     )
 
 
