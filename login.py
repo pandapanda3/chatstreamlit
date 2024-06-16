@@ -114,11 +114,15 @@ def show_create_account_form():
 def show_reset_password_form():
     st.write("## Reset Password")
     reset_username = st.text_input("Username for Password Reset", key="reset_username")
-    new_password = st.text_input("New Password", type="password", key="reset_password")
+    new_password = st.text_input("New Password", type="password", key="new_password")
+    new_password_confirm = st.text_input("Confirm New Password", type="password", key="new_password_confirm")
     if st.button("Update Password"):
-        update_password(reset_username, new_password)
-        st.success("Password updated successfully!")
-        st.session_state.show_reset_password_form = False
+        if new_password == new_password_confirm:
+            update_password(reset_username, new_password)
+            st.success("Password updated successfully!")
+            st.session_state.show_reset_password_form = False
+        else:
+            st.error("Passwords do not match. Please try again.")
 
 if 'show_create_account_form' not in st.session_state:
     st.session_state.show_create_account_form = False
