@@ -10,14 +10,14 @@ st.secrets = st.config._parse_toml(secrets_path)
 
 # the data stores in .streamlit/secrets.toml, it's not a good way to expose it to github. It raises security issues.
 def get_connection():
-    db_secrets = st.secrets["mysql"]
+    # db_secrets = st.secrets["mysql"]
     return pymysql.connect(
-        host=db_secrets["RDS_HOST"],
-        user=db_secrets["RDS_USER"],
-        password=db_secrets["RDS_PASSWORD"],
-        database=db_secrets["RDS_DB"],
-        port=db_secrets["RDS_PORT"],
-        charset=db_secrets["RDS_CHARTSET"]
+        host='database-dentist.cx6cggcw84g9.eu-west-2.rds.amazonaws.com',
+        user='admin',
+        password='kcladmin',
+        database='dentist_information',
+        port='3306',
+        charset='utf8mb4'
     )
     # return {
     #     "RDS_HOST": get_ssm_parameter("RDS_HOST"),
