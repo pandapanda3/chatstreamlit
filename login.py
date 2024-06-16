@@ -88,19 +88,56 @@ if st.button("Log in", type="primary"):
         st.switch_page("pages/2Communication.py")
     else:
         st.error("Incorrect username or password")
+st.markdown("""
+    <style>
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+    }
+    .button-container > button {
+        flex: 1;
+        margin: 0 5px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
-if st.button("Create an Account"):
+
+def show_create_account_form():
     st.write("## Create an Account")
-    new_username = st.text_input("New Username")
-    new_password = st.text_input("New Password", type="password")
+    new_username = st.text_input("New Username", key="new_username")
+    new_password = st.text_input("New Password", type="password", key="new_password")
     if st.button("Register"):
         create_user(new_username, new_password)
         st.success("Account created successfully!")
+        st.session_state.show_create_account_form = False
 
-if st.button("Forgot Password"):
+def show_reset_password_form():
     st.write("## Reset Password")
-    reset_username = st.text_input("Username for Password Reset")
-    new_password = st.text_input("New Password", type="password")
+    reset_username = st.text_input("Username for Password Reset", key="reset_username")
+    new_password = st.text_input("New Password", type="password", key="reset_password")
     if st.button("Update Password"):
         update_password(reset_username, new_password)
         st.success("Password updated successfully!")
+        st.session_state.show_reset_password_form = False
+
+if 'show_create_account_form' not in st.session_state:
+    st.session_state.show_create_account_form = False
+
+if 'show_reset_password_form' not in st.session_state:
+    st.session_state.show_reset_password_form = False
+
+st.markdown('<div class="button-container">', unsafe_allow_html=True)
+if st.button("Create an Account"):
+    st.session_state.show_create_account_form = True
+    st.session_state.show_reset_password_form = False
+
+if st.button("Forgot Password"):
+    st.session_state.show_create_account_form = False
+    st.session_state.show_reset_password_form = True
+st.markdown('</div>', unsafe_allow_html=True)
+
+if st.session_state.show_create_account_form:
+    show_create_account_form()
+
+if st.session_state.show_reset_password_form:
+    show_reset_password_form()
