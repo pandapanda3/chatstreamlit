@@ -5,9 +5,6 @@ import bcrypt
 import boto3
 
 
-secrets_path = '/home/ec2-user/chatstreamlit/.streamlit/secrets.toml'
-st.secrets = st.config._parse_toml(secrets_path)
-
 # the data stores in .streamlit/secrets.toml, it's not a good way to expose it to github. It raises security issues.
 def get_connection():
     # db_secrets = st.secrets["mysql"]
