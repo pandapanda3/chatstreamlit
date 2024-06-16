@@ -4,25 +4,25 @@ from navigation import make_sidebar
 import bcrypt
 import boto3
 
-# the data stores in .streamlit/secrets.toml, but it can't be exposed to github. So we need to have another way to approach it.
+# the data stores in .streamlit/secrets.toml, it's not a good way to expose it to github. It raises security issues.
 def get_connection():
-    # db_secrets = st.secrets["mysql"]
-    # return pymysql.connect(
-    #     host=db_secrets["RDS_HOST"],
-    #     user=db_secrets["RDS_USER"],
-    #     password=db_secrets["RDS_PASSWORD"],
-    #     database=db_secrets["RDS_DB"],
-    #     port=db_secrets["RDS_PORT"],
-    #     charset=db_secrets["RDS_CHARTSET"]
-    # )
-    return {
-        "RDS_HOST": get_ssm_parameter("RDS_HOST"),
-        "RDS_PORT": int(get_ssm_parameter("RDS_PORT")),
-        "RDS_DB": get_ssm_parameter("RDS_DB"),
-        "RDS_USER": get_ssm_parameter("RDS_USER"),
-        "RDS_PASSWORD": get_ssm_parameter("RDS_PASSWORD"),
-        "RDS_CHARSET": get_ssm_parameter("RDS_CHARSET")
-    }
+    db_secrets = st.secrets["mysql"]
+    return pymysql.connect(
+        host=db_secrets["RDS_HOST"],
+        user=db_secrets["RDS_USER"],
+        password=db_secrets["RDS_PASSWORD"],
+        database=db_secrets["RDS_DB"],
+        port=db_secrets["RDS_PORT"],
+        charset=db_secrets["RDS_CHARTSET"]
+    )
+    # return {
+    #     "RDS_HOST": get_ssm_parameter("RDS_HOST"),
+    #     "RDS_PORT": int(get_ssm_parameter("RDS_PORT")),
+    #     "RDS_DB": get_ssm_parameter("RDS_DB"),
+    #     "RDS_USER": get_ssm_parameter("RDS_USER"),
+    #     "RDS_PASSWORD": get_ssm_parameter("RDS_PASSWORD"),
+    #     "RDS_CHARSET": get_ssm_parameter("RDS_CHARSET")
+    # }
 
 # store the secret data in aws
 def get_ssm_parameter(name):
