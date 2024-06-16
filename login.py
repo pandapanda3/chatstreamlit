@@ -13,7 +13,7 @@ def get_connection():
         user='admin',
         password='kcladmin',
         database='dentist_information',
-        port='3306',
+        port=3306,
         charset='utf8mb4'
     )
     # return {
@@ -26,10 +26,10 @@ def get_connection():
     # }
 
 # store the secret data in aws
-def get_ssm_parameter(name):
-    ssm = boto3.client('ssm', region_name='London')
-    secret_data_whole = ssm.get_parameter(Name=name, WithDecryption=True)
-    return secret_data_whole['Parameter']['Value']
+# def get_ssm_parameter(name):
+#     ssm = boto3.client('ssm', region_name='London')
+#     secret_data_whole = ssm.get_parameter(Name=name, WithDecryption=True)
+#     return secret_data_whole['Parameter']['Value']
     
 
 def authenticate_user(username, password):
@@ -59,6 +59,17 @@ def create_user(username, password, role='normal'):
     finally:
         connection.close()
 
+def update_password(username, new_password):
+    connection = get_connection()
+    hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+    try:
+        with connection.cursor() as cursor:
+            sql = "UPDATE users SET password = %s WHERE username = %s"
+            cursor.execute(sql, (hashed_password, username))
+            connection.commit()
+    finally:
+        connection.close()
+        
 
 make_sidebar()
 
@@ -77,3 +88,19 @@ if st.button("Log in", type="primary"):
         st.switch_page("pages/2Communication.py")
     else:
         st.error("Incorrect username or password")
+
+if st.button("Create an Account"):
+    st.write("## Create an Account")
+    new_username = st.text_input("New Username")
+    new_password = st.text_input("New Password", type="password")
+    if st.button("Register"):
+        create_user(new_username, new_password)
+        st.success("Account created successfully!")
+
+if st.button("Forgot Password"):
+    st.write("## Reset Password")
+    reset_username = st.text_input("Username for Password Reset")
+    new_password = st.text_input("New Password", type="password")
+    if st.button("Update Password"):
+        update_password(reset_username, new_password)
+        st.success("Password updated successfully!")
