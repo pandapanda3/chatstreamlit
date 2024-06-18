@@ -2,7 +2,6 @@ import streamlit as st
 from navigation import make_sidebar
 from service.generate_conversation import generate_patient_conversation
 from service.mysql import get_connection
-from langchain.memory import ConversationSummaryBufferMemory
 
 # insert message
 def insert_message(session_id, user_id, message, user_role):
@@ -48,11 +47,6 @@ if 'session_id' not in st.session_state:
 
 session_id = st.session_state['session_id']
 
-if 'context_memory' not in st.session_state:
-    
-    st.session_state['context_memory'] = ConversationSummaryBufferMemory()
-
-context_memory = st.session_state['context_memory']
 
 
 if "messages" not in st.session_state:
@@ -73,8 +67,8 @@ if dentist_input := st.chat_input():
     insert_message(session_id, user_id, dentist_input, "dentist")
     
     
-    context_memory.add_message(dentist_input)
-    patient_response = generate_patient_conversation(dentist_input=dentist_input, context=context_memory, openai_api_key=openai_api_key)
+    context = "\n".join([msg["content"] for msg in st.session_state.messages if msg["role"] == "dentist"])
+    patient_response = generate_patient_conversation(dentist_input=dentist_input, context=context, openai_api_key=openai_api_key)
 
     st.session_state.messages.append({"role": "patient", "content": patient_response})
     # show the message in the streamlit
