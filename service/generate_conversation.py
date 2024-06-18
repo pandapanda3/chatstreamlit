@@ -41,15 +41,17 @@ def generate_patient_conversation(dentist_input, context="", openai_api_key=""):
         output_variables=["patient_followup_response"]
     )
     
-    if not context:  # 初始对话
+    if not context:  # initial conversation
         initial_context = "Hi, what can I do for you today?"
-        conversation = chain_one.run(style=patient_style, text=initial_context)
-        response = conversation['patient_initial_response']
-    else:  # 后续对话
+        response = chain_one.run(style=patient_style, text=initial_context)
+        
+    else:
         context = f"{context}\nDentist: {dentist_input}\nPatient:"
-        followup_conversation = chain_two.run(style=patient_style, text=context)
-        response = followup_conversation['patient_followup_response']
-    
+        response = chain_two.run(style=patient_style, text=context)
+        
+    if response.startswith("Patient:"):
+        response = response[len("Patient:"):].strip()
+
     return response
 
 
