@@ -28,7 +28,8 @@ def main():
         return
 
     user_info = st.session_state.user_info
-    user = user_info['username']
+    user_with_quotes = user_info['username']
+    user = user_with_quotes.replace('"', '')
     
     # Profile Header
     st.markdown("<style>.header {text-align: center;}</style>", unsafe_allow_html=True)
@@ -68,7 +69,7 @@ def main():
             insert_suggestion(user, suggestion_content)
             st.success("Suggestion submitted successfully!")
             # Clear the suggestion text
-            st.experimental_rerun()
+            # st.experimental_rerun()
         else:
             st.warning("Please write a suggestion before submitting.")
 
