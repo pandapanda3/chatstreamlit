@@ -42,14 +42,12 @@ current_user = st.session_state.get('user_info', {"user_id": None, "username": "
 user_id = current_user["user_id"]
 user_role = current_user["role"]
 
-if 'session_id' not in st.session_state:
+if 'session_id' not in st.session_state or st.session_state['session_id'] is None:
     st.session_state['session_id'] = generate_session_id()
 
 session_id = st.session_state['session_id']
 
-
-
-if "messages" not in st.session_state:
+if "messages" not in st.session_state or not st.session_state["messages"]:
     st.session_state["messages"] = [{"role": "patient", "content": "Hello, doctor. How are you today?"}]
 
 for msg in st.session_state.messages:

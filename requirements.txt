@@ -7,6 +7,5 @@ trubrics>=1.4.3
 streamlit-feedback
 pymysql
 bcrypt
-boto3
 langchain
 langchain_community

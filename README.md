@@ -1,22 +1,21 @@
-# 🎈 Streamlit + LLM Examples App
+# 🎈 Dental Interaction Simulator
 
-Building LLM apps with Streamlit.
+**Dental Interaction Simulator**
+
+The Dental Interaction Simulator is an advanced training platform designed to enhance the skills of dental professionals through realistic simulations. It allows users to engage in lifelike conversations between dentists and patients, focusing on detailed patient information gathering. The platform utilizes cutting-edge AI technology to generate coherent and natural dialogues, helping trainees practice and improve their communication abilities in a controlled, immersive environment.
 
 ## Overview of the App
 
-This app showcases a growing collection of LLM minimum working examples.
+Current pages include:
 
-Current examples include:
+- Profile
+- Communication
+- History Conversation
 
-- Chatbot
-- File Q&A
-- Chat with Internet search
-- LangChain Quickstart
-- LangChain PromptTemplate
-- Chat with user feedback
+## Where to acess it?
+1. Open the link and click the button of Open app: https://dashboard.heroku.com/apps/chatstreamlit
+2. Open the link of http://3.8.0.20:8501/
 
-## Demo App
-open the link and click the button of Open app: https://dashboard.heroku.com/apps/chatstreamlit
 ### Get an OpenAI API key
 
 You can get your own OpenAI API key by following the following instructions:
@@ -39,10 +38,10 @@ OPENAI_API_KEY='xxxxxxxxxx'
 ## Run it locally
 
 ```sh
-virtualenv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-streamlit run Chatbot.py
+1. python3 -m venv venv
+2. source venv/bin/activate
+3. python3 -m pip install -r chatstreamlit/requirements.txt
+4. streamlit run chatstreamlit/login.py
 ```
 ## Reference
 1. Set up to use Amazon EC2: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/get-set-up-for-amazon-ec2.html

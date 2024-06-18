@@ -1,7 +1,6 @@
 import streamlit as st
 from navigation import make_sidebar
 import bcrypt
-import boto3
 from service.mysql import get_connection
 
 
@@ -58,6 +57,8 @@ if st.button("Log in", type="primary"):
     if user_info:
         st.session_state.logged_in = True
         st.session_state.user_info = user_info
+        st.session_state['session_id'] = None
+        st.session_state['messages'] = []
         st.success("Logged in successfully!")
         st.switch_page("pages/2Communication.py")
     else:
