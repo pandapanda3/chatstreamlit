@@ -9,14 +9,14 @@ def authenticate_user(username, password):
     connection = get_connection()
     try:
         with connection.cursor() as cursor:
-            sql = "SELECT password FROM users WHERE username = %s"
+            sql = "SELECT id, password, role FROM users WHERE username = %s"
             cursor.execute(sql, (username,))
             result = cursor.fetchone()
             if result:
-                stored_password = result[0]
-                # The password will be encrypted
-                return bcrypt.checkpw(password.encode('utf-8'), stored_password.encode('utf-8'))
-            return False
+                user_id, stored_password, role = result
+                if bcrypt.checkpw(password.encode('utf-8'), stored_password.encode('utf-8')):
+                    return {"user_id": user_id, "username": username, "role": role}
+            return None
     finally:
         connection.close()
 
@@ -54,13 +54,15 @@ username = st.text_input("Username")
 password = st.text_input("Password", type="password")
 
 if st.button("Log in", type="primary"):
-    if authenticate_user(username, password):
+    user_info = authenticate_user(username, password)
+    if user_info:
         st.session_state.logged_in = True
+        st.session_state.user_info = user_info
         st.success("Logged in successfully!")
-        
         st.switch_page("pages/2Communication.py")
     else:
         st.error("Incorrect username or password")
+        
 st.markdown("""
     <style>
     .button-container {
