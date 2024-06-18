@@ -49,6 +49,7 @@ if 'session_id' not in st.session_state:
 session_id = st.session_state['session_id']
 
 if 'context_memory' not in st.session_state:
+    
     st.session_state['context_memory'] = ConversationSummaryBufferMemory()
 
 context_memory = st.session_state['context_memory']
@@ -73,7 +74,7 @@ if dentist_input := st.chat_input():
     
     
     context_memory.add_message(dentist_input)
-    patient_response = generate_patient_conversation(dentist_input=dentist_input, context=context, openai_api_key=openai_api_key)
+    patient_response = generate_patient_conversation(dentist_input=dentist_input, context=context_memory, openai_api_key=openai_api_key)
 
     st.session_state.messages.append({"role": "patient", "content": patient_response})
     # show the message in the streamlit

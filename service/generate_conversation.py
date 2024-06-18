@@ -2,9 +2,9 @@ from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.chains import SequentialChain
 from langchain.chains import LLMChain
-from langchain.memory import ConversationSummaryBufferMemory
 
-def generate_patient_conversation(dentist_input, context_memory="", openai_api_key=""):
+
+def generate_patient_conversation(dentist_input, context="", openai_api_key=""):
     llm_model = "gpt-3.5-turbo"
     
     llm = ChatOpenAI(temperature=0.0, model=llm_model, openai_api_key=openai_api_key)
@@ -41,13 +41,12 @@ def generate_patient_conversation(dentist_input, context_memory="", openai_api_k
         output_variables=["patient_followup_response"]
     )
     
-    if not context_memory:  # initial conversation
+    if not context:  # initial conversation
         initial_context = "Hi, what can I do for you today?"
         response = chain_one.run(style=patient_style, text=initial_context)
         
     else:
-        context = context_memory.buffer
-        context += f"\nDentist: {dentist_input}\nPatient:"
+        context = f"{context}\nDentist: {dentist_input}\nPatient:"
         response = chain_two.run(style=patient_style, text=context)
         
     if response.startswith("Patient:"):
