@@ -9,3 +9,4 @@ pymysql
 bcrypt
 boto3
 langchain
+langchain_community
