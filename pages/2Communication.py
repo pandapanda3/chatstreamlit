@@ -51,7 +51,7 @@ session_id = st.session_state['session_id']
 
 
 if "messages" not in st.session_state:
-    st.session_state["messages"] = [{"role": "assistant", "content": "I have a headache."}]
+    st.session_state["messages"] = [{"role": "patient", "content": "Hello, doctor. How are you today?"}]
 
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
@@ -61,21 +61,20 @@ if dentist_input := st.chat_input():
         st.info("Please add your OpenAI API key to continue.")
         st.stop()
 
-    client = OpenAI(api_key=openai_api_key)
-    st.session_state.messages.append({"role": "user", "content": dentist_input})
+    st.session_state.messages.append({"role": "dentist", "content": dentist_input})
     # show the message in the streamlit
-    st.chat_message("user").write(dentist_input)
+    st.chat_message("dentist").write(dentist_input)
     # save the conversation
     insert_message(session_id, user_id, dentist_input, "dentist")
     
     # response = client.chat.completions.create(model="gpt-3.5-turbo", messages=st.session_state.messages)
     # msg = response.choices[0].message.content
-    context = "\n".join([msg["content"] for msg in st.session_state.messages if msg["role"] == "user"])
+    context = "\n".join([msg["content"] for msg in st.session_state.messages if msg["role"] == "dentist"])
     patient_response = generate_patient_conversation(dentist_input=dentist_input, context=context, openai_api_key=openai_api_key)
 
-    st.session_state.messages.append({"role": "assistant", "content": msg})
+    st.session_state.messages.append({"role": "patient", "content": patient_response})
     # show the message in the streamlit
-    st.chat_message("assistant").write(msg)
-    insert_message(session_id, user_id, msg, "patient")
+    st.chat_message("patient").write(patient_response)
+    insert_message(session_id, user_id, patient_response, "patient")
 
 
