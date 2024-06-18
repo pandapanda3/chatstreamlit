@@ -37,7 +37,7 @@ def main():
         st.session_state.avatar = "https://via.placeholder.com/100"
 
     st.markdown(
-        f'<div class="header"><img src="{st.session_state.avatar}" alt="Avatar" style="border-radius:50%;width:100px;height:100px;"><h1>Peter</h1><a href="#">Edit Photo</a></div>',
+        f'<div class="header"><img src="{st.session_state.avatar}" alt="Avatar" style="border-radius:50%;width:100px;height:100px;"><h1>"{user}"</h1><a href="#">Edit Photo</a></div>',
         unsafe_allow_html=True
     )
 
@@ -55,17 +55,10 @@ def main():
         st.session_state.avatar = st.file_uploader
         st.success("Profile picture updated!")
 
-    # Profile Options
-    st.markdown('<div style="background-color:#fff;padding:20px;border-radius:10px;text-align:center;">',
-                unsafe_allow_html=True)
-    st.write("#### Feedback and Suggestion")
-    st.markdown('<hr>', unsafe_allow_html=True)
-    st.write("#### Change Password")
-    st.markdown('<hr>', unsafe_allow_html=True)
 
     # Suggestion Form
     st.markdown("### Feedback and Suggestion")
-    suggestion = st.text_area("Write your suggestion here...")
+    suggestion = st.text_area("Write your suggestion here...", key="suggestion_text")
     if "suggestions" not in st.session_state:
         st.session_state.suggestions = []
     if st.button("Submit"):
@@ -74,6 +67,8 @@ def main():
             # Insert into database
             insert_suggestion(user, suggestion_content)
             st.success("Suggestion submitted successfully!")
+            # Clear the suggestion text
+            st.session_state.suggestion_text = ""
         else:
             st.warning("Please write a suggestion before submitting.")
 
