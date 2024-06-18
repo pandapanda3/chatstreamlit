@@ -71,7 +71,7 @@ if dentist_input := st.chat_input():
     # response = client.chat.completions.create(model="gpt-3.5-turbo", messages=st.session_state.messages)
     # msg = response.choices[0].message.content
     context = "\n".join([msg["content"] for msg in st.session_state.messages if msg["role"] == "user"])
-    patient_response = generate_patient_conversation(dentist_input=dentist_input, context=context)
+    patient_response = generate_patient_conversation(dentist_input=dentist_input, context=context, openai_api_key=openai_api_key)
 
     st.session_state.messages.append({"role": "assistant", "content": msg})
     # show the message in the streamlit

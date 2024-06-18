@@ -4,10 +4,10 @@ from langchain.chains import SequentialChain
 from langchain.chains import LLMChain
 
 
-def generate_patient_conversation(dentist_input, context=""):
+def generate_patient_conversation(dentist_input, context="", openai_api_key=""):
     llm_model = "gpt-3.5-turbo"
     
-    llm = ChatOpenAI(temperature=0.0, model=llm_model)
+    llm = ChatOpenAI(temperature=0.0, model=llm_model, openai_api_key=openai_api_key)
     first_prompt = ChatPromptTemplate.from_template(
         """
         Generate a conversation with a dentist. The conversation should start with the patient's concern about their dental issue.
@@ -55,4 +55,6 @@ def generate_patient_conversation(dentist_input, context=""):
 
 if __name__ == '__main__':
     dentist_input = 'I see, thank you for letting me know. Before we proceed with any diagnostic procedures, may I ask for some detailed information about your health?'
-    print(generate_patient_conversation(dentist_input))
+    openai_api_key = 'your_openai_api_key'
+    
+    print(generate_patient_conversation(dentist_input, openai_api_key=openai_api_key))
