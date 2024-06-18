@@ -68,7 +68,7 @@ def main():
             insert_suggestion(user, suggestion_content)
             st.success("Suggestion submitted successfully!")
             # Clear the suggestion text
-            st.session_state.suggestion_text = ""
+            st.experimental_rerun()
         else:
             st.warning("Please write a suggestion before submitting.")
 
