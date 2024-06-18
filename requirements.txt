@@ -8,3 +8,4 @@ streamlit-feedback
 pymysql
 bcrypt
 boto3
+langchain
