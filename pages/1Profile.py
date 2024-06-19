@@ -4,6 +4,7 @@ import io
 from navigation import make_sidebar
 from service.mysql import get_connection
 
+
 st.set_page_config(page_title="Profile", page_icon="👤")
 make_sidebar()
 
@@ -100,10 +101,10 @@ def main():
         avatar_image = Image.open(io.BytesIO(avatar_data))
         st.image(avatar_image, width=100, caption="Updated Avatar")
         
-    st.markdown(
-        f'<div class="header"><img src="{st.session_state.avatar}" alt="Avatar" style="border-radius:50%;width:100px;height:100px;"><h1>"{user}"</h1></div>',
-        unsafe_allow_html=True
-    )
+    # st.markdown(
+    #     f'<div class="header"><img src="{st.session_state.avatar}" alt="Avatar" style="border-radius:50%;width:100px;height:100px;"><h1>"{user}"</h1></div>',
+    #     unsafe_allow_html=True
+    # )
     
     # Suggestion Form
     st.markdown("### Feedback and Suggestion")
