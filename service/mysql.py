@@ -38,7 +38,7 @@ def get_connection():
         host=secret_dict['host'],
         user=secret_dict['username'],
         password=secret_dict['password'],
-        database=secret_dict['dbInstanceIdentifier'],
+        database=secret_dict['database'],
         port=secret_dict['port'],
         charset='utf8mb4'
     )
