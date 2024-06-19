@@ -53,6 +53,7 @@ def main():
     user = user_info['username']
     user_id = user_info['user_id']
     print(f'information of session_state: {st.session_state}')
+    
     # Load the user's avatar from the database
     avatar_data = get_avatar(user_id)
     if avatar_data:
@@ -65,13 +66,14 @@ def main():
     st.markdown("<style>.header {text-align: center;}</style>", unsafe_allow_html=True)
 
     # Display the avatar
-    if avatar_data:
-        st.image(st.session_state.avatar, width=100, caption=user)
-    else:
-        st.markdown(
-            f'<div class="header"><img src="{st.session_state.avatar}" alt="Avatar" style="border-radius:50%;width:100px;height:100px;"><h1>"{user}"</h1></div>',
-            unsafe_allow_html=True
-        )
+    # if avatar_data:
+    #     st.image(st.session_state.avatar, width=100, caption=user)
+    # else:
+    #     st.markdown(
+    #         f'<div class="header"><img src="{st.session_state.avatar}" alt="Avatar" style="border-radius:50%;width:100px;height:100px;"><h1>"{user}"</h1></div>',
+    #         unsafe_allow_html=True
+    #     )
+    
 
     # Upload image for avatar
     uploaded_file = st.file_uploader("Choose a new profile picture", type=["jpg", "jpeg", "png"])
@@ -79,8 +81,7 @@ def main():
         image = Image.open(uploaded_file)
         img_byte_arr = io.BytesIO()
         image.save(img_byte_arr, format='PNG')
-        img_byte_arr = img_byte_arr.getvalue()
-
+        
         # Update the avatar in the database
         update_avatar(user_id, img_byte_arr)
 
@@ -88,9 +89,14 @@ def main():
         avatar_data = get_avatar(user_id)
         avatar_image = Image.open(io.BytesIO(avatar_data))
         st.session_state.avatar = avatar_image
-        st.image(st.session_state.avatar, width=100, caption=user)
+        
         st.success("Profile picture updated!")
-
+        
+    st.markdown(
+        f'<div class="header"><img src="{st.session_state.avatar}" alt="Avatar" style="border-radius:50%;width:100px;height:100px;"><h1>"{user}"</h1></div>',
+        unsafe_allow_html=True
+    )
+    
     # Suggestion Form
     st.markdown("### Feedback and Suggestion")
     suggestion = st.text_area("Write your suggestion here...", key="suggestion_text")
