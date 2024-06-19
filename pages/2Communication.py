@@ -31,7 +31,8 @@ def generate_session_id():
             return max_session_id + 1
     finally:
         connection.close()
-        
+
+# get the information of mysql and openai key
 def get_secret():
 
     secret_name = "chatstreamlit/mysql"
@@ -55,6 +56,7 @@ def get_secret():
 
     secret = get_secret_value_response['SecretString']
     print(f'the secret is : {type(secret)},{secret}')
+    return secret
 
 
 make_sidebar()
