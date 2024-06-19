@@ -19,6 +19,28 @@ def insert_suggestion(user, suggestion_content):
     finally:
         connection.close()
 
+# save the image of avatar
+def update_avatar(username, avatar_data):
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            sql = "UPDATE users SET profile_image = %s WHERE username = %s"
+            cursor.execute(sql, (avatar_data, username))
+            connection.commit()
+    finally:
+        connection.close()
+        
+def get_avatar(username):
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT profile_image FROM users WHERE username = %s"
+            cursor.execute(sql, (username,))
+            result = cursor.fetchone()
+            return result[0] if result else None
+    finally:
+        connection.close()
+
 def main():
     
     st.title("Profile")
@@ -28,19 +50,27 @@ def main():
         return
 
     user_info = st.session_state.user_info
-    user_with_quotes = user_info['username']
-    user = user_with_quotes.replace('"', '')
-    
+    user = user_info['username']
+    print(f'information of session_state: {st.session_state}')
+    # Load the user's avatar from the database
+    avatar_data = get_avatar(user)
+    if avatar_data:
+        avatar_image = Image.open(io.BytesIO(avatar_data))
+        st.session_state.avatar = avatar_image
+    else:
+        st.session_state.avatar = "https://via.placeholder.com/100"
+
     # Profile Header
     st.markdown("<style>.header {text-align: center;}</style>", unsafe_allow_html=True)
 
-    if "avatar" not in st.session_state:
-        st.session_state.avatar = "https://via.placeholder.com/100"
-
-    st.markdown(
-        f'<div class="header"><img src="{st.session_state.avatar}" alt="Avatar" style="border-radius:50%;width:100px;height:100px;"><h1>"{user}"</h1><a href="#">Edit Photo</a></div>',
-        unsafe_allow_html=True
-    )
+    # Display the avatar
+    if avatar_data:
+        st.image(st.session_state.avatar, width=100, caption="Current Avatar")
+    else:
+        st.markdown(
+            f'<div class="header"><img src="{st.session_state.avatar}" alt="Avatar" style="border-radius:50%;width:100px;height:100px;"><h1>"{user}"</h1><a href="#">Edit Photo</a></div>',
+            unsafe_allow_html=True
+        )
 
     # Upload image for avatar
     uploaded_file = st.file_uploader("Choose a new profile picture", type=["jpg", "jpeg", "png"])
@@ -48,13 +78,20 @@ def main():
         image = Image.open(uploaded_file)
         img_byte_arr = io.BytesIO()
         image.save(img_byte_arr, format='PNG')
+        img_byte_arr = img_byte_arr.getvalue()
+
+        # Update the avatar in the database
+        update_avatar(user, img_byte_arr)
 
         # Display the uploaded image
         st.image(image, caption='Uploaded Image.', use_column_width=True)
 
-        # Update session state
-        st.session_state.avatar = st.file_uploader
         st.success("Profile picture updated!")
+
+        # Reload the avatar from the database to display
+        avatar_data = get_avatar(user)
+        avatar_image = Image.open(io.BytesIO(avatar_data))
+        st.image(avatar_image, width=100, caption="Updated Avatar")
 
 
     # Suggestion Form
