@@ -20,22 +20,22 @@ def insert_suggestion(user, suggestion_content):
         connection.close()
 
 # save the image of avatar
-def update_avatar(username, avatar_data):
+def update_avatar(user_id, avatar_data):
     connection = get_connection()
     try:
         with connection.cursor() as cursor:
-            sql = "UPDATE users SET profile_image = %s WHERE username = %s"
-            cursor.execute(sql, (avatar_data, username))
+            sql = "UPDATE users SET profile_image = %s WHERE id = %s"
+            cursor.execute(sql, (avatar_data, user_id))
             connection.commit()
     finally:
         connection.close()
         
-def get_avatar(username):
+def get_avatar(user_id):
     connection = get_connection()
     try:
         with connection.cursor() as cursor:
-            sql = "SELECT profile_image FROM users WHERE username = %s"
-            cursor.execute(sql, (username,))
+            sql = "SELECT profile_image FROM users WHERE id = %s"
+            cursor.execute(sql, (user_id,))
             result = cursor.fetchone()
             return result[0] if result else None
     finally:
@@ -51,9 +51,10 @@ def main():
 
     user_info = st.session_state.user_info
     user = user_info['username']
+    user_id = user_info['user_id']
     print(f'information of session_state: {st.session_state}')
     # Load the user's avatar from the database
-    avatar_data = get_avatar(user)
+    avatar_data = get_avatar(user_id)
     if avatar_data:
         avatar_image = Image.open(io.BytesIO(avatar_data))
         st.session_state.avatar = avatar_image
@@ -81,18 +82,18 @@ def main():
         img_byte_arr = img_byte_arr.getvalue()
 
         # Update the avatar in the database
-        update_avatar(user, img_byte_arr)
-
-        # Display the uploaded image
-        st.image(image, caption='Uploaded Image.', use_column_width=True)
+        update_avatar(user_id, img_byte_arr)
 
         st.success("Profile picture updated!")
 
         # Reload the avatar from the database to display
-        avatar_data = get_avatar(user)
+        avatar_data = get_avatar(user_id)
         avatar_image = Image.open(io.BytesIO(avatar_data))
-        st.image(avatar_image, width=100, caption="Updated Avatar")
-
+        st.session_state.avatar = avatar_image
+        
+    # Display the updated avatar (if it was updated)
+    if 'avatar' in st.session_state and isinstance(st.session_state.avatar, Image.Image):
+        st.image(st.session_state.avatar, width=100, caption="Current Avatar")
 
     # Suggestion Form
     st.markdown("### Feedback and Suggestion")
