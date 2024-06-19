@@ -1,5 +1,5 @@
 import streamlit as st
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 import io
 from navigation import make_sidebar
 from service.mysql import get_connection
@@ -57,8 +57,12 @@ def main():
     # Load the user's avatar from the database
     avatar_data = get_avatar(user_id)
     if avatar_data:
-        avatar_image = Image.open(io.BytesIO(avatar_data))
-        st.session_state.avatar = avatar_image
+        try:
+            avatar_image = Image.open(io.BytesIO(avatar_data))
+            st.session_state.avatar = avatar_image
+        except UnidentifiedImageError:
+            st.session_state.avatar = "https://via.placeholder.com/100"
+            st.error("Failed to load avatar image.")
     else:
         st.session_state.avatar = "https://via.placeholder.com/100"
 
@@ -87,9 +91,12 @@ def main():
 
         # Reload the avatar from the database to display
         avatar_data = get_avatar(user_id)
-        avatar_image = Image.open(io.BytesIO(avatar_data))
-        st.session_state.avatar = avatar_image
-        
+        try:
+            avatar_image = Image.open(io.BytesIO(avatar_data))
+            st.session_state.avatar = avatar_image
+        except UnidentifiedImageError:
+            st.session_state.avatar = "https://via.placeholder.com/100"
+            st.error("Failed to load updated avatar image.")
         st.success("Profile picture updated!")
         
     st.markdown(
