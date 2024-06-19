@@ -4,6 +4,8 @@ from service.generate_conversation import generate_patient_conversation
 from service.mysql import get_connection
 import boto3
 from botocore.exceptions import ClientError
+import json
+
 
 # insert message
 def insert_message(session_id, user_id, message, user_role):
@@ -55,8 +57,9 @@ def get_secret():
         raise e
 
     secret = get_secret_value_response['SecretString']
-    print(f'the secret is : {type(secret)},{secret}')
-    return secret
+    secret_dict = json.loads(secret)
+    print(f'The secret is : {type(secret_dict)},{secret_dict}')
+    return secret_dict
 
 
 make_sidebar()
@@ -64,8 +67,8 @@ make_sidebar()
 with st.sidebar:
     openai_api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
 
-openai_api_key = get_secret()
-
+secret_values = get_secret()
+openai_api_key = secret_values['openai_api_key']
 
 
 st.title("💬 Communication")
