@@ -70,13 +70,13 @@ def main():
     st.markdown("<style>.header {text-align: center;}</style>", unsafe_allow_html=True)
 
     # Display the avatar
-    if avatar_data:
-        st.image(st.session_state.avatar, width=100, caption=user)
-    else:
-        st.markdown(
-            f'<div class="header"><img src="{st.session_state.avatar}" alt="Avatar" style="border-radius:50%;width:100px;height:100px;"><h1>"{user}"</h1></div>',
-            unsafe_allow_html=True
-        )
+    # if avatar_data:
+    #     st.image(st.session_state.avatar, width=100, caption=user)
+    # else:
+    #     st.markdown(
+    #         f'<div class="header"><img src="{st.session_state.avatar}" alt="Avatar" style="border-radius:50%;width:100px;height:100px;"><h1>"{user}"</h1></div>',
+    #         unsafe_allow_html=True
+    #     )
     
 
     # Upload image for avatar
@@ -86,18 +86,19 @@ def main():
         img_byte_arr = io.BytesIO()
         image.save(img_byte_arr, format='PNG')
         img_byte_arr = img_byte_arr.getvalue()
+    
         # Update the avatar in the database
-        update_avatar(user_id, img_byte_arr)
-
-        # Reload the avatar from the database to display
-        avatar_data = get_avatar(user_id)
-        try:
-            avatar_image = Image.open(io.BytesIO(avatar_data))
-            st.session_state.avatar = avatar_image
-        except UnidentifiedImageError:
-            st.session_state.avatar = "https://via.placeholder.com/100"
-            st.error("Failed to load updated avatar image.")
+        update_avatar(user, img_byte_arr)
+    
+        # Display the uploaded image
+        st.image(image, caption='Uploaded Image.', use_column_width=True)
+    
         st.success("Profile picture updated!")
+    
+        # Reload the avatar from the database to display
+        avatar_data = get_avatar(user)
+        avatar_image = Image.open(io.BytesIO(avatar_data))
+        st.image(avatar_image, width=100, caption="Updated Avatar")
         
     st.markdown(
         f'<div class="header"><img src="{st.session_state.avatar}" alt="Avatar" style="border-radius:50%;width:100px;height:100px;"><h1>"{user}"</h1></div>',
