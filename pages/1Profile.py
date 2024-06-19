@@ -69,7 +69,7 @@ def main():
         st.image(st.session_state.avatar, width=100, caption="Current Avatar")
     else:
         st.markdown(
-            f'<div class="header"><img src="{st.session_state.avatar}" alt="Avatar" style="border-radius:50%;width:100px;height:100px;"><h1>"{user}"</h1><a href="#">Edit Photo</a></div>',
+            f'<div class="header"><img src="{st.session_state.avatar}" alt="Avatar" style="border-radius:50%;width:100px;height:100px;"><h1>"{user}"</h1></div>',
             unsafe_allow_html=True
         )
 
@@ -84,15 +84,12 @@ def main():
         # Update the avatar in the database
         update_avatar(user_id, img_byte_arr)
 
-        st.success("Profile picture updated!")
-
         # Reload the avatar from the database to display
         avatar_data = get_avatar(user_id)
         avatar_image = Image.open(io.BytesIO(avatar_data))
         st.session_state.avatar = avatar_image
-        
-    st.image(st.session_state.avatar, width=100, caption="Current Avatar")
-    
+
+        st.success("Profile picture updated!")
 
     # Suggestion Form
     st.markdown("### Feedback and Suggestion")
