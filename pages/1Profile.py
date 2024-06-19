@@ -81,7 +81,7 @@ def main():
         image = Image.open(uploaded_file)
         img_byte_arr = io.BytesIO()
         image.save(img_byte_arr, format='PNG')
-        
+        img_byte_arr = img_byte_arr.getvalue()
         # Update the avatar in the database
         update_avatar(user_id, img_byte_arr)
 
