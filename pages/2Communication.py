@@ -1,10 +1,7 @@
 import streamlit as st
 from navigation import make_sidebar
 from service.generate_conversation import generate_patient_conversation
-from service.mysql import get_connection
-import boto3
-from botocore.exceptions import ClientError
-import json
+from service.mysql import get_connection, get_secret
 
 
 # insert message
@@ -34,42 +31,15 @@ def generate_session_id():
     finally:
         connection.close()
 
-# get the information of mysql and openai key
-def get_secret():
-
-    secret_name = "chatstreamlit/mysql"
-    region_name = "eu-west-2"
-
-    # Create a Secrets Manager client
-    session = boto3.session.Session()
-    client = session.client(
-        service_name='secretsmanager',
-        region_name=region_name
-    )
-
-    try:
-        get_secret_value_response = client.get_secret_value(
-            SecretId=secret_name
-        )
-    except ClientError as e:
-        # For a list of exceptions thrown, see
-        # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
-        raise e
-
-    secret = get_secret_value_response['SecretString']
-    secret_dict = json.loads(secret)
-    print(f'The secret is : {type(secret_dict)},{secret_dict}')
-    return secret_dict
-
 
 make_sidebar()
 
-with st.sidebar:
-    openai_api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
-
+# get openai_key
 secret_values = get_secret()
 openai_api_key = secret_values['openai_api_key']
-
+if openai_api_key == '':
+    with st.sidebar:
+        openai_api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
 
 st.title("💬 Communication")
 
