@@ -91,9 +91,8 @@ def main():
         avatar_image = Image.open(io.BytesIO(avatar_data))
         st.session_state.avatar = avatar_image
         
-    # Display the updated avatar (if it was updated)
-    if 'avatar' in st.session_state and isinstance(st.session_state.avatar, Image.Image):
-        st.image(st.session_state.avatar, width=100, caption="Current Avatar")
+    st.image(st.session_state.avatar, width=100, caption="Current Avatar")
+    
 
     # Suggestion Form
     st.markdown("### Feedback and Suggestion")
