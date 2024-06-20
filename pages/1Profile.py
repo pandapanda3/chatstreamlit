@@ -61,7 +61,7 @@ def main():
         try:
             avatar_image = Image.open(io.BytesIO(avatar_data))
             st.session_state.avatar = avatar_image
-            st.image(st.session_state.avatar, width=100, caption=(st.markdown(f"### {user}")))
+            st.image(st.session_state.avatar, width=100, caption=user)
         except UnidentifiedImageError:
             st.session_state.avatar = "https://via.placeholder.com/100"
             st.error("Failed to load avatar image.")
@@ -107,6 +107,7 @@ def main():
         st.session_state.suggestion_text = ""
     if "empty_text" not in st.session_state:
         st.session_state.empty_text = ""
+        empty_text=st.session_state.empty_text
     suggestion = st.text_area(label="Write your suggestion here...", help="Is there any suggestion?", key="suggestion_text")
     # empty = st.text_area(label="Write your suggestion here...", help="Is there any suggestion?", disabled = True,
     #                           key="suggestion_text_empty")
@@ -120,7 +121,7 @@ def main():
             insert_suggestion(user, suggestion_content)
             st.success("Suggestion submitted successfully!")
             # Clear the suggestion text
-            st.write(f"Current suggestion: {st.session_state.suggestion_text}")
+            st.session_state.suggestion_text = empty_text
         else:
             st.warning("Please write a suggestion before submitting.")
 
