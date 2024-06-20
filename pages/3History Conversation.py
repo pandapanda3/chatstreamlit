@@ -25,6 +25,8 @@ def fetch_chat_history_data(user_id):
 chat_history_data = fetch_chat_history_data(user_id)
 
 chat_history_data_df = pd.DataFrame(chat_history_data)
+# Select only the columns you want to display
+chat_history_data_df = chat_history_data_df[["user_name", "chat_count", "patient_details"]]
 
 # Display the data in Streamlit
 st.data_editor(
