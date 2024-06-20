@@ -10,3 +10,4 @@ bcrypt
 langchain
 langchain_community
 boto3
+pandas
