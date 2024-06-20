@@ -105,18 +105,19 @@ def main():
     st.markdown("### Feedback and Suggestion")
     if "suggestion_text" not in st.session_state:
         st.session_state.suggestion_text = ""
-    suggestion = st.text_area(label="THIS IS THE LABEL", value="Write your suggestion here...", help="Is there any suggestion?", key="suggestion_text")
+    suggestion = st.text_area(label="Write your suggestion here...", help="Is there any suggestion?", key="suggestion_text")
     
 
     if st.button("Submit"):
         if suggestion.strip():
             suggestion_content = suggestion.strip()
-            st.session_state.suggestion_text = suggestion_content
+            # st.session_state.suggestion_text = suggestion_content
             # Insert into database
             insert_suggestion(user, suggestion_content)
             st.success("Suggestion submitted successfully!")
             # Clear the suggestion text
             st.session_state.suggestion_text = ""
+            st.experimental_rerun()
         else:
             st.warning("Please write a suggestion before submitting.")
 
