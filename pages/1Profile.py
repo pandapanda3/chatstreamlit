@@ -95,14 +95,14 @@ def main():
             # Display the uploaded image
             st.image(image, caption='Uploaded Image.', use_column_width=True)
         
-            st.success("Profile picture updated!")
-        
             # Reload the avatar from the database to display
-            avatar_data = get_avatar(user)
+            avatar_data = get_avatar(user_id)
             avatar_image = Image.open(io.BytesIO(avatar_data))
             st.image(avatar_image, width=100, caption="Updated Avatar")
         except UnidentifiedImageError:
             st.error("The uploaded file is not a valid image.")
+            return
+        st.success("Profile picture updated!")
 
     # Suggestion Form
     st.markdown("### Feedback and Suggestion")
