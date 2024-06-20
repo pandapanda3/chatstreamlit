@@ -90,10 +90,7 @@ if "messages" not in st.session_state or not st.session_state["messages"]:
     st.session_state["messages"] = [{"role": "patient", "content": "Hello, doctor. How are you today?"}]
 
 for msg in st.session_state.messages:
-    if msg["role"] == "patient":
-        st.chat_message("patient").write(msg["content"])
-    else:
-        st.chat_message("dentist", is_user=True).write(msg["content"])
+    st.chat_message(msg["role"]).write(msg["content"])
 
 if dentist_input := st.chat_input():
     if not openai_api_key:
@@ -106,7 +103,7 @@ if dentist_input := st.chat_input():
 
     st.session_state.messages.append({"role": "dentist", "content": dentist_input})
     # show the message in the streamlit
-    st.chat_message("dentist", is_user=True).write(dentist_input)
+    st.chat_message("dentist").write(dentist_input)
     # save the conversation
     insert_message(session_id, user_id, dentist_input, "dentist")
     
