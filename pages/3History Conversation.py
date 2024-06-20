@@ -25,39 +25,29 @@ def fetch_chat_history_data(user_id):
         
 chat_history_data = fetch_chat_history_data(user_id)
 
-chat_history_data_df = pd.DataFrame(chat_history_data)
+chat_history_data_df = pd.DataFrame(chat_history_data, columns=["user_name", "chat_count", "patient_details"])
 print(f'{type(chat_history_data_df)}, data df is :{chat_history_data_df}')
 print(f'{type(chat_history_data)}, data is :{chat_history_data}')
-data_df = pd.DataFrame(
-    {
-        "widgets": ["AA", "BB", "CC", "DD"],
-    }
-)
 
 # Display the data in Streamlit
 st.data_editor(
-    data_df,
+    chat_history_data_df,
     column_config={
-        "widgets": st.column_config.TextColumn(
+        "user_name": st.column_config.TextColumn(
             "User Name",
             help="The name of the user",
             width="medium"
         ),
-        # "user_name": st.column_config.TextColumn(
-        #     "User Name",
-        #     help="The name of the user",
-        #     width="medium"
-        # ),
-        # "chat_count": st.column_config.NumberColumn(
-        #     "The number of question",
-        #     help="The number of chats",
-        #     width="medium"
-        # ),
-        # "patient_details": st.column_config.TextColumn(
-        #     "Patient Details",
-        #     help="Details of the patient",
-        #     width="large"
-        # ),
+        "chat_count": st.column_config.NumberColumn(
+            "The number of question",
+            help="The number of chats",
+            width="medium"
+        ),
+        "patient_details": st.column_config.TextColumn(
+            "Patient Details",
+            help="Details of the patient",
+            width="large"
+        ),
     },
     hide_index=True,
 )
