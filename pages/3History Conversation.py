@@ -30,9 +30,9 @@ chat_history_data_df = pd.DataFrame(chat_history_data)
 st.data_editor(
     chat_history_data_df,
     column_config={
-        "user_id": st.column_config.NumberColumn(
-            "User ID",
-            help="The unique identifier of the user",
+        "user_name": st.column_config.TextColumn(
+            "User Name",
+            help="The name of the user",
         ),
         "chat_count": st.column_config.NumberColumn(
             "Chat Count",
