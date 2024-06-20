@@ -105,7 +105,7 @@ def main():
     st.markdown("### Feedback and Suggestion")
     if "suggestion_text" not in st.session_state:
         st.session_state.suggestion_text = ""
-    suggestion = st.text_area(value="Write your suggestion here...", help="Is there any suggestion?", key="suggestion_text")
+    suggestion = st.text_area(label="THIS IS THE LABEL", value="Write your suggestion here...", help="Is there any suggestion?", key="suggestion_text")
     
 
     if st.button("Submit"):
