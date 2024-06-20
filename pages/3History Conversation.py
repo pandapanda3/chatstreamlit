@@ -28,23 +28,6 @@ chat_history_data_df = pd.DataFrame(chat_history_data)
 print(f'data is :{chat_history_data_df}')
 
 
-# CSS to resize the table based on the screen size
-st.markdown(
-    """
-    <style>
-    .dataframe-container {
-        width: 100%;
-        height: auto;
-    }
-    .dataframe-table {
-        width: 100% !important;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-# Wrap the table in a div with a custom class
-st.markdown('<div class="dataframe-container">', unsafe_allow_html=True)
 
 # Display the data in Streamlit
 st.data_editor(
@@ -67,7 +50,4 @@ st.data_editor(
         ),
     },
     hide_index=True,
-    num_rows="dynamic",
 )
-
-st.markdown('</div>', unsafe_allow_html=True)
