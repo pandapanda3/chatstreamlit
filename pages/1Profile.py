@@ -93,7 +93,7 @@ def main():
             update_avatar(user_id, img_byte_arr)
         
             # Display the uploaded image
-            st.image(image, caption='Uploaded Image.', use_column_width=True)
+            # st.image(image, caption='Uploaded Image.', use_column_width=True)
         
             # Reload the avatar from the database to display
             avatar_data = get_avatar(user_id)
