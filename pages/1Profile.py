@@ -95,7 +95,7 @@ def main():
             # Save the avatar image in session state
             st.session_state.avatar = avatar_image
             # Display the updated avatar image
-            st.image(st.session_state.avatar, width=100, caption=user, key="avatar_uploader")
+            # st.image(st.session_state.avatar, width=100, caption=user, key="avatar_uploader")
         except UnidentifiedImageError:
             st.error("The uploaded file is not a valid image.")
             return
