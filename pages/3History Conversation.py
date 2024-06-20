@@ -15,7 +15,7 @@ def fetch_chat_history_data(user_id):
     connection = get_connection()
     try:
         with connection.cursor() as cursor:
-            sql = "SELECT user_id, user_name, chat_count, patient_details FROM user_chat_history where user_id =  %s"
+            sql = "SELECT user_name, chat_count, patient_details FROM user_chat_history where user_id =  %s"
             cursor.execute(sql, (user_id,))
             result = cursor.fetchall()
             return result
@@ -25,8 +25,6 @@ def fetch_chat_history_data(user_id):
 chat_history_data = fetch_chat_history_data(user_id)
 
 chat_history_data_df = pd.DataFrame(chat_history_data)
-# Select only the columns you want to display
-chat_history_data_df = chat_history_data_df[["user_name", "chat_count", "patient_details"]]
 
 # Display the data in Streamlit
 st.data_editor(
