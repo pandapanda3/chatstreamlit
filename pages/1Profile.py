@@ -106,7 +106,6 @@ def main():
     if "suggestion_text" not in st.session_state:
         st.session_state.suggestion_text = ""
     
-    empty_text = ""
     suggestion = st.text_area(label="", value="Write your suggestion here...", help="Is there any suggestion?",
                               key="suggestion_text")
     
@@ -118,7 +117,7 @@ def main():
             insert_suggestion(user, suggestion_content)
             st.success("Suggestion submitted successfully!")
             # Clear the suggestion text
-            st.session_state.suggestion_text = empty_text
+            
         else:
             st.warning("Please write a suggestion before submitting.")
 
