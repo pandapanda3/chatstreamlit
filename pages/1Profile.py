@@ -4,14 +4,14 @@ import io
 from navigation import make_sidebar
 from service.mysql import get_connection
 
-
 st.set_page_config(page_title="Profile", page_icon="👤")
 make_sidebar()
+
 
 def insert_suggestion(user, suggestion_content):
     value = (user, suggestion_content)
     connection = get_connection()
-
+    
     try:
         with connection.cursor() as cursor:
             sql = "INSERT INTO suggestions (user, suggestion_content) VALUES (%s, %s)"
@@ -19,6 +19,7 @@ def insert_suggestion(user, suggestion_content):
             connection.commit()
     finally:
         connection.close()
+
 
 # save the image of avatar
 def update_avatar(user_id, avatar_data):
@@ -30,7 +31,8 @@ def update_avatar(user_id, avatar_data):
             connection.commit()
     finally:
         connection.close()
-        
+
+
 def get_avatar(user_id):
     connection = get_connection()
     try:
@@ -42,14 +44,14 @@ def get_avatar(user_id):
     finally:
         connection.close()
 
+
 def main():
-    
     st.title("Profile")
     # Check if user is logged in
     if 'logged_in' not in st.session_state or not st.session_state.logged_in:
         st.warning("Please log in first.")
         return
-
+    
     user_info = st.session_state.user_info
     user = user_info['username']
     user_id = user_info['user_id']
@@ -71,10 +73,9 @@ def main():
             f'<div class="header"><img src="{st.session_state.avatar}" alt="Avatar" style="border-radius:50%;width:100px;height:100px;"><h1>"{user}"</h1></div>',
             unsafe_allow_html=True
         )
-
+    
     # Profile Header
     st.markdown("<style>.header {text-align: center;}</style>", unsafe_allow_html=True)
-
     
     # Upload image for avatar
     uploaded_file = st.file_uploader("Choose a new profile picture", type=["jpg", "jpeg", "png"])
@@ -84,10 +85,9 @@ def main():
             img_byte_arr = io.BytesIO()
             image.save(img_byte_arr, format='PNG')
             img_byte_arr = img_byte_arr.getvalue()
-        
+            
             # Update the avatar in the database
             update_avatar(user_id, img_byte_arr)
-        
             
             # Reload the avatar from the database to display
             avatar_data = get_avatar(user_id)
@@ -100,19 +100,16 @@ def main():
             st.error("The uploaded file is not a valid image.")
             return
         st.success("Profile picture updated!")
-
+    
     # Suggestion Form
     st.markdown("### Feedback and Suggestion")
     if "suggestion_text" not in st.session_state:
         st.session_state.suggestion_text = ""
-    if "empty_text" not in st.session_state:
-        st.session_state.empty_text = ""
-        empty_text=st.session_state.empty_text
-    suggestion = st.text_area(label="Write your suggestion here...", help="Is there any suggestion?", key="suggestion_text")
-    # empty = st.text_area(label="Write your suggestion here...", help="Is there any suggestion?", disabled = True,
-    #                           key="suggestion_text_empty")
     
-
+    empty_text = ""
+    suggestion = st.text_area(label="", value="Write your suggestion here...", help="Is there any suggestion?",
+                              key="suggestion_text")
+    
     if st.button("Submit"):
         if suggestion.strip():
             suggestion_content = suggestion.strip()
@@ -125,6 +122,6 @@ def main():
         else:
             st.warning("Please write a suggestion before submitting.")
 
-        
+
 if __name__ == "__main__":
     main()
