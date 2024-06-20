@@ -20,6 +20,23 @@ def insert_message(session_id, user_id, message, user_role):
         connection.close()
 
 
+# get the largest number of chat_count of the user
+def get_largest_chat_number(user_id):
+    value = (user_id)
+    connection = get_connection()
+    
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT MAX(chat_count) AS max_chat_count FROM user_chat_history WHERE user_id = %s"
+            cursor.execute(sql, value)
+            result = cursor.fetchone()
+            max_chat_count = result[0] if result else 0
+            print(f'The max chat number is :{max_chat_count}')
+            return max_chat_count
+    
+    finally:
+        connection.close()
+
 # insert user_chat_history
 def insert_user_chat_history(user_id, user_name, chat_count, patient_details):
     value = (user_id, user_name, chat_count, patient_details)
@@ -61,6 +78,7 @@ st.title("💬 Communication")
 current_user = st.session_state.get('user_info', {"user_id": None, "username": "unknown", "role": "dentist"})
 user_id = current_user["user_id"]
 user_role = current_user["role"]
+username = current_user["username"]
 print(f'st.session_state is :{st.session_state}')
 
 if 'session_id' not in st.session_state or st.session_state['session_id'] is None:
@@ -78,6 +96,10 @@ if dentist_input := st.chat_input():
     if not openai_api_key:
         st.info("Please add your OpenAI API key to continue.")
         st.stop()
+    # Check if there is only one message in the session state
+    if 'messages' in st.session_state and len(st.session_state.messages) == 1:
+        max_chat_count = get_largest_chat_number(user_id)
+        insert_user_chat_history(user_id, username, max_chat_count + 1, f'patient for {username}')
 
     st.session_state.messages.append({"role": "dentist", "content": dentist_input})
     # show the message in the streamlit
