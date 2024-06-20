@@ -105,47 +105,47 @@ def main():
     st.markdown("### Feedback and Suggestion")
 
     
-    # suggestion = st.text_area(label="", value="Write your suggestion here...", help="Is there any suggestion?")
-    #
-    # if st.button("Submit"):
-    #     if suggestion.strip():
-    #         suggestion_content = suggestion.strip()
-    #         # Insert into database
-    #         insert_suggestion(user, suggestion_content)
-    #         st.success("Suggestion submitted successfully!")
-    #         # Clear the suggestion text
-    #
-    #     else:
-    #         st.warning("Please write a suggestion before submitting.")
-    if 'suggestion_text' not in st.session_state:
-        st.session_state.suggestion_text = "Write your suggestion here..."
-
-    def clear_placeholder():
-        if st.session_state.suggestion_text == "Write your suggestion here...":
-            st.session_state.suggestion_text = ""
-
-    def restore_placeholder():
-        if st.session_state.suggestion_text == "":
-            st.session_state.suggestion_text = "Write your suggestion here..."
-
-    suggestion = st.text_area(
-        label="",
-        value=st.session_state.suggestion_text,
-        help="Is there any suggestion?",
-        on_change=restore_placeholder,
-        key="suggestion_text"
-    )
-
-    if suggestion == "Write your suggestion here...":
-        suggestion = ""
+    suggestion = st.text_area(label="", value="Write your suggestion here...", help="Is there any suggestion?")
 
     if st.button("Submit"):
         if suggestion.strip():
-            insert_suggestion(user, suggestion.strip())
+            suggestion_content = suggestion.strip()
+            # Insert into database
+            insert_suggestion(user, suggestion_content)
             st.success("Suggestion submitted successfully!")
-            st.session_state.suggestion_text = "Write your suggestion here..."
+            # Clear the suggestion text
+
         else:
             st.warning("Please write a suggestion before submitting.")
+    # if 'suggestion_text' not in st.session_state:
+    #     st.session_state.suggestion_text = "Write your suggestion here..."
+    #
+    # def clear_placeholder():
+    #     if st.session_state.suggestion_text == "Write your suggestion here...":
+    #         st.session_state.suggestion_text = ""
+    #
+    # def restore_placeholder():
+    #     if st.session_state.suggestion_text == "":
+    #         st.session_state.suggestion_text = "Write your suggestion here..."
+    #
+    # suggestion = st.text_area(
+    #     label="",
+    #     value=st.session_state.suggestion_text,
+    #     help="Is there any suggestion?",
+    #     on_change=restore_placeholder,
+    #     key="suggestion_text"
+    # )
+    #
+    # if suggestion == "Write your suggestion here...":
+    #     suggestion = ""
+    #
+    # if st.button("Submit"):
+    #     if suggestion.strip():
+    #         insert_suggestion(user, suggestion.strip())
+    #         st.success("Suggestion submitted successfully!")
+    #         st.session_state.suggestion_text = "Write your suggestion here..."
+    #     else:
+    #         st.warning("Please write a suggestion before submitting.")
 
 
 if __name__ == "__main__":

@@ -18,6 +18,21 @@ def insert_message(session_id, user_id, message, user_role):
             
     finally:
         connection.close()
+
+
+# insert user_chat_history
+def insert_user_chat_history(user_id, user_name, chat_count, patient_details):
+    value = (user_id, user_name, chat_count, patient_details)
+    connection = get_connection()
+    
+    try:
+        with connection.cursor() as cursor:
+            sql = "INSERT INTO user_chat_history (user_id, user_name, chat_count, patient_details) VALUES (%s, %s, %s, %s)"
+            cursor.execute(sql, value)
+            connection.commit()
+    
+    finally:
+        connection.close()
         
 # generate session id
 def generate_session_id():
@@ -46,6 +61,7 @@ st.title("💬 Communication")
 current_user = st.session_state.get('user_info', {"user_id": None, "username": "unknown", "role": "dentist"})
 user_id = current_user["user_id"]
 user_role = current_user["role"]
+print(f'st.session_state is :{st.session_state}')
 
 if 'session_id' not in st.session_state or st.session_state['session_id'] is None:
     st.session_state['session_id'] = generate_session_id()
