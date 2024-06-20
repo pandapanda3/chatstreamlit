@@ -101,10 +101,6 @@ def main():
         avatar_image = Image.open(io.BytesIO(avatar_data))
         st.image(avatar_image, width=100, caption="Updated Avatar")
         
-    # st.markdown(
-    #     f'<div class="header"><img src="{st.session_state.avatar}" alt="Avatar" style="border-radius:50%;width:100px;height:100px;"><h1>"{user}"</h1></div>',
-    #     unsafe_allow_html=True
-    # )
     
     # Suggestion Form
     st.markdown("### Feedback and Suggestion")
@@ -118,7 +114,7 @@ def main():
             insert_suggestion(user, suggestion_content)
             st.success("Suggestion submitted successfully!")
             # Clear the suggestion text
-            # st.experimental_rerun()
+            st.empty()
         else:
             st.warning("Please write a suggestion before submitting.")
 
