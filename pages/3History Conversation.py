@@ -4,6 +4,7 @@ from service.mysql import get_connection
 import pandas as pd
 
 make_sidebar()
+st.set_page_config(layout="wide")
 # Streamlit App
 st.title('History Conversation')
 user_info = st.session_state.user_info
