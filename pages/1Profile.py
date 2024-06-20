@@ -83,25 +83,27 @@ def main():
     # Upload image for avatar
     uploaded_file = st.file_uploader("Choose a new profile picture", type=["jpg", "jpeg", "png"])
     if uploaded_file is not None:
-        image = Image.open(uploaded_file)
-        img_byte_arr = io.BytesIO()
-        image.save(img_byte_arr, format='PNG')
-        img_byte_arr = img_byte_arr.getvalue()
-    
-        # Update the avatar in the database
-        update_avatar(user, img_byte_arr)
-    
-        # Display the uploaded image
-        st.image(image, caption='Uploaded Image.', use_column_width=True)
-    
-        st.success("Profile picture updated!")
-    
-        # Reload the avatar from the database to display
-        avatar_data = get_avatar(user)
-        avatar_image = Image.open(io.BytesIO(avatar_data))
-        st.image(avatar_image, width=100, caption="Updated Avatar")
+        try:
+            image = Image.open(uploaded_file)
+            img_byte_arr = io.BytesIO()
+            image.save(img_byte_arr, format='PNG')
+            img_byte_arr = img_byte_arr.getvalue()
         
-    
+            # Update the avatar in the database
+            update_avatar(user_id, img_byte_arr)
+        
+            # Display the uploaded image
+            st.image(image, caption='Uploaded Image.', use_column_width=True)
+        
+            st.success("Profile picture updated!")
+        
+            # Reload the avatar from the database to display
+            avatar_data = get_avatar(user)
+            avatar_image = Image.open(io.BytesIO(avatar_data))
+            st.image(avatar_image, width=100, caption="Updated Avatar")
+        except UnidentifiedImageError:
+            st.error("The uploaded file is not a valid image.")
+
     # Suggestion Form
     st.markdown("### Feedback and Suggestion")
     suggestion = st.text_area("Write your suggestion here...", key="suggestion_text")
