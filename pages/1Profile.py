@@ -61,7 +61,7 @@ def main():
         try:
             avatar_image = Image.open(io.BytesIO(avatar_data))
             st.session_state.avatar = avatar_image
-            st.image(st.session_state.avatar, width=100, caption=user, key="avatar_uploader")
+            st.image(st.session_state.avatar, width=100, caption=user)
         except UnidentifiedImageError:
             st.session_state.avatar = "https://via.placeholder.com/100"
             st.error("Failed to load avatar image.")
