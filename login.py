@@ -60,7 +60,7 @@ if st.button("Log in", type="primary"):
         st.session_state['session_id'] = None
         st.session_state['messages'] = []
         st.success("Logged in successfully!")
-        st.switch_page("pages/2Communication.py")
+        st.switch_page("pages/1Profile.py")
     else:
         st.error("Incorrect username or password")
         
