@@ -120,7 +120,7 @@ def main():
             insert_suggestion(user, suggestion_content)
             st.success("Suggestion submitted successfully!")
             # Clear the suggestion text
-            st.text_area(label="Write your suggestion here...", help="Is there any suggestion?", key="empty_text")
+            st.write(f"Current suggestion: {st.session_state.suggestion_text}")
         else:
             st.warning("Please write a suggestion before submitting.")
 
