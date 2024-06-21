@@ -1,7 +1,6 @@
 import streamlit as st
 from navigation import make_sidebar
-from service.generate_conversation import generate_patient_conversation
-from service.mysql import get_connection, get_secret
+from service.mysql import get_connection
 
 
 # get all the chat history of certain session_id
@@ -34,7 +33,7 @@ def display_chat(session_id):
 make_sidebar()
 
 st.title("💬 History Detail Conversation For a Session")
-
+st.text('If the page is blank, please go the the History Conversation page to choose a session.')
 
 if "session_id" not in st.session_state:
     st.session_state.session_id = ''

@@ -63,19 +63,7 @@ if st.button("Log in", type="primary"):
         st.switch_page("pages/3History Conversation.py")
     else:
         st.error("Incorrect username or password")
-        
-st.markdown("""
-    <style>
-    .button-container {
-        display: flex;
-        justify-content: space-between;
-    }
-    .button-container > button {
-        flex: 1;
-        margin: 0 5px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+     
 
 
 def show_create_account_form():
