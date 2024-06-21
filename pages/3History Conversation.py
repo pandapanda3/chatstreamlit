@@ -17,7 +17,7 @@ def fetch_chat_history_data(user_id):
     connection = get_connection()
     try:
         with connection.cursor() as cursor:
-            sql = "SELECT user_name, chat_count, patient_details, session_id FROM user_chat_history where user_id =  %s"
+            sql = "SELECT chat_count, user_name, patient_details, session_id FROM user_chat_history where user_id =  %s"
             cursor.execute(sql, (user_id,))
             result = cursor.fetchall()
             return result
