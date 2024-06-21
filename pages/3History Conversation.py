@@ -8,7 +8,6 @@ make_sidebar()
 # Streamlit App
 st.title('History Conversation')
 user_info = st.session_state.user_info
-user = user_info['username']
 user_id = user_info['user_id']
 
 
@@ -30,38 +29,42 @@ chat_history_data = fetch_chat_history_data(user_id)
 chat_history_data_df = pd.DataFrame(chat_history_data,
                                     columns=["user_name", "chat_count", "patient_details", "session_id"])
 
-# chat_history_data_df["session_id"] = chat_history_data_df["session_id"].astype(str)
 
-# Display the data in Streamlit
-st.data_editor(
-    chat_history_data_df,
-    column_config={
-        "chat_count": st.column_config.NumberColumn(
-            "The number of chat session",
-            help="The number of chats",
-            width="medium"
-        ),
-        "user_name": st.column_config.TextColumn(
-            "User Name",
-            help="The name of the user",
-            width="medium"
-        ),
-        "patient_details": st.column_config.TextColumn(
-            "Patient Details",
-            help="Details of the patient",
-            width="large"
-        ),
-        
-    },
-    hide_index=True,
-)
+col1, col2 = st.columns([3, 1])
 
-for index, row in chat_history_data_df.iterrows():
-    session_id = row["session_id"]
-    chat_count = row["chat_count"]
-    if st.button(f"Click me to jump into the detail: {chat_count}", key=chat_count):
-        st.session_state.session_id = session_id
-        st.session_state.chat_count = chat_count
-        st.switch_page("pages/4History Detail Conversation.py")
-        
-print(f'the session state information: {st.session_state}')
+with col1:
+
+    # Display the data in Streamlit
+    st.data_editor(
+        chat_history_data_df,
+        column_config={
+            "chat_count": st.column_config.NumberColumn(
+                "The number of chat session",
+                help="The number of chats",
+                width="medium"
+            ),
+            "user_name": st.column_config.TextColumn(
+                "User Name",
+                help="The name of the user",
+                width="medium"
+            ),
+            "patient_details": st.column_config.TextColumn(
+                "Patient Details",
+                help="Details of the patient",
+                width="large"
+            ),
+            
+        },
+        hide_index=True,
+    )
+
+with col2:
+    # when click the button, jump to another page to get the detail message
+    for index, row in chat_history_data_df.iterrows():
+        session_id = row["session_id"]
+        chat_count = row["chat_count"]
+        if st.button(f"Click me to jump into the detail: {chat_count}", key=chat_count):
+            st.session_state.session_id = session_id
+            st.session_state.chat_count = chat_count
+            st.switch_page("pages/4History Detail Conversation.py")
+  

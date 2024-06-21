@@ -20,6 +20,7 @@ def make_sidebar():
             st.page_link("pages/1Profile.py", label="Profile") # , icon="👤‍‍"
             st.page_link("pages/2Communication.py", label="Communication") # , icon="💬"
             st.page_link("pages/3History Conversation.py", label="History Conversation") # , icon="📝"
+            st.page_link("pages/4History Detail Conversation.py", label="History Detail Conversation")
             st.write("")
             st.write("")
 
