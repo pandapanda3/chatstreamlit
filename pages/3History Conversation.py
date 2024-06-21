@@ -33,31 +33,39 @@ print(f'{type(chat_history_data_df)}, data df is :{chat_history_data_df}')
 print(f'{type(chat_history_data)}, data is :{chat_history_data}')
 
 # Display the data in Streamlit
-st.data_editor(
-    chat_history_data_df,
-    column_config={
-        "user_name": st.column_config.TextColumn(
-            "User Name",
-            help="The name of the user",
-            width="medium"
-        ),
-        "chat_count": st.column_config.NumberColumn(
-            "The number of question",
-            help="The number of chats",
-            width="medium"
-        ),
-        "patient_details": st.column_config.TextColumn(
-            "Patient Details",
-            help="Details of the patient",
-            width="large"
-        ),
-        "session_id": st.column_config.LinkColumn(
-            "Session",
-            help="Details of each chat detail",
-            width="medium",
-            display_text="session_id",
-            url="history_page?session_id={session_id}",
-        ),
-    },
-    hide_index=True,
-)
+# st.data_editor(
+#     chat_history_data_df,
+#     column_config={
+#         "user_name": st.column_config.TextColumn(
+#             "User Name",
+#             help="The name of the user",
+#             width="medium"
+#         ),
+#         "chat_count": st.column_config.NumberColumn(
+#             "The number of question",
+#             help="The number of chats",
+#             width="medium"
+#         ),
+#         "patient_details": st.column_config.TextColumn(
+#             "Patient Details",
+#             help="Details of the patient",
+#             width="large"
+#         ),
+#         "session_id": st.column_config.LinkColumn(
+#             "Session",
+#             help="Details of each chat detail",
+#             width="medium",
+#             display_text="session_id",
+#             url="history_page?session_id={session_id}",
+#         ),
+#     },
+#     hide_index=True,
+# )
+
+st.dataframe(chat_history_data_df)
+
+for index, row in chat_history_data_df.iterrows():
+    session_id = row["session_id"]
+    if st.button(f"查看会话 {session_id}", key=session_id):
+        st.experimental_set_query_params(session_id=session_id)
+        st.experimental_rerun()
