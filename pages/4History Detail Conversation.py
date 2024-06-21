@@ -37,6 +37,7 @@ st.title("💬 History Detail Conversation For a Session")
 
 
 query_params = st.experimental_get_query_params()
+print(f'get the params: {query_params}')
 if "session_id" in query_params:
     session_id = query_params.get("session_id", [None])[0]
     if session_id:
