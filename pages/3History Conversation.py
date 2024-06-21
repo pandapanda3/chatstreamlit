@@ -55,8 +55,7 @@ st.data_editor(
             "Session",
             help="Details of each chat detail",
             width="large",
-            display_text="click me to show the detail",
-            url="history_page?session_id={session_id}",
+            display_text="click me to show the detail"
         ),
     },
     hide_index=True,
