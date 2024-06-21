@@ -32,9 +32,6 @@ chat_history_data_df = pd.DataFrame(chat_history_data,
 
 chat_history_data_df["session_id"] = chat_history_data_df["session_id"].astype(str)
 
-# print(f'{type(chat_history_data_df)}, data df is :{chat_history_data_df}')
-# print(f'{type(chat_history_data)}, data is :{chat_history_data}')
-#
 # Display the data in Streamlit
 st.data_editor(
     chat_history_data_df,
@@ -54,37 +51,15 @@ st.data_editor(
             help="Details of the patient",
             width="large"
         ),
-        "session_id": st.column_config.LinkColumn(
-            "Session",
-            help="Details of each chat detail",
-            width="large",
-            display_text="click me to show the detail"
-        ),
+        
     },
     hide_index=True,
 )
 
-# st.dataframe(chat_history_data_df)
-#
-# for index, row in chat_history_data_df.iterrows():
-#     session_id = row["session_id"]
-#     if st.button(f"查看会话 {session_id}", key=session_id):
-#         st.query_params(session_id=session_id)
-#         st.rerun()
-
-# st.write(chat_history_data_df)
-# # selected_row = st.selectbox("Select a row to get session_id", chat_history_data_df.columns)
-# #
-# # # 提取选中行的 session_id
-# # session_id = chat_history_data_df.loc[selected_row, "session_id"]
-# #
-# # # 显示 session_id
-# # st.write(f"Selected session_id: {session_id}")
-# # st.query_params.session_id = session_id
-
 session_ids = chat_history_data_df["session_id"].tolist()
 if "session_id" not in st.session_state:
     st.session_state.session_id = ''
+print(f'the session state information: {st.session_state}')
 for session_id in session_ids:
     if st.button(f"click me to jump into the detail: {session_id}", key=session_id):
         st.session_state.session_id = session_id
