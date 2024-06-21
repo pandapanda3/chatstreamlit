@@ -62,10 +62,6 @@ for index, row in chat_history_data_df.iterrows():
     if st.button(f"Click me to jump into the detail: {chat_count}", key=chat_count):
         st.session_state.session_id = session_id
         st.session_state.chat_count = chat_count
-        st.page_link("pages/4History Detail Conversation.py", label="History Detail Conversation")
+        st.switch_page("pages/4History Detail Conversation.py")
         
 print(f'the session state information: {st.session_state}')
-
-# for session_id in session_ids:
-#     if st.button(f"click me to jump into the detail: {session_id}", key=session_id):
-#         st.session_state.session_id = session_id
