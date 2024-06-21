@@ -56,11 +56,16 @@ st.data_editor(
     hide_index=True,
 )
 
-session_ids = chat_history_data_df["session_id"].tolist()
-if "session_id" not in st.session_state:
-    st.session_state.session_id = ''
-print(f'the session state information: {st.session_state}')
-for session_id in session_ids:
-    if st.button(f"click me to jump into the detail: {session_id}", key=session_id):
+for index, row in chat_history_data_df.iterrows():
+    session_id = row["session_id"]
+    chat_count = row["chat_count"]
+    if st.button(f"Click me to jump into the detail: {chat_count}", key=chat_count):
         st.session_state.session_id = session_id
+        st.session_state.chat_count = chat_count
         st.page_link("pages/4History Detail Conversation.py", label="History Detail Conversation")
+        
+print(f'the session state information: {st.session_state}')
+
+# for session_id in session_ids:
+#     if st.button(f"click me to jump into the detail: {session_id}", key=session_id):
+#         st.session_state.session_id = session_id
