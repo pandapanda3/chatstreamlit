@@ -29,10 +29,10 @@ chat_history_data = fetch_chat_history_data(user_id)
 
 chat_history_data_df = pd.DataFrame(chat_history_data,
                                     columns=["user_name", "chat_count", "patient_details", "session_id"])
-print(f'{type(chat_history_data_df)}, data df is :{chat_history_data_df}')
-print(f'{type(chat_history_data)}, data is :{chat_history_data}')
-
-# Display the data in Streamlit
+# print(f'{type(chat_history_data_df)}, data df is :{chat_history_data_df}')
+# print(f'{type(chat_history_data)}, data is :{chat_history_data}')
+#
+# # Display the data in Streamlit
 # st.data_editor(
 #     chat_history_data_df,
 #     column_config={
@@ -62,10 +62,20 @@ print(f'{type(chat_history_data)}, data is :{chat_history_data}')
 #     hide_index=True,
 # )
 
-st.dataframe(chat_history_data_df)
+# st.dataframe(chat_history_data_df)
+#
+# for index, row in chat_history_data_df.iterrows():
+#     session_id = row["session_id"]
+#     if st.button(f"查看会话 {session_id}", key=session_id):
+#         st.query_params(session_id=session_id)
+#         st.rerun()
 
-for index, row in chat_history_data_df.iterrows():
-    session_id = row["session_id"]
-    if st.button(f"查看会话 {session_id}", key=session_id):
-        st.query_params(session_id=session_id)
-        st.rerun()
+st.write(chat_history_data_df)
+selected_row = st.selectbox("Select a row to get session_id", chat_history_data_df.index)
+
+# 提取选中行的 session_id
+session_id = chat_history_data_df.loc[selected_row, "session_id"]
+
+# 显示 session_id
+st.write(f"Selected session_id: {session_id}")
+st.query_params.session_id = session_id
