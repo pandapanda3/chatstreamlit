@@ -67,5 +67,5 @@ st.dataframe(chat_history_data_df)
 for index, row in chat_history_data_df.iterrows():
     session_id = row["session_id"]
     if st.button(f"查看会话 {session_id}", key=session_id):
-        st.experimental_set_query_params(session_id=session_id)
-        st.experimental_rerun()
+        st.query_params(session_id=session_id)
+        st.rerun()

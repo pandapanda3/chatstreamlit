@@ -40,9 +40,6 @@ query_params = st.experimental_get_query_params()
 print(f'get the params: {query_params}')
 if "session_id" in query_params:
     session_id = query_params.get("session_id", [None])[0]
-    if session_id:
-        display_chat(session_id)
-    else:
-        st.write("No session ID provided.")
+    display_chat(session_id)
 else:
     st.write("No session ID provided.")
