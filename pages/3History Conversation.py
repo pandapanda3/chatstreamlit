@@ -54,7 +54,7 @@ with col1:
                 help="Details of the patient",
                 width="large"
             ),
-            "session_id": st.column_config.TextColumn(
+            "session_id": st.column_config.NumberColumn(
                 "Tech Details (IGNORE IT)",
                 help="Tech Details (forget about it)",
                 width="small"
