@@ -40,7 +40,7 @@ st.data_editor(
     chat_history_data_df,
     column_config={
         "chat_count": st.column_config.NumberColumn(
-            "The number of question",
+            "The number of chat session",
             help="The number of chats",
             width="medium"
         ),
@@ -83,7 +83,8 @@ st.data_editor(
 # # st.query_params.session_id = session_id
 
 session_ids = chat_history_data_df["session_id"].tolist()
-
+if "session_id" not in st.session_state:
+    st.session_state.session_id = ''
 for session_id in session_ids:
     if st.button(f"click me to jump into the detail: {session_id}", key=session_id):
         st.session_state.session_id = session_id
