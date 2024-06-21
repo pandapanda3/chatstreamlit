@@ -3,6 +3,7 @@ from navigation import make_sidebar
 from service.mysql import get_connection
 import pandas as pd
 
+st.set_page_config(page_title="History Conversation", layout="wide")
 make_sidebar()
 
 # Streamlit App
@@ -27,7 +28,7 @@ def fetch_chat_history_data(user_id):
 chat_history_data = fetch_chat_history_data(user_id)
 
 chat_history_data_df = pd.DataFrame(chat_history_data,
-                                    columns=["user_name", "chat_count", "patient_details", "session_id"])
+                                    columns=["chat_count", "user_name", "patient_details", "session_id"])
 
 
 col1, col2 = st.columns([3, 1])
@@ -41,7 +42,7 @@ with col1:
             "chat_count": st.column_config.NumberColumn(
                 "The number of chat session",
                 help="The number of chats",
-                width="medium"
+                width="small"
             ),
             "user_name": st.column_config.TextColumn(
                 "User Name",
@@ -53,7 +54,11 @@ with col1:
                 help="Details of the patient",
                 width="large"
             ),
-            
+            "session_id": st.column_config.TextColumn(
+                "Tech Details (IGNORE IT)",
+                help="Tech Details (forget about it)",
+                width="small"
+            ),
         },
         hide_index=True,
     )
