@@ -29,6 +29,9 @@ chat_history_data = fetch_chat_history_data(user_id)
 
 chat_history_data_df = pd.DataFrame(chat_history_data,
                                     columns=["user_name", "chat_count", "patient_details", "session_id"])
+
+chat_history_data_df["session_id"] = chat_history_data_df["session_id"].astype(str)
+
 # print(f'{type(chat_history_data_df)}, data df is :{chat_history_data_df}')
 # print(f'{type(chat_history_data)}, data is :{chat_history_data}')
 #
