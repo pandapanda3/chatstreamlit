@@ -30,7 +30,7 @@ chat_history_data = fetch_chat_history_data(user_id)
 chat_history_data_df = pd.DataFrame(chat_history_data,
                                     columns=["user_name", "chat_count", "patient_details", "session_id"])
 
-chat_history_data_df["session_id"] = chat_history_data_df["session_id"].astype(str)
+# chat_history_data_df["session_id"] = chat_history_data_df["session_id"].astype(str)
 
 # Display the data in Streamlit
 st.data_editor(
