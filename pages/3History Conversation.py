@@ -84,5 +84,5 @@ session_ids = chat_history_data_df["session_id"].tolist()
 
 for session_id in session_ids:
     if st.button(f"click me to jump into the detail: {session_id}", key=session_id):
-        st.query_params.session_id = session_id
+        st.session_state.session_id = session_id
         st.page_link("pages/4History Detail Conversation.py", label="History Detail Conversation")
