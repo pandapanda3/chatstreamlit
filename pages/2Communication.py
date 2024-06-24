@@ -79,6 +79,15 @@ if openai_api_key == '':
     with st.sidebar:
         openai_api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
 
+with st.sidebar:
+    st.header("Patient Details")
+    gender = st.selectbox("Gender", ["Male", "Female", "Other"])
+    age = st.number_input("Age", min_value=0, max_value=120, step=1)
+    symptoms = st.text_area("Symptoms")
+    allergies = st.text_area("Allergies")
+    social_habits = st.text_area("Social Habits")
+
+
 st.title("💬 Communication")
 
 current_user = st.session_state.get('user_info', {"user_id": None, "username": "unknown", "role": "dentist"})
