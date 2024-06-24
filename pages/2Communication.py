@@ -29,8 +29,10 @@ def get_largest_chat_number(user_id):
             sql = "SELECT MAX(chat_count) AS max_chat_count FROM user_chat_history WHERE user_id = %s"
             cursor.execute(sql, value)
             result = cursor.fetchone()
-            max_chat_count = result[0] if result else 0
-            print(f'The max chat number is :{max_chat_count}')
+            if result and len(result) > 0:
+                max_chat_count = result[0] if result[0] is not None else 0
+            else:
+                max_chat_count = 0
             return max_chat_count
     
     finally:
@@ -59,7 +61,10 @@ def generate_session_id():
         with connection.cursor() as cursor:
             cursor.execute("SELECT MAX(session_id) FROM chat_records")
             result = cursor.fetchone()
-            max_session_id = result[0] if result[0] is not None else 0
+            if result and len(result) > 0:
+                max_session_id = result[0] if result[0] is not None else 0
+            else:
+                max_session_id = 0
             return max_session_id + 1
     finally:
         connection.close()
@@ -101,7 +106,7 @@ if dentist_input := st.chat_input():
     if 'messages' in st.session_state and len(st.session_state.messages) == 1:
         max_chat_count = get_largest_chat_number(user_id)
         print(f'max_chat_count: {max_chat_count}')
-        if not max_chat_count: 
+        if not max_chat_count:
             max_chat_count = 0
         insert_user_chat_history(user_id, username, max_chat_count + 1, f'patient for {username}', session_id)
     
