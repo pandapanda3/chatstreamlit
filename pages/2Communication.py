@@ -101,7 +101,7 @@ if dentist_input := st.chat_input():
     if 'messages' in st.session_state and len(st.session_state.messages) == 1:
         max_chat_count = get_largest_chat_number(user_id)
         print(f'max_chat_count: {max_chat_count}')
-        if max_chat_count == '':
+        if not max_chat_count: 
             max_chat_count = 0
         insert_user_chat_history(user_id, username, max_chat_count + 1, f'patient for {username}', session_id)
     
