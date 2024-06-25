@@ -7,6 +7,7 @@ __pycache__/
 .idea/
 .secreate
 .env
+./service/test.py
 # C extensions
 *.so
 
