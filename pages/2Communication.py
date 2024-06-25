@@ -92,6 +92,8 @@ if "messages" not in st.session_state or not st.session_state["messages"]:
 
 if 'session_id' not in st.session_state or st.session_state['session_id'] is None:
     st.session_state['session_id'] = generate_session_id()
+if 'patient_information' not in st.session_state:
+    st.session_state['patient_information'] = ''
 
 session_id = st.session_state['session_id']
 
