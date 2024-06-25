@@ -17,11 +17,12 @@ make_sidebar()
 
 st.title("💬 History Detail Conversation For a Session")
 st.text('If the page is blank, please go the the History Conversation page to choose a session.')
-
+print('*'*100)
 if "session_id" not in st.session_state:
     st.session_state.session_id = ''
 else:
     session_id = st.session_state.session_id
+    print(f'session is from state:{session_id}')
     if session_id != '':
         display_chat(session_id)
         print(f'the session ID is {session_id}')
