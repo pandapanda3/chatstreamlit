@@ -1,23 +1,6 @@
 import streamlit as st
 from navigation import make_sidebar
-from service.mysql import get_connection
-
-
-# get all the chat history of certain session_id
-def get_session_chat_detail(session_id):
-    value = (session_id,)
-    connection = get_connection()
-    
-    try:
-        with connection.cursor() as cursor:
-            sql = "SELECT user_role, message FROM chat_records WHERE session_id = %s"
-            cursor.execute(sql, value)
-            result = cursor.fetchall()
-            
-            return result
-    
-    finally:
-        connection.close()
+from service.information_from_mysql import get_session_chat_detail, get_patient_symptoms_detail
 
 # display the chat detail
 def display_chat(session_id):
@@ -41,5 +24,8 @@ else:
     session_id = st.session_state.session_id
     if session_id != '':
         display_chat(session_id)
+        with st.sidebar:
+            patient_symptoms = get_patient_symptoms_detail(session_id)
+            st.write(patient_symptoms)
     else:
         st.write("No session ID provided.")

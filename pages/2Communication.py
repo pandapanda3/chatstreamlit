@@ -1,6 +1,7 @@
 import streamlit as st
 from navigation import make_sidebar
 from service.generate_conversation import generate_patient_conversation, generate_patient_Symptoms
+from service.information_from_mysql import get_patient_symptoms_detail
 from service.mysql import get_connection, get_secret
 
 
@@ -92,8 +93,6 @@ if "messages" not in st.session_state or not st.session_state["messages"]:
 
 if 'session_id' not in st.session_state or st.session_state['session_id'] is None:
     st.session_state['session_id'] = generate_session_id()
-if 'patient_information' not in st.session_state:
-    st.session_state['patient_information'] = ''
 
 session_id = st.session_state['session_id']
 
@@ -111,11 +110,10 @@ if dentist_input := st.chat_input():
         if not max_chat_count:
             max_chat_count = 0
         # generate the symptons of patient
-        with st.sidebar:
-            patient_information = generate_patient_Symptoms(openai_api_key)
-            st.session_state['patient_information'] = patient_information
-            print(f"st.session_state[patient_information] : {st.session_state['patient_information']}")
-        insert_user_chat_history(user_id, username, max_chat_count + 1, patient_information, session_id)
+        
+        patient_Symptoms = generate_patient_Symptoms(openai_api_key)
+        
+        insert_user_chat_history(user_id, username, max_chat_count + 1, patient_Symptoms, session_id)
 
         
     st.session_state.messages.append({"role": "dentist", "content": dentist_input})
@@ -134,6 +132,8 @@ if dentist_input := st.chat_input():
     insert_message(session_id, user_id, patient_response, "patient")
 
 # if it has already generate the patient_information, show it in the sidebar
-if st.session_state['patient_information']:
+if session_id:
     with st.sidebar:
-        st.write(st.session_state['patient_information'])
+        patient_symptoms = get_patient_symptoms_detail(session_id)
+        st.write(patient_symptoms)
+    
