@@ -108,13 +108,14 @@ if dentist_input := st.chat_input():
     # Check if there is only one message in the session state
     if 'messages' in st.session_state and len(st.session_state.messages) == 1:
         max_chat_count = get_largest_chat_number(user_id)
-        print(f'max_chat_count: {max_chat_count}')
+        
         if not max_chat_count:
             max_chat_count = 0
-        # generate the symptons of patient
-        
+            
+        # generate the symptoms of patient
         patient_Symptoms = generate_patient_Symptoms(openai_api_key)
         st.session_state['patient_symptoms'] = patient_Symptoms
+        
         insert_user_chat_history(user_id, username, max_chat_count + 1, patient_Symptoms, session_id)
 
         
@@ -135,7 +136,7 @@ if dentist_input := st.chat_input():
 
 # if it has already generate the patient_information, show it in the sidebar
 if session_id:
-    print(f'communication the last one, session id is :{session_id}')
+    print(f'communication the last one, session id is :{session_id}, session state is {st.session_state}')
     with st.sidebar:
         formatted_symptoms=st.session_state['patient_symptoms'].replace('\n', '<br>')
         st.markdown(formatted_symptoms, unsafe_allow_html=True)
