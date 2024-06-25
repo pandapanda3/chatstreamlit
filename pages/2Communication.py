@@ -93,6 +93,8 @@ if "messages" not in st.session_state or not st.session_state["messages"]:
 
 if 'session_id' not in st.session_state or st.session_state['session_id'] is None:
     st.session_state['session_id'] = generate_session_id()
+if 'patient_symptoms' not in st.session_state:
+    st.session_state['patient_symptoms'] = ''
 
 session_id = st.session_state['session_id']
 
@@ -112,7 +114,7 @@ if dentist_input := st.chat_input():
         # generate the symptons of patient
         
         patient_Symptoms = generate_patient_Symptoms(openai_api_key)
-        
+        st.session_state['patient_symptoms'] = patient_Symptoms
         insert_user_chat_history(user_id, username, max_chat_count + 1, patient_Symptoms, session_id)
 
         
@@ -134,6 +136,4 @@ if dentist_input := st.chat_input():
 # if it has already generate the patient_information, show it in the sidebar
 if session_id:
     with st.sidebar:
-        patient_symptoms = get_patient_symptoms_detail(session_id)
-        st.write(patient_symptoms)
-    
+        st.write(st.session_state['patient_symptoms'])

@@ -85,7 +85,7 @@ def generate_patient_Symptoms(openai_api_key=""):
     second_prompt = ChatPromptTemplate.from_template(
         """
         For the following text, extract the key information. Format the output with the keys, don't response in json type.
-
+        Patient information:
     text: {text}
         """
     )
