@@ -136,4 +136,5 @@ if dentist_input := st.chat_input():
 # if it has already generate the patient_information, show it in the sidebar
 if session_id:
     with st.sidebar:
-        st.write(st.session_state['patient_symptoms'])
+        formatted_symptoms=st.session_state['patient_symptoms'].replace('\n', '<br>')
+        st.markdown(formatted_symptoms, unsafe_allow_html=True)
