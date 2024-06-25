@@ -22,14 +22,14 @@ if "session_id" not in st.session_state:
     st.session_state.session_id = ''
 else:
     session_id = st.session_state.session_id
-    print(f'session is from state:{session_id}')
     if session_id != '':
         display_chat(session_id)
         print(f'the session ID is {session_id}')
         with st.sidebar:
             patient_symptoms = get_patient_symptoms_detail(session_id)
-            # each session only has one record
-            formatted_symptoms = patient_symptoms[0][0].replace('\n', '<br>')
-            st.markdown(formatted_symptoms, unsafe_allow_html=True)
+            if patient_symptoms:
+                # each session only has one record
+                formatted_symptoms = patient_symptoms[0][0].replace('\n', '<br>')
+                st.markdown(formatted_symptoms, unsafe_allow_html=True)
     else:
         st.write("No session ID provided.")
