@@ -27,6 +27,6 @@ else:
         with st.sidebar:
             patient_symptoms = get_patient_symptoms_detail(session_id)
             # each session only has one record
-            st.write(patient_symptoms[0])
+            st.write(patient_symptoms[0][0])
     else:
         st.write("No session ID provided.")
