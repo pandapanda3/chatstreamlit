@@ -114,7 +114,7 @@ if dentist_input := st.chat_input():
         with st.sidebar:
             patient_information = generate_patient_Symptoms(openai_api_key)
             st.write(patient_information)
-        insert_user_chat_history(user_id, username, max_chat_count + 1, {patient_information}, session_id)
+        insert_user_chat_history(user_id, username, max_chat_count + 1, patient_information, session_id)
     
     st.session_state.messages.append({"role": "dentist", "content": dentist_input})
     # show the message in the streamlit
