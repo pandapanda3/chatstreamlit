@@ -79,8 +79,6 @@ if openai_api_key == '':
         openai_api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
 
 
-
-
 st.title("💬 Communication")
 
 current_user = st.session_state.get('user_info', {"user_id": None, "username": "unknown", "role": "dentist"})
@@ -110,12 +108,19 @@ if dentist_input := st.chat_input():
         print(f'max_chat_count: {max_chat_count}')
         if not max_chat_count:
             max_chat_count = 0
-        # display the symptons of patient
+        # generate the symptons of patient
         with st.sidebar:
             patient_information = generate_patient_Symptoms(openai_api_key)
             st.write(patient_information)
+            st.session_state['patient_information'] = patient_information
+            print(f"st.session_state[patient_information] : {st.session_state['patient_information']}")
         insert_user_chat_history(user_id, username, max_chat_count + 1, patient_information, session_id)
-    
+
+    # if it has already generate the patient_information, show it in the sidebar
+    if st.session_state['patient_information']:
+        with st.sidebar:
+            st.write(st.session_state['patient_information'])
+        
     st.session_state.messages.append({"role": "dentist", "content": dentist_input})
     # show the message in the streamlit
     st.chat_message("dentist").write(dentist_input)
