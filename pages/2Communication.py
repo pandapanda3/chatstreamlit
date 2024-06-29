@@ -24,6 +24,7 @@ print(f'st.session_state is :{st.session_state}')
 if "messages" not in st.session_state or not st.session_state["messages"]:
     st.session_state["messages"] = [{"role": "patient", "content": "Hello, doctor. How are you today?"}]
 
+# generate session id from chat_records
 if 'session_id' not in st.session_state or st.session_state['session_id'] is None:
     st.session_state['session_id'] = generate_session_id()
 if 'patient_symptoms' not in st.session_state:
@@ -81,7 +82,6 @@ if dentist_input := st.chat_input():
         print(f'The message is bad')
         update_quality_of_each_message(session_id, user_id, message_id, 'bad')
     
-
 
 # if it has already generate the patient_information, show it in the sidebar
 if len(st.session_state.messages) > 1:
