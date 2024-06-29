@@ -35,8 +35,7 @@ if 'message_id' not in st.session_state:
 def increment_message_id():
     st.session_state['message_id'] += 1
     return st.session_state['message_id']
-# get the largest chat number of a person
-max_chat_count = get_largest_chat_number(user_id)
+
 session_id = st.session_state['session_id']
 
 for msg in st.session_state.messages:
@@ -48,7 +47,8 @@ if dentist_input := st.chat_input():
         st.stop()
     # Check if there is only one message in the session state
     if 'messages' in st.session_state and len(st.session_state.messages) == 1:
-        
+        # get the largest chat number of a person
+        max_chat_count = get_largest_chat_number(user_id)
         if not max_chat_count:
             max_chat_count = 0
         chat_count = max_chat_count + 1
@@ -95,6 +95,7 @@ if session_id:
         st.markdown(formatted_symptoms, unsafe_allow_html=True)
         
         conversation_score = st.number_input("How would you rate the quality of this conversation?", min_value=0, max_value=100, step=1, format="%d")
-        if conversation_score:
+        if conversation_score is not None and len(st.session_state.messages) > 1:
             st.write("The quality of this conversation is ", conversation_score)
-            update_user_chat_history_quality(user_id, username, max_chat_count, conversation_score)
+            chat_count_number = get_largest_chat_number(user_id)
+            update_user_chat_history_quality(user_id, username, chat_count_number, conversation_score)
