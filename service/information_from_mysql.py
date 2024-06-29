@@ -99,17 +99,20 @@ def insert_user_chat_history(user_id, user_name, chat_count, patient_details, se
         connection.close()
 
 
-# update the quality of user_chat_history
+# update the quality of the conversation of a session
 def update_user_chat_history_quality(user_id, user_name, chat_count, conversation_score):
     value = (conversation_score, user_id, user_name, chat_count)
     connection = get_connection()
-    
+    print(f'conversation_score, user_id, user_name, chat_count: {conversation_score},{user_id},{user_name},{chat_count}\n The type is  {type(conversation_score)},{type(user_id)},{type(user_name)},{type(chat_count)}')
     try:
         with connection.cursor() as cursor:
             sql = "UPDATE user_chat_history SET conversation_score = %s WHERE user_id = %s AND user_name = %s AND chat_count = %s"
-            cursor.execute(sql, value)
+            result = cursor.execute(sql, value)
+            print(f'the result is {result}')
             connection.commit()
-    
+    except Exception as e:
+        print(f'An error occurred: {e}')
+        connection.rollback()
     finally:
         connection.close()
 
