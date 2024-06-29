@@ -79,18 +79,19 @@ if dentist_input := st.chat_input():
     message_id = increment_message_id()
     insert_message(session_id, user_id, patient_response, "patient", message_id)
     # mark the performance
-    col1, col2 = st.columns([1, 1])
-    with col1:
-        good_on = st.toggle("Performance is good",key = 'good:'+str(message_id))
-        print(f'THE VALUE OF GOOD IS :{good_on}')
-        if good_on:
-            print(f'The message is good: session_id: {session_id}, user_id:{user_id}, message_id:{message_id}')
-            update_quality_of_each_message(session_id, user_id, message_id, 'good')
-    with col2:
-        bad_on = st.toggle("Performance is bad", key='bad:' + str(message_id))
-        if bad_on:
-            print(f'The message is bad')
-            update_quality_of_each_message(session_id, user_id, message_id, 'bad')
+    good_on = st.toggle("Performance is good", key='good:' + str(message_id))
+    print(f'THE VALUE OF GOOD IS :{good_on}')
+    if good_on:
+        print(f'The message is good: session_id: {session_id}, user_id:{user_id}, message_id:{message_id}')
+        update_quality_of_each_message(session_id, user_id, message_id, 'good')
+
+    # col1, col2 = st.columns([1, 1])
+    # with col1:
+    #         with col2:
+    #     bad_on = st.toggle("Performance is bad", key='bad:' + str(message_id))
+    #     if bad_on:
+    #         print(f'The message is bad')
+    #         update_quality_of_each_message(session_id, user_id, message_id, 'bad')
                 
 # if it has already generate the patient_information, show it in the sidebar
 if len(st.session_state.messages) > 1:
