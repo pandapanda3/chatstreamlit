@@ -103,7 +103,7 @@ def insert_user_chat_history(user_id, user_name, chat_count, patient_details, se
 def update_user_chat_history_quality(user_id, user_name, chat_count, conversation_score):
     value = (conversation_score, user_id, user_name, chat_count)
     connection = get_connection()
-    print(f'conversation_score, user_id, user_name, chat_count: {conversation_score},{user_id},{user_name},{chat_count}\n The type is  {type(conversation_score)},{type(user_id)},{type(user_name)},{type(chat_count)}')
+    print(f'conversation_score, user_id, user_name, chat_count:  {conversation_score}: {type(conversation_score)}, {user_id} : {type(user_id)}, {user_name} : {type(user_name)}, {chat_count}:{type(chat_count)}\n')
     try:
         with connection.cursor() as cursor:
             sql = "UPDATE user_chat_history SET conversation_score = %s WHERE user_id = %s AND user_name = %s AND chat_count = %s"

@@ -35,13 +35,8 @@ if 'message_id' not in st.session_state:
 def increment_message_id():
     st.session_state['message_id'] += 1
     return st.session_state['message_id']
-
 # get the largest chat number of a person
 max_chat_count = get_largest_chat_number(user_id)
-if not max_chat_count:
-    max_chat_count = 0
-chat_count = max_chat_count + 1
-
 session_id = st.session_state['session_id']
 
 for msg in st.session_state.messages:
@@ -54,6 +49,9 @@ if dentist_input := st.chat_input():
     # Check if there is only one message in the session state
     if 'messages' in st.session_state and len(st.session_state.messages) == 1:
         
+        if not max_chat_count:
+            max_chat_count = 0
+        chat_count = max_chat_count + 1
         # generate the symptoms of patient
         patient_Symptoms = generate_patient_Symptoms(openai_api_key)
         st.session_state['patient_symptoms'] = patient_Symptoms
@@ -81,8 +79,10 @@ if dentist_input := st.chat_input():
     message_id = increment_message_id()
     insert_message(session_id, user_id, patient_response, "patient", message_id)
     if st.button('👍', key='like_button'):
+        print(f'The message is good: session_id: {session_id}, user_id:{user_id}, message_id:{message_id}')
         update_quality_of_each_message(session_id, user_id, message_id, 'good')
     if st.button('👎', key='dislike_button'):
+        print(f'The message is bad')
         update_quality_of_each_message(session_id, user_id, message_id, 'bad')
     
     
@@ -93,6 +93,8 @@ if session_id:
     with st.sidebar:
         formatted_symptoms=st.session_state['patient_symptoms'].replace('\n', '<br>')
         st.markdown(formatted_symptoms, unsafe_allow_html=True)
-        conversation_score = st.number_input("How would you rate the quality of this conversation?", value=None, placeholder="Please enter a number between 0 and 100.")
-        st.write("The quality of this conversation is ", conversation_score)
-        update_user_chat_history_quality(user_id, username, chat_count, conversation_score)
+        
+        conversation_score = st.number_input("How would you rate the quality of this conversation?", min_value=0, max_value=100, step=1, format="%d")
+        if conversation_score:
+            st.write("The quality of this conversation is ", conversation_score)
+            update_user_chat_history_quality(user_id, username, max_chat_count, conversation_score)
