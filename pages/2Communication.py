@@ -81,7 +81,8 @@ if dentist_input := st.chat_input():
     # mark the performance
     col1, col2 = st.columns([1, 1])
     with col1:
-        good_on = st.toggle("Performance is good",key = 'good:'+str(message_id) )
+        good_on = st.toggle("Performance is good",key = 'good:'+str(message_id))
+        print(f'THE VALUE OF GOOD IS :{good_on}')
         if good_on:
             print(f'The message is good: session_id: {session_id}, user_id:{user_id}, message_id:{message_id}')
             update_quality_of_each_message(session_id, user_id, message_id, 'good')
