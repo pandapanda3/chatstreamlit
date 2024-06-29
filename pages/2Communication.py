@@ -90,8 +90,8 @@ if len(st.session_state.messages) > 1:
         formatted_symptoms=st.session_state['patient_symptoms'].replace('\n', '<br>')
         st.markdown(formatted_symptoms, unsafe_allow_html=True)
         
-        conversation_score = st.number_input("How would you rate the quality of this conversation?", min_value=0, max_value=100, step=1, format="%d")
-        if conversation_score is not None and len(st.session_state.messages) > 1:
+        conversation_score = st.number_input("How would you rate the quality of this conversation?", min_value=0, max_value=100, step=1, format="%d", value=None, placeholder="Number between 0 to 100")
+        if conversation_score is not None:
             st.write("The quality of this conversation is ", conversation_score)
             chat_count_number = get_largest_chat_number(user_id)
             update_user_chat_history_quality(user_id, username, chat_count_number, conversation_score)
