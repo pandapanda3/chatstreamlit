@@ -6,14 +6,12 @@ from service.information_from_mysql import generate_session_id, get_largest_chat
 from service.mysql import get_secret
 
 make_sidebar()
-
 # get openai_key
 secret_values = get_secret()
 openai_api_key = secret_values['openai_api_key']
 if openai_api_key == '':
     with st.sidebar:
         openai_api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
-
 
 st.title("💬 Communication")
 
@@ -26,8 +24,8 @@ print(f'st.session_state is :{st.session_state}')
 if "messages" not in st.session_state or not st.session_state["messages"]:
     st.session_state["messages"] = [{"role": "patient", "content": "Hello, doctor. How are you today?"}]
 
-if 'session_id' not in st.session_state:
-    st.session_state['session_id'] = ''
+if 'session_id' not in st.session_state or st.session_state['session_id'] is None:
+    st.session_state['session_id'] = generate_session_id()
 if 'patient_symptoms' not in st.session_state:
     st.session_state['patient_symptoms'] = ''
 if 'message_id' not in st.session_state:
@@ -38,6 +36,8 @@ def increment_message_id():
 
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
+
+session_id = st.session_state['session_id']
 
 if dentist_input := st.chat_input():
     if not openai_api_key:
@@ -53,18 +53,14 @@ if dentist_input := st.chat_input():
         # generate the symptoms of patient
         patient_Symptoms = generate_patient_Symptoms(openai_api_key)
         st.session_state['patient_symptoms'] = patient_Symptoms
-        st.session_state['session_id'] = generate_session_id()
-        session_id = st.session_state['session_id']
         insert_user_chat_history(user_id, username, chat_count, patient_Symptoms, session_id)
 
         
     st.session_state.messages.append({"role": "dentist", "content": dentist_input})
     # show the message in the streamlit
     st.chat_message("dentist").write(dentist_input)
-    
-    
+
     # save the conversation
-    session_id = st.session_state['session_id']
     message_id = increment_message_id()
     insert_message(session_id, user_id, dentist_input, "dentist", message_id)
     
@@ -85,10 +81,10 @@ if dentist_input := st.chat_input():
         print(f'The message is bad')
         update_quality_of_each_message(session_id, user_id, message_id, 'bad')
     
-    
+
 
 # if it has already generate the patient_information, show it in the sidebar
-if session_id:
+if len(st.session_state.messages) > 1:
     print(f'communication the last one, session id is :{session_id}, session state is {st.session_state}')
     with st.sidebar:
         formatted_symptoms=st.session_state['patient_symptoms'].replace('\n', '<br>')
