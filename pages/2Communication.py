@@ -75,14 +75,16 @@ if dentist_input := st.chat_input():
 
     message_id = increment_message_id()
     insert_message(session_id, user_id, patient_response, "patient", message_id)
-    if st.button('👍', key='like_button'):
-        print(f'The message is good: session_id: {session_id}, user_id:{user_id}, message_id:{message_id}')
-        update_quality_of_each_message(session_id, user_id, message_id, 'good')
-    if st.button('👎', key='dislike_button'):
-        print(f'The message is bad')
-        update_quality_of_each_message(session_id, user_id, message_id, 'bad')
-    
-
+    col1, col2 = st.columns([1, 1])
+    with col1:
+        if st.button(f'👍'):
+            print(f'The message is good: session_id: {session_id}, user_id:{user_id}, message_id:{message_id}')
+            update_quality_of_each_message(session_id, user_id, message_id, 'good')
+        with col2:
+            if st.button(f'👎'):
+                print(f'The message is bad')
+                update_quality_of_each_message(session_id, user_id, message_id, 'bad')
+                
 # if it has already generate the patient_information, show it in the sidebar
 if len(st.session_state.messages) > 1:
     print(f'communication the last one, session id is :{session_id}, session state is {st.session_state}')
