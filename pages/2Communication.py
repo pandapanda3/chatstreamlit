@@ -79,7 +79,7 @@ if dentist_input := st.chat_input():
     message_id = increment_message_id()
     insert_message(session_id, user_id, patient_response, "patient", message_id)
     # mark the performance
-    good_on = st.toggle("Performance is good")
+    good_on = st.checkbox("Performance is good")
     print(f'THE VALUE OF GOOD IS :{good_on}')
     if good_on:
         print(f'The message is good: session_id: {session_id}, user_id:{user_id}, message_id:{message_id}')
