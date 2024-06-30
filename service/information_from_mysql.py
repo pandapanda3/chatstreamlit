@@ -43,6 +43,7 @@ def insert_message(session_id, user_id, message, user_role, message_id):
     try:
         with connection.cursor() as cursor:
             sql = "INSERT INTO chat_records (session_id, user_id, message, user_role, message_id) VALUES (%s, %s, %s, %s, %s)"
+            print(f'Insert chat_records: {sql}')
             cursor.execute(sql, value)
             connection.commit()
     
