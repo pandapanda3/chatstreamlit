@@ -91,8 +91,8 @@ if dentist_input := st.chat_input():
     #         with col2:
     #     bad_on = st.toggle("Performance is bad", key='bad:' + str(message_id))
     #     if bad_on:
-    #         print(f'The message is bad')
-    #         update_quality_of_each_message(session_id, user_id, message_id, 'bad')
+    print(f'The message is bad')
+    update_quality_of_each_message(session_id, user_id, message_id, 'bad')
                 
 # if it has already generate the patient_information, show it in the sidebar
 if len(st.session_state.messages) > 1:
