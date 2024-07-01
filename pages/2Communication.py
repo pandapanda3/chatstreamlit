@@ -41,20 +41,6 @@ def increment_message_id():
     st.session_state['message_id'] += 1
     return st.session_state['message_id']
 
-def get_feedback():
-    score_mappings = {
-        "thumbs": {"👍": 1, "👎": 0},
-        "faces": {"😀": 1, "🙂": 0.75, "😐": 0.5, "🙁": 0.25, "😞": 0},
-    }
-    feedback = streamlit_feedback(
-        feedback_type="thumbs",
-        score_mapping=score_mappings["thumbs"],
-        key=st.session_state.feedback_key
-    )
-    if feedback:
-        st.write(":orange[Component output:]")
-        st.write(feedback)
-    return feedback
 
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
@@ -99,8 +85,11 @@ if dentist_input:
     insert_message(session_id, user_id, patient_response, "patient", message_id)
     print(f'go to click the checkbox.')
     st.session_state.feedback_key += 1
-    feedback = get_feedback()
-    
+    feedback = streamlit_feedback(feedback_type="thumbs", align="flex-start")
+    print(f' the feedback is {feedback}')
+    if feedback:
+        # st.write(":orange[Component output:]")
+        st.write(feedback)
     
     # mark the performance
     # good_on = st.checkbox("Performance is good")
@@ -131,4 +120,4 @@ if len(st.session_state.messages) > 1:
             chat_count_number = get_largest_chat_number(user_id)
             update_user_chat_history_quality(user_id, username, chat_count_number, conversation_score)
             st.session_state['conversation_score'] = conversation_score
-            
+
