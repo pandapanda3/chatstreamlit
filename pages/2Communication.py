@@ -43,7 +43,8 @@ for msg in st.session_state.messages:
 
 session_id = st.session_state['session_id']
 
-if dentist_input := st.chat_input():
+dentist_input = st.chat_input("Input your question! ",)
+if dentist_input:
     if not openai_api_key:
         st.info("Please add your OpenAI API key to continue.")
         st.stop()
@@ -109,8 +110,3 @@ if len(st.session_state.messages) > 1:
             update_user_chat_history_quality(user_id, username, chat_count_number, conversation_score)
             st.session_state['conversation_score'] = conversation_score
             
-            
-agree = st.checkbox("I agree")
-print(f'agree is {agree}')
-if agree:
-    st.write("Great!")
