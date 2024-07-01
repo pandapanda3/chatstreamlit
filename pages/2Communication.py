@@ -4,6 +4,7 @@ from service.generate_conversation import generate_patient_conversation, generat
 from service.information_from_mysql import generate_session_id, get_largest_chat_number, \
     insert_user_chat_history, insert_message, update_user_chat_history_quality, update_quality_of_each_message
 from service.mysql import get_secret
+from streamlit_feedback import streamlit_feedback
 
 make_sidebar()
 # get openai_key
@@ -33,10 +34,27 @@ if 'message_id' not in st.session_state:
     st.session_state['message_id'] = 0
 if 'conversation_score' not in st.session_state:
     st.session_state['conversation_score'] = ''
+if 'feedback_key' not in st.session_state:
+    st.session_state.feedback_key = 0
     
 def increment_message_id():
     st.session_state['message_id'] += 1
     return st.session_state['message_id']
+
+def get_feedback():
+    score_mappings = {
+        "thumbs": {"👍": 1, "👎": 0},
+        "faces": {"😀": 1, "🙂": 0.75, "😐": 0.5, "🙁": 0.25, "😞": 0},
+    }
+    feedback = streamlit_feedback(
+        feedback_type="thumbs",
+        score_mapping=score_mappings["thumbs"],
+        key=st.session_state.feedback_key
+    )
+    if feedback:
+        st.write(":orange[Component output:]")
+        st.write(feedback)
+    return feedback
 
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
@@ -80,12 +98,16 @@ if dentist_input:
     message_id = increment_message_id()
     insert_message(session_id, user_id, patient_response, "patient", message_id)
     print(f'go to click the checkbox.')
+    st.session_state.feedback_key += 1
+    feedback = get_feedback()
+    
+    
     # mark the performance
-    good_on = st.checkbox("Performance is good")
-    print(f'THE VALUE OF GOOD IS :{good_on}')
-    if good_on:
-        print(f'The message is good: session_id: {session_id}, user_id:{user_id}, message_id:{message_id}')
-        update_quality_of_each_message(session_id, user_id, message_id, 'good')
+    # good_on = st.checkbox("Performance is good")
+    # print(f'THE VALUE OF GOOD IS :{good_on}')
+    # if good_on:
+    #     print(f'The message is good: session_id: {session_id}, user_id:{user_id}, message_id:{message_id}')
+    #     update_quality_of_each_message(session_id, user_id, message_id, 'good')
 
     # col1, col2 = st.columns([1, 1])
     # with col1:
