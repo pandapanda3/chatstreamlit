@@ -41,6 +41,23 @@ def increment_message_id():
     st.session_state['message_id'] += 1
     return st.session_state['message_id']
 
+def get_feedback():
+    feedback = streamlit_feedback(
+        feedback_type="thumbs",
+        label="Please rate your experience",
+        key=st.session_state.feedback_key,
+    )
+    print(f'the feedback in the function is {feedback}')
+    if feedback:
+        if feedback['score'] == '👍':
+            feedback['text'] = 'good'
+        elif feedback['score'] == '👎':
+            feedback['text'] = 'bad'
+        
+        st.write(":orange[Component output:]")
+        st.write(feedback)
+    
+    return feedback
 
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
@@ -84,9 +101,10 @@ if dentist_input:
     message_id = increment_message_id()
     insert_message(session_id, user_id, patient_response, "patient", message_id)
     print(f'go to click the checkbox.')
-    st.session_state.feedback_key += 1
-    feedback = streamlit_feedback(feedback_type="thumbs", align="flex-start")
+    
+    feedback = get_feedback()
     print(f' the feedback is {feedback}')
+    st.session_state.feedback_key = feedback
     if feedback:
         # st.write(":orange[Component output:]")
         st.write(feedback)
