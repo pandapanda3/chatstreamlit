@@ -44,7 +44,7 @@ def increment_message_id():
 def get_feedback():
     feedback = streamlit_feedback(
         feedback_type="thumbs",
-        label="Please rate your experience",
+        
         key=st.session_state.feedback_key,
     )
     print(f'the feedback in the function is {feedback}')
