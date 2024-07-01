@@ -77,7 +77,6 @@ if dentist_input := st.chat_input():
     st.chat_message("patient").write(patient_response)
 
     message_id = increment_message_id()
-    #
     insert_message(session_id, user_id, patient_response, "patient", message_id)
     # mark the performance
     # good_on = st.checkbox("Performance is good")
@@ -108,3 +107,9 @@ if len(st.session_state.messages) > 1:
             chat_count_number = get_largest_chat_number(user_id)
             update_user_chat_history_quality(user_id, username, chat_count_number, conversation_score)
             st.session_state['conversation_score'] = conversation_score
+            
+            
+agree = st.checkbox("I agree")
+print(f'agree is {agree}')
+if agree:
+    st.write("Great!")
