@@ -12,3 +12,4 @@ langchain_community
 boto3
 pandas
 streamlit_feedback
+streamlit-aggrid
