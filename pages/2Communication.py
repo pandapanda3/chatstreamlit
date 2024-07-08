@@ -41,25 +41,28 @@ def increment_message_id():
     st.session_state['message_id'] += 1
     return st.session_state['message_id']
 
+# def get_feedback():
+#     feedback = streamlit_feedback(
+#         feedback_type="thumbs",
+#         key=st.session_state.feedback_key,
+#     )
+#     print(f'the feedback in the function is {feedback}')
+#     if feedback:
+#         if feedback['score'] == '👍':
+#             feedback['text'] = 'good'
+#         elif feedback['score'] == '👎':
+#             feedback['text'] = 'bad'
+#
+#         st.write(":orange[Component output:]")
+#         st.write(feedback)
+#
+#     return feedback
+
 def get_feedback():
-    feedback = streamlit_feedback(
-        feedback_type="thumbs",
-        key=st.session_state.feedback_key,
-    )
-    print(f'the feedback in the function is {feedback}')
-    if feedback:
-        if feedback['score'] == '👍':
-            feedback['text'] = 'good'
-        elif feedback['score'] == '👎':
-            feedback['text'] = 'bad'
-
-        st.write(":orange[Component output:]")
-        st.write(feedback)
-
-    return feedback
-
-def fbcb():
-    st.session_state.feedback_key = st.session_state.fb_k
+    st.toast("✔️ Feedback received!")
+    feedback_score = st.session_state.feedback['score']
+    print(f'in the get feed_back(), the score is {feedback_score}')
+    return feedback_score
 
 
 for msg in st.session_state.messages:
@@ -106,8 +109,8 @@ if dentist_input:
     print(f'go to click the checkbox.')
 
     with st.form('form'):
-        streamlit_feedback(feedback_type="thumbs", align="flex-end", key='fb_k')
-        st.form_submit_button('Save feedback', on_click=fbcb)
+        streamlit_feedback(feedback_type="thumbs", align="flex-end", key='feedback')
+        st.form_submit_button('Save feedback', on_click=get_feedback)
     
     # st.session_state.feedback_key = feedback
     # print(f' the feedback is {st.session_state.feedback_key}')
