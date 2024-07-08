@@ -99,7 +99,7 @@ if st.button("Create an Account"):
     st.session_state.show_create_account_form = True
     st.session_state.show_reset_password_form = False
 
-if st.button("Forgot Password"):
+if st.button("Reset Password"):
     st.session_state.show_create_account_form = False
     st.session_state.show_reset_password_form = True
 st.markdown('</div>', unsafe_allow_html=True)

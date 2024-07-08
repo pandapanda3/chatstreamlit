@@ -7,7 +7,7 @@ from service.mysql import get_connection
 st.set_page_config(page_title="Profile", page_icon="👤")
 make_sidebar()
 
-
+# save the suggestion from user
 def insert_suggestion(user, suggestion_content):
     value = (user, suggestion_content)
     connection = get_connection()
@@ -32,7 +32,7 @@ def update_avatar(user_id, avatar_data):
     finally:
         connection.close()
 
-
+# get the avatar of current user
 def get_avatar(user_id):
     connection = get_connection()
     try:
@@ -94,8 +94,7 @@ def main():
             avatar_image = Image.open(io.BytesIO(avatar_data))
             # Save the avatar image in session state
             st.session_state.avatar = avatar_image
-            # Display the updated avatar image
-            # st.image(st.session_state.avatar, width=100, caption=user, key="avatar_uploader")
+            
         except UnidentifiedImageError:
             st.error("The uploaded file is not a valid image.")
             return

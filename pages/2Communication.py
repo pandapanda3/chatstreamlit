@@ -44,7 +44,6 @@ def increment_message_id():
 def get_feedback():
     feedback = streamlit_feedback(
         feedback_type="thumbs",
-        
         key=st.session_state.feedback_key,
     )
     print(f'the feedback in the function is {feedback}')
@@ -53,11 +52,15 @@ def get_feedback():
             feedback['text'] = 'good'
         elif feedback['score'] == '👎':
             feedback['text'] = 'bad'
-        
+
         st.write(":orange[Component output:]")
         st.write(feedback)
-    
+
     return feedback
+
+def fbcb():
+    st.session_state.feedback_key = st.session_state.fb_k
+
 
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
@@ -101,13 +104,16 @@ if dentist_input:
     message_id = increment_message_id()
     insert_message(session_id, user_id, patient_response, "patient", message_id)
     print(f'go to click the checkbox.')
+
+    with st.form('form'):
+        streamlit_feedback(feedback_type="thumbs", align="flex-end", key='fb_k')
+        st.form_submit_button('Save feedback', on_click=fbcb)
     
-    feedback = get_feedback()
-    print(f' the feedback is {feedback}')
-    st.session_state.feedback_key = feedback
-    if feedback:
-        # st.write(":orange[Component output:]")
-        st.write(feedback)
+    # st.session_state.feedback_key = feedback
+    # print(f' the feedback is {st.session_state.feedback_key}')
+    # if feedback:
+    #     # st.write(":orange[Component output:]")
+    #     st.write(feedback)
     
     # mark the performance
     # good_on = st.checkbox("Performance is good")
