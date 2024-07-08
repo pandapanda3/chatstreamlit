@@ -2,8 +2,8 @@ import streamlit as st
 from navigation import make_sidebar
 from service.mysql import get_connection
 import pandas as pd
-from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode, DataReturnMode
-
+from st_aggrid import AgGrid, GridOptionsBuilder
+from st_aggrid.shared import JsCode
 
 st.set_page_config(page_title="History Conversation", layout="wide")
 make_sidebar()
@@ -13,13 +13,20 @@ st.title('History Conversation')
 user_info = st.session_state.user_info
 user_id = user_info['user_id']
 
+# Function to generate link
+def generate_link(session_id, chat_count):
+    st.session_state.session_id = session_id
+    st.session_state.chat_count = chat_count
+    # st.experimental_rerun()  # Reload the app with updated session state
+    st.switch_page("pages/4History Detail Conversation.py")
+    
 
 #  Fetch data from database
 def fetch_chat_history_data(user_id):
     connection = get_connection()
     try:
         with connection.cursor() as cursor:
-            sql = "SELECT chat_count, user_name, patient_details, session_id FROM user_chat_history where user_id =  %s"
+            sql = "SELECT chat_count, user_name, patient_details, conversation_score, session_id FROM user_chat_history where user_id =  %s"
             cursor.execute(sql, (user_id,))
             result = cursor.fetchall()
             return result
@@ -30,7 +37,18 @@ def fetch_chat_history_data(user_id):
 chat_history_data = fetch_chat_history_data(user_id)
 
 chat_history_data_df = pd.DataFrame(chat_history_data,
-                                    columns=["chat_count", "user_name", "patient_details", "session_id"])
+                                    columns=["chat_count", "user_name", "patient_details", "conversation_score", "session_id"])
+# Add link column to DataFrame
+chat_history_data_df['link'] = "Go to conversation"
+chat_history_data_df['link'] = chat_history_data_df.apply(lambda row: generate_link(row['session_id'], row['chat_count']), axis=1)
+
+gb = GridOptionsBuilder.from_dataframe(chat_history_data_df)
+gb.configure_pagination(paginationAutoPageSize=True)  # Enable pagination
+gridOptions = gb.build()
+
+# 显示 AgGrid
+AgGrid(chat_history_data_df, gridOptions=gridOptions)
+
 #
 #
 # col1, col2 = st.columns([3, 1])
@@ -74,9 +92,3 @@ chat_history_data_df = pd.DataFrame(chat_history_data,
 #             st.session_state.session_id = session_id
 #             st.session_state.chat_count = chat_count
 #             st.switch_page("pages/4History Detail Conversation.py")
-gb = GridOptionsBuilder.from_dataframe(chat_history_data_df)
-gb.configure_pagination(paginationAutoPageSize=True)  # 启用分页
-gridOptions = gb.build()
-
-# 显示 AgGrid
-AgGrid(chat_history_data_df, gridOptions=gridOptions)
