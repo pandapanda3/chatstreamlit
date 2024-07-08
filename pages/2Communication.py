@@ -59,10 +59,17 @@ def increment_message_id():
 #     return feedback
 
 def get_feedback():
-    st.toast("✔️ Feedback received!")
+    message_id = st.session_state.message_id
+    st.toast("✔:red[ Feedback received! ]", icon="🔥")
     feedback_score = st.session_state.feedback['score']
     print(f'in the get feed_back(), the score is {feedback_score}')
-    return feedback_score
+    if feedback_score == '👍':
+        print(f'insert good')
+        update_quality_of_each_message(session_id, user_id, message_id, 'good')
+    elif feedback_score == '👎':
+        update_quality_of_each_message(session_id, user_id, message_id, 'bad')
+        print(f'insert bad')
+    
 
 
 for msg in st.session_state.messages:
