@@ -34,33 +34,16 @@ if 'message_id' not in st.session_state:
     st.session_state['message_id'] = 0
 if 'conversation_score' not in st.session_state:
     st.session_state['conversation_score'] = ''
-if 'feedback_key' not in st.session_state:
-    st.session_state.feedback_key = 0
+
     
 def increment_message_id():
     st.session_state['message_id'] += 1
     return st.session_state['message_id']
 
-# def get_feedback():
-#     feedback = streamlit_feedback(
-#         feedback_type="thumbs",
-#         key=st.session_state.feedback_key,
-#     )
-#     print(f'the feedback in the function is {feedback}')
-#     if feedback:
-#         if feedback['score'] == '👍':
-#             feedback['text'] = 'good'
-#         elif feedback['score'] == '👎':
-#             feedback['text'] = 'bad'
-#
-#         st.write(":orange[Component output:]")
-#         st.write(feedback)
-#
-#     return feedback
-
+# get feed back for the generation of the model
 def get_feedback():
     message_id = st.session_state.message_id
-    st.toast("✔:red[ Feedback received! ]", icon="🔥")
+    st.toast(":red[ Feedback received! ]", icon="🔥")
     feedback_score = st.session_state.feedback['score']
     print(f'in the get feed_back(), the score is {feedback_score}')
     if feedback_score == '👍':
@@ -102,7 +85,7 @@ if dentist_input:
     # save the conversation
     message_id = increment_message_id()
     insert_message(session_id, user_id, dentist_input, "dentist", message_id)
-    
+    # generate answer of the patient
     context = "\n".join([msg["content"] for msg in st.session_state.messages if msg["role"] == "dentist"])
     patient_response = generate_patient_conversation(dentist_input=dentist_input, context=context,
                                                      openai_api_key=openai_api_key)
@@ -113,33 +96,13 @@ if dentist_input:
 
     message_id = increment_message_id()
     insert_message(session_id, user_id, patient_response, "patient", message_id)
-    print(f'go to click the checkbox.')
-
+    
+    # get feedback
     with st.form('form'):
         streamlit_feedback(feedback_type="thumbs", align="flex-end", key='feedback')
         st.form_submit_button('Save feedback', on_click=get_feedback)
     
-    # st.session_state.feedback_key = feedback
-    # print(f' the feedback is {st.session_state.feedback_key}')
-    # if feedback:
-    #     # st.write(":orange[Component output:]")
-    #     st.write(feedback)
-    
-    # mark the performance
-    # good_on = st.checkbox("Performance is good")
-    # print(f'THE VALUE OF GOOD IS :{good_on}')
-    # if good_on:
-    #     print(f'The message is good: session_id: {session_id}, user_id:{user_id}, message_id:{message_id}')
-    #     update_quality_of_each_message(session_id, user_id, message_id, 'good')
 
-    # col1, col2 = st.columns([1, 1])
-    # with col1:
-    #         with col2:
-    #     bad_on = st.toggle("Performance is bad", key='bad:' + str(message_id))
-    #     if bad_on:
-    # print(f'The message is bad')
-    # update_quality_of_each_message(session_id, user_id, message_id, 'bad')
-                
 # if it has already generate the patient_information, show it in the sidebar
 if len(st.session_state.messages) > 1:
     print(f'communication the last one, session id is :{session_id}, session state is {st.session_state}')
