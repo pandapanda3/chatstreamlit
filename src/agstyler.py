@@ -37,8 +37,9 @@ def draw_grid(
     if grid_options is not None:
         gb.configure_grid_options(**grid_options)
 
-    for latin_name, (cyr_name, style_dict) in formatter.items():
-        gb.configure_column(latin_name, header_name=cyr_name, **style_dict)
+    if formatter:
+        for latin_name, (cyr_name, style_dict) in formatter.items():
+            gb.configure_column(latin_name, header_name=cyr_name, **style_dict)
 
     gb.configure_selection(selection_mode=selection, use_checkbox=use_checkbox)
 
@@ -57,12 +58,12 @@ def draw_grid(
 def highlight(color, condition):
     code = f"""
         function(params) {{
-            color = "{color}";
             if ({condition}) {{
                 return {{
-                    'backgroundColor': color
-                }}
+                    'backgroundColor': '{color}'
+                }};
             }}
+            return null;
         }};
     """
     return JsCode(code)

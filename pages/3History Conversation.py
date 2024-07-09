@@ -46,7 +46,7 @@ formatter = {
     "patient_details": ("Patient Details", {}),
     "conversation_score": ("Conversation Score", get_numeric_style_with_precision(0)),
     "session_id": ("Session ID", {}),
-    "link": ("Link", {"cellRenderer": highlight('lightblue', 'true')})
+    "link": ("Link", {"cellRenderer": JsCode('''function(params) { return params.value; }''')})
 }
 
 draw_grid(chat_history_data_df, formatter=formatter, fit_columns=True, theme="balham")
