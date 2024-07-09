@@ -91,10 +91,11 @@ if dentist_input:
     # save the conversation
     message_id = increment_message_id()
     insert_message(session_id, user_id, dentist_input, "dentist", message_id)
-    # generate answer of the patient
+    
+    # gather all the information that patient has told dentist
     context = "\n".join([msg["content"] for msg in st.session_state.messages if msg["role"] == "dentist"])
-    patient_response = generate_patient_conversation(dentist_input=dentist_input, context=context,
-                                                     openai_api_key=openai_api_key)
+    # generate the answer of patient
+    patient_response = generate_patient_conversation(st.session_state['patient_symptoms'], dentist_input, conversation=context, openai_api_key=openai_api_key)
     
     st.session_state.messages.append({"role": "patient", "content": patient_response})
     # show the message in the streamlit
