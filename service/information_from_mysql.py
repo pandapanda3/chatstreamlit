@@ -25,7 +25,7 @@ def get_patient_symptoms_detail(session_id):
     
     try:
         with connection.cursor() as cursor:
-            sql = "SELECT patient_details FROM user_chat_history WHERE session_id = %s"
+            sql = "SELECT patient_details, conversation_score FROM user_chat_history WHERE session_id = %s"
             cursor.execute(sql, value)
             result = cursor.fetchall()
             
@@ -43,7 +43,7 @@ def insert_message(session_id, user_id, message, user_role, message_id):
     try:
         with connection.cursor() as cursor:
             sql = "INSERT INTO chat_records (session_id, user_id, message, user_role, message_id) VALUES (%s, %s, %s, %s, %s)"
-            print(f'Insert chat_records: {sql}')
+            print(f'Insert chat_records: {sql}, VALUE IS : {value}')
             cursor.execute(sql, value)
             connection.commit()
     
@@ -124,10 +124,12 @@ def generate_session_id():
         with connection.cursor() as cursor:
             cursor.execute("SELECT MAX(session_id) FROM chat_records")
             result = cursor.fetchone()
+            print(f'')
             if result and len(result) > 0:
                 max_session_id = result[0] if result[0] is not None else 0
             else:
                 max_session_id = 0
+            print(f'generate session id is {max_session_id + 1}')
             return max_session_id + 1
     finally:
         connection.close()

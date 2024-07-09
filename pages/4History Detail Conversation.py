@@ -10,10 +10,11 @@ def display_chat(session_id):
         user_role, message, quality = chat
         print(f'current quality is {quality}')
         if quality:
+            print(f'inside the quality: {quality}')
             if quality == 'good':
-                message = message + '👍'
+                message = message + ' 👍'
             else:
-                message = message + '👎'
+                message = message + ' 👎'
         if user_role == "patient":
             st.chat_message("patient").write(message)
         elif user_role == "dentist":
@@ -32,10 +33,12 @@ else:
         display_chat(session_id)
         print(f'the session ID is {session_id}')
         with st.sidebar:
-            patient_symptoms = get_patient_symptoms_detail(session_id)
+            result = get_patient_symptoms_detail(session_id)
+            patient_symptoms, conversation_score = result
             if patient_symptoms:
                 # each session only has one record
                 formatted_symptoms = patient_symptoms[0][0].replace('\n', '<br>')
                 st.markdown(formatted_symptoms, unsafe_allow_html=True)
+            
     else:
         st.write("No session ID provided.")

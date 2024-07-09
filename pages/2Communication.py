@@ -44,6 +44,7 @@ def increment_message_id():
 def get_feedback():
     message_id = st.session_state.message_id
     st.toast(":red[ Feedback received! ]", icon="🔥")
+    print(f'After the  feed back, the session state is :{st.session_state} ')
     feedback_score = st.session_state.feedback['score']
     print(f'in the get feed_back(), the score is {feedback_score}')
     if feedback_score == '👍':
@@ -100,7 +101,7 @@ if dentist_input:
     # get feedback
     with st.form('form'):
         streamlit_feedback(feedback_type="thumbs", align="flex-end", key='feedback')
-        st.form_submit_button('Save feedback', on_click=get_feedback)
+        st.form_submit_button('Save feedback', on_click=get_feedback, use_container_width = True)
     
 
 # if it has already generate the patient_information, show it in the sidebar
