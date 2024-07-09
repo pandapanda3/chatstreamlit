@@ -20,7 +20,9 @@ def draw_grid(
         auto_height: bool = False,
         grid_options: dict = None,
         key=None,
-        css: dict = None
+        css: dict = {
+            ".center-header .ag-header-cell-label": {"justify-content": "center"}
+        }  # Add CSS to center the header text
 ):
 
     gb = GridOptionsBuilder.from_dataframe(df)
