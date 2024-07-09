@@ -15,6 +15,6 @@ def get_screen_height():
         </script>
     """, height=0, width=0)
 
-    # Use Streamlit's experimental function to retrieve the value from the hidden input
-    screen_height = st.experimental_get_query_params().get("screen_height", [500])[0]
+    # Use Streamlit's function to retrieve the value from the hidden input
+    screen_height = st.query_params.get("screen_height", [500])[0]
     return int(screen_height)
