@@ -8,7 +8,7 @@ def display_chat(session_id):
     
     for chat in chat_history:
         user_role, message, quality = chat
-        print(f'current quality is {quality}')
+        
         if quality:
             print(f'inside the quality: {quality}')
             if quality == 'good':
@@ -39,7 +39,7 @@ else:
                 patient_symptoms, conversation_score = result
                 print(f'patient_symptoms: {patient_symptoms}, conversation_score :{conversation_score}')
                 if patient_symptoms:
-                    st.markdown(patient_symptoms.replace('\n', '<br>'))
+                    st.markdown(patient_symptoms)
                 if conversation_score:
                     st.markdown(f"The quality of this conversation is: {conversation_score}")
                 else:
