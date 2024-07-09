@@ -15,11 +15,8 @@ user_id = user_info['user_id']
 
 # Function to generate link
 def generate_link(session_id, chat_count):
-    st.session_state.session_id = session_id
-    st.session_state.chat_count = chat_count
-    # st.experimental_rerun()  # Reload the app with updated session state
-    st.switch_page("pages/4History Detail Conversation.py")
-    
+    return f'<a href="/pages/4History Detail Conversation.py?session_id={session_id}&chat_count={chat_count}" target="_blank">Go to conversation</a>'
+
 
 #  Fetch data from database
 def fetch_chat_history_data(user_id):
@@ -39,15 +36,16 @@ chat_history_data = fetch_chat_history_data(user_id)
 chat_history_data_df = pd.DataFrame(chat_history_data,
                                     columns=["chat_count", "user_name", "patient_details", "conversation_score", "session_id"])
 # Add link column to DataFrame
-chat_history_data_df['link'] = "Go to conversation"
 chat_history_data_df['link'] = chat_history_data_df.apply(lambda row: generate_link(row['session_id'], row['chat_count']), axis=1)
 
 gb = GridOptionsBuilder.from_dataframe(chat_history_data_df)
 gb.configure_pagination(paginationAutoPageSize=True)  # Enable pagination
+gb.configure_column('link', header_name="Link", cellRenderer=JsCode('''function(params) {return params.value;}'''))
+
 gridOptions = gb.build()
 
 # 显示 AgGrid
-AgGrid(chat_history_data_df, gridOptions=gridOptions)
+AgGrid(chat_history_data_df, gridOptions=gridOptions, allow_unsafe_jscode=True)
 
 #
 #
