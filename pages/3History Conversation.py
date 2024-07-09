@@ -55,7 +55,6 @@ formatter = {
 
 draw_grid(chat_history_data_df, max_height=max_table_height, formatter=formatter, fit_columns=True, theme="balham")
 
-
 #
 #
 # col1, col2 = st.columns([3, 1])

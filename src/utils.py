@@ -1,6 +1,7 @@
 # src/utils.py
 
 import streamlit.components.v1 as components
+import streamlit as st
 
 def get_screen_height():
     components.html("""
@@ -14,18 +15,6 @@ def get_screen_height():
         </script>
     """, height=0, width=0)
 
-    screen_height = st_js('document.getElementById("screen_height").value')
-    return int(screen_height) if screen_height else 500
-
-def st_js(js):
-    result = components.html(f"""
-        <script>
-            const result = {js};
-            const element = document.createElement("input");
-            element.setAttribute("type", "hidden");
-            element.setAttribute("id", "result");
-            element.setAttribute("value", result);
-            document.body.appendChild(element);
-        </script>
-    """, height=0, width=0)
-    return result
+    # Use Streamlit's experimental function to retrieve the value from the hidden input
+    screen_height = st.experimental_get_query_params().get("screen_height", [500])[0]
+    return int(screen_height)
