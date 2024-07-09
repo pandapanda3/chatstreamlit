@@ -43,17 +43,22 @@ def increment_message_id():
 # get feed back for the generation of the model
 def get_feedback():
     message_id = st.session_state.message_id
-    st.toast(":red[ Feedback received! ]", icon="🔥")
-    print(f'After the  feed back, the session state is :{st.session_state} ')
-    feedback_score = st.session_state.feedback['score']
-    print(f'in the get feed_back(), the score is {feedback_score}')
-    if feedback_score == '👍':
-        print(f'insert good')
-        update_quality_of_each_message(session_id, user_id, message_id, 'good')
-    elif feedback_score == '👎':
-        update_quality_of_each_message(session_id, user_id, message_id, 'bad')
-        print(f'insert bad')
-    
+    feedback_information = st.session_state.feedback
+    feedback_information_score = feedback_information.get('score', None)
+
+    if feedback_information_score:
+        st.toast(":red[ Feedback received! ]", icon="🔥")
+        print(f'After the  feed back, the session state is :{st.session_state} ')
+        feedback_score = st.session_state.feedback['score']
+        
+        if feedback_score == '👍':
+            print(f'insert good')
+            update_quality_of_each_message(session_id, user_id, message_id, 'good')
+        elif feedback_score == '👎':
+            update_quality_of_each_message(session_id, user_id, message_id, 'bad')
+            print(f'insert bad')
+    else:
+        st.toast(":red[ Please provide feedback by clicking thumbs up or thumbs down. ]", icon="⚠️")
 
 
 for msg in st.session_state.messages:
