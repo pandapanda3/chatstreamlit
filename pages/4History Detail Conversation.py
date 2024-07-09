@@ -33,15 +33,16 @@ else:
         display_chat(session_id)
         print(f'the session ID is {session_id}')
         with st.sidebar:
-            result = get_patient_symptoms_detail(session_id)
-            patient_symptoms, conversation_score = result
-            if patient_symptoms:
-                # each session only has one record
-                formatted_symptoms = patient_symptoms[0][0].replace('\n', '<br>')
-                st.markdown(formatted_symptoms, unsafe_allow_html=True)
-            if conversation_score:
-                st.markdown(f"The quality of this conversation is: {conversation_score}")
-            else:
-                st.markdown(f"The quality of this conversation is: NULL")
+            patient_symptoms_detai_result = get_patient_symptoms_detail(session_id)
+            for result in patient_symptoms_detai_result:
+                patient_symptoms, conversation_score = result
+                if patient_symptoms:
+                    # each session only has one record
+                    formatted_symptoms = patient_symptoms[0][0].replace('\n', '<br>')
+                    st.markdown(formatted_symptoms, unsafe_allow_html=True)
+                if conversation_score:
+                    st.markdown(f"The quality of this conversation is: {conversation_score}")
+                else:
+                    st.markdown(f"The quality of this conversation is: NULL")
     else:
         st.write("No session ID provided.")
