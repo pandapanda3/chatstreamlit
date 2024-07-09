@@ -4,6 +4,8 @@ from service.mysql import get_connection
 import pandas as pd
 from st_aggrid import AgGrid, GridOptionsBuilder
 from st_aggrid.shared import JsCode
+from src.agstyler import draw_grid, get_numeric_style_with_precision, highlight
+
 
 st.set_page_config(page_title="History Conversation", layout="wide")
 make_sidebar()
@@ -38,14 +40,17 @@ chat_history_data_df = pd.DataFrame(chat_history_data,
 # Add link column to DataFrame
 chat_history_data_df['link'] = chat_history_data_df.apply(lambda row: generate_link(row['session_id'], row['chat_count']), axis=1)
 
-gb = GridOptionsBuilder.from_dataframe(chat_history_data_df)
-gb.configure_pagination(paginationAutoPageSize=True)  # Enable pagination
-gb.configure_column('link', header_name="Link", cellRenderer=JsCode('''function(params) {return params.value;}'''))
+formatter = {
+    "chat_count": ("Chat Count", get_numeric_style_with_precision(0)),
+    "user_name": ("User Name", {}),
+    "patient_details": ("Patient Details", {}),
+    "conversation_score": ("Conversation Score", get_numeric_style_with_precision(0)),
+    "session_id": ("Session ID", {}),
+    "link": ("Link", {"cellRenderer": highlight('lightblue', 'true')})
+}
 
-gridOptions = gb.build()
+draw_grid(chat_history_data_df, formatter=formatter, fit_columns=True, theme="balham")
 
-# 显示 AgGrid
-AgGrid(chat_history_data_df, gridOptions=gridOptions, allow_unsafe_jscode=True)
 
 #
 #
