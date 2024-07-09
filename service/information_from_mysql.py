@@ -8,7 +8,7 @@ def get_session_chat_detail(session_id):
     
     try:
         with connection.cursor() as cursor:
-            sql = "SELECT user_role, message FROM chat_records WHERE session_id = %s"
+            sql = "SELECT user_role, message, quality FROM chat_records WHERE session_id = %s"
             cursor.execute(sql, value)
             result = cursor.fetchall()
             

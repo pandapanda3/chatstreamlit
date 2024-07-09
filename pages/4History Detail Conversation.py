@@ -7,7 +7,13 @@ def display_chat(session_id):
     chat_history = get_session_chat_detail(session_id)
     
     for chat in chat_history:
-        user_role, message = chat
+        user_role, message, quality = chat
+        print(f'current quality is {quality}')
+        if quality:
+            if quality == 'good':
+                message = message + '👍'
+            else:
+                message = message + '👎'
         if user_role == "patient":
             st.chat_message("patient").write(message)
         elif user_role == "dentist":
