@@ -47,7 +47,7 @@ chat_history_data_df['link'] = chat_history_data_df.apply(lambda row: generate_l
 formatter = {
     "chat_count": ("Chat Count", get_numeric_style_with_precision(0)),
     "user_name": ("User Name", {}),
-    "patient_details": ("Patient Details", {"cellStyle": {"textAlign": "left", "whiteSpace": "normal"}}),
+    "patient_details": ("Patient Details", {"cellStyle": {"textAlign": "center", "whiteSpace": "normal"}}),
     "conversation_score": ("Conversation Score", get_numeric_style_with_precision(0)),
     "session_id": ("Session ID", {}),
     "link": ("Link", {"cellRenderer": JsCode('''function(params) { return params.value; }''')})

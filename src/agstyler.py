@@ -28,10 +28,10 @@ def draw_grid(
         filterable=True,
         groupable=False,
         editable=False,
-        wrapText=wrap_text,
-        autoHeight=auto_height,
+        wrapText=True,
+        autoHeight=True,
         headerClass='center-header',  # Center the header text
-        cellStyle={"textAlign": "center"}  # Center the cell text
+        cellStyle={"textAlign": "center", "whiteSpace": "normal"}  # Center the cell text and allow wrap text
     )
 
     if grid_options is not None:
@@ -41,7 +41,7 @@ def draw_grid(
         for latin_name, (cyr_name, style_dict) in formatter.items():
             gb.configure_column(latin_name, header_name=cyr_name, **style_dict)
 
-    gb.configure_column("patient_details", cellStyle={"textAlign": "left", "whiteSpace": "normal"})  # Left-align and wrap text for patient_details
+    gb.configure_column("patient_details", cellStyle={"textAlign": "center", "whiteSpace": "normal"})  # Center-align and wrap text for patient_details
     gb.configure_selection(selection_mode=selection, use_checkbox=use_checkbox)
     gb.configure_pagination(paginationAutoPageSize=True)  # Add pagination configuration
 
