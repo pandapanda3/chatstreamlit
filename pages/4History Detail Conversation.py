@@ -31,15 +31,15 @@ else:
     session_id = st.session_state.session_id
     if session_id != '':
         display_chat(session_id)
-        print(f'the session ID is {session_id}')
+        print(f'the session ID in history detail conversation is {session_id}')
         with st.sidebar:
             patient_symptoms_detai_result = get_patient_symptoms_detail(session_id)
             for result in patient_symptoms_detai_result:
-                print(f'patient_symptoms_detai_result is {patient_symptoms_detai_result}, the result is {result}')
+                print(f'patient_symptoms_detai_result is {patient_symptoms_detai_result}')
                 patient_symptoms, conversation_score = result
                 print(f'patient_symptoms: {patient_symptoms}, conversation_score :{conversation_score}')
                 if patient_symptoms:
-                    st.markdown(patient_symptoms)
+                    st.markdown(patient_symptoms.replace('\n', '<br>'))
                 if conversation_score:
                     st.markdown(f"The quality of this conversation is: {conversation_score}")
                 else:
