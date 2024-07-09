@@ -35,7 +35,9 @@ else:
         with st.sidebar:
             patient_symptoms_detai_result = get_patient_symptoms_detail(session_id)
             for result in patient_symptoms_detai_result:
+                print(f'patient_symptoms_detai_result is {patient_symptoms_detai_result}, the result is {result}')
                 patient_symptoms, conversation_score = result
+                print(f'patient_symptoms: {patient_symptoms}, conversation_score :{conversation_score}')
                 if patient_symptoms:
                     # each session only has one record
                     formatted_symptoms = patient_symptoms[0][0].replace('\n', '<br>')
