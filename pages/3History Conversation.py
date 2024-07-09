@@ -79,6 +79,11 @@ with col1:
                 help="Details of the patient",
                 width="large"
             ),
+            "conversation_score": st.column_config.NumberColumn(
+                "Conversation Score",
+                help="The score of this chat session",
+                width="small"
+            ),
             "session_id": st.column_config.NumberColumn(
                 "Tech Details (IGNORE IT)",
                 help="Tech Details (forget about it)",

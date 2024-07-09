@@ -60,7 +60,7 @@ def generate_patient_Symptoms(openai_api_key=""):
     patient_detail = """
             Age: between 20 and 80 years old
             Gender: male or female or other
-            Symptoms: Symptoms: common dental issues, including tooth pain, gum bleeding, tooth decay, bad breath, sensitive teeth, swollen gums, tooth discoloration, mouth sores, loose teeth, receding gums etc
+            Symptoms: common dental issues, including tooth pain, gum bleeding, tooth decay, bad breath, sensitive teeth, swollen gums, tooth discoloration, mouth sores, loose teeth, receding gums etc
             Allergy history: allergies to specific medications, foods, or other substances (please clarify the exact items, not general categories)
             Social habits: whether the patient smokes or drinks alcohol
             Lifestyle habits: whether the patient likes to eat sweets, tooth brushing habits, tooth brushing method
@@ -69,11 +69,11 @@ def generate_patient_Symptoms(openai_api_key=""):
     # prompt template 1: generate information of patient into json format
     first_prompt = ChatPromptTemplate.from_template(
         """
-        Please generate information for a patient visiting the dentist in JSON format. The patient's information should include the following:  patient_detail.
-         {patient_detail}.
-         For Symptoms, include one or two symptoms.
-         For Allergy history, it can be either "no allergy" or one specific allergy.
-         Only generate the information within patient_detail, without replying to any other irrelevant information.
+        Please generate information for a patient visiting the dentist in JSON format. The patient's information should include the following:  {patient_detail}.
+        For Age, Randomly select a value within a given age range, not just the middle value.
+        For Symptoms, include one or two symptoms. briefly describe the symptoms without jargon.
+        For Allergy history, it can be either "no allergy" or one specific allergy.
+        Only generate the information within patient_detail, without replying to any other irrelevant information.
         patient_detail: {patient_detail}
         """
     )
