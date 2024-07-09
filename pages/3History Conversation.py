@@ -56,7 +56,7 @@ chat_history_data_df = pd.DataFrame(chat_history_data,
 # draw_grid(chat_history_data_df, max_height=max_table_height, formatter=formatter, fit_columns=True, theme="balham")
 #
 #
-col1, col2 = st.columns([3, 1])
+col1, col2 = st.columns([5, 1])
 
 with col1:
 
@@ -96,4 +96,5 @@ with col2:
         if st.button(f"Click me to jump into chat session: {chat_count}", key=chat_count):
             st.session_state.session_id = session_id
             st.session_state.chat_count = chat_count
+            print(f'the current session id is {session_id}, chat count is {chat_count}')
             st.switch_page("pages/4History Detail Conversation.py")
