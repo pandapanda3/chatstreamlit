@@ -25,7 +25,7 @@ def draw_grid(
         css: dict = None
 ):
 
-    gb = GridOptionsBuilder()
+    gb = GridOptionsBuilder.from_dataframe(df)
     gb.configure_default_column(
         filterable=True,
         groupable=False,
@@ -42,6 +42,7 @@ def draw_grid(
             gb.configure_column(latin_name, header_name=cyr_name, **style_dict)
 
     gb.configure_selection(selection_mode=selection, use_checkbox=use_checkbox)
+    gb.configure_pagination(paginationAutoPageSize=True)  # Add pagination configuration
 
     return AgGrid(
         df,
