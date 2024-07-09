@@ -39,6 +39,7 @@ else:
                 # each session only has one record
                 formatted_symptoms = patient_symptoms[0][0].replace('\n', '<br>')
                 st.markdown(formatted_symptoms, unsafe_allow_html=True)
-            
+            if conversation_score:
+                st.markdown(f"The quality of this conversation is: {conversation_score}")
     else:
         st.write("No session ID provided.")
