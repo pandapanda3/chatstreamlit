@@ -5,6 +5,7 @@ import pandas as pd
 from st_aggrid import AgGrid, GridOptionsBuilder
 from st_aggrid.shared import JsCode
 from src.agstyler import draw_grid, get_numeric_style_with_precision, highlight
+from src.utils import get_screen_height
 
 
 st.set_page_config(page_title="History Conversation", layout="wide")
@@ -14,6 +15,9 @@ make_sidebar()
 st.title('History Conversation')
 user_info = st.session_state.user_info
 user_id = user_info['user_id']
+
+screen_height = get_screen_height()
+max_table_height = screen_height * 0.75
 
 # Function to generate link
 def generate_link(session_id, chat_count):
@@ -43,13 +47,13 @@ chat_history_data_df['link'] = chat_history_data_df.apply(lambda row: generate_l
 formatter = {
     "chat_count": ("Chat Count", get_numeric_style_with_precision(0)),
     "user_name": ("User Name", {}),
-    "patient_details": ("Patient Details", {}),
+    "patient_details": ("Patient Details", {"cellStyle": {"textAlign": "left", "whiteSpace": "normal"}}),
     "conversation_score": ("Conversation Score", get_numeric_style_with_precision(0)),
     "session_id": ("Session ID", {}),
     "link": ("Link", {"cellRenderer": JsCode('''function(params) { return params.value; }''')})
 }
 
-draw_grid(chat_history_data_df, formatter=formatter, fit_columns=True, theme="balham")
+draw_grid(chat_history_data_df, max_height=max_table_height, formatter=formatter, fit_columns=True, theme="balham")
 
 
 #

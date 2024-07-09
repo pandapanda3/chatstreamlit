@@ -2,8 +2,6 @@
 
 from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode, JsCode
 
-MAX_TABLE_HEIGHT = 500
-
 def get_numeric_style_with_precision(precision: int) -> dict:
     return {"type": ["numericColumn", "customNumericFormat"], "precision": precision}
 
@@ -12,12 +10,12 @@ PINLEFT = {"pinned": "left"}
 
 def draw_grid(
         df,
+        max_height,
         formatter: dict = None,
         selection="multiple",
         use_checkbox=False,
         fit_columns=False,
         theme="streamlit",
-        max_height: int = MAX_TABLE_HEIGHT,
         wrap_text: bool = False,
         auto_height: bool = False,
         grid_options: dict = None,
@@ -31,7 +29,9 @@ def draw_grid(
         groupable=False,
         editable=False,
         wrapText=wrap_text,
-        autoHeight=auto_height
+        autoHeight=auto_height,
+        headerClass='center-header',  # Center the header text
+        cellStyle={"textAlign": "center"}  # Center the cell text
     )
 
     if grid_options is not None:
@@ -41,6 +41,7 @@ def draw_grid(
         for latin_name, (cyr_name, style_dict) in formatter.items():
             gb.configure_column(latin_name, header_name=cyr_name, **style_dict)
 
+    gb.configure_column("patient_details", cellStyle={"textAlign": "left", "whiteSpace": "normal"})  # Left-align and wrap text for patient_details
     gb.configure_selection(selection_mode=selection, use_checkbox=use_checkbox)
     gb.configure_pagination(paginationAutoPageSize=True)  # Add pagination configuration
 

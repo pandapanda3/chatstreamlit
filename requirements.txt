@@ -13,3 +13,4 @@ boto3
 pandas
 streamlit_feedback
 streamlit-aggrid
+streamlit-components
