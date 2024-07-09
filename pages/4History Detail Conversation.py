@@ -41,5 +41,7 @@ else:
                 st.markdown(formatted_symptoms, unsafe_allow_html=True)
             if conversation_score:
                 st.markdown(f"The quality of this conversation is: {conversation_score}")
+            else:
+                st.markdown(f"The quality of this conversation is: NULL")
     else:
         st.write("No session ID provided.")
