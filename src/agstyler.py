@@ -8,6 +8,12 @@ def get_numeric_style_with_precision(precision: int) -> dict:
 PRECISION_ZERO = get_numeric_style_with_precision(0)
 PINLEFT = {"pinned": "left"}
 
+css = {
+    ".center-header .ag-header-cell-label": {"justify-content": "center", "display": "flex"},
+    ".ag-header-cell": {"text-align": "center"},
+    ".ag-cell": {"text-align": "center"}
+}
+
 def draw_grid(
         df,
         max_height,
@@ -20,9 +26,7 @@ def draw_grid(
         auto_height: bool = False,
         grid_options: dict = None,
         key=None,
-        css: dict = {
-            ".center-header .ag-header-cell-label": {"justify-content": "center"}
-        }  # Add CSS to center the header text
+        css=css
 ):
 
     gb = GridOptionsBuilder.from_dataframe(df)
