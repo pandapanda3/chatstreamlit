@@ -16,7 +16,7 @@ st.title('History Conversation')
 user_info = st.session_state.user_info
 user_id = user_info['user_id']
 
-screen_height = get_screen_height()
+screen_height = 800
 max_table_height = screen_height * 0.75
 
 # Function to generate link
