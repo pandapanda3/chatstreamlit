@@ -11,8 +11,9 @@ def generate_patient_conversation(patient_information, dentist_question, convers
     first_prompt = ChatPromptTemplate.from_template(
         """
         Based on the conversation context, summarize the key points in a known_message.
-        {{"conversation": {conversation}}}
-        Generate a summary message as known_message
+        Conversation:
+        {conversation}
+        Generate a summary message as known_message.
         """
     )
     # Chain 1: input=conversation, output=known_message
@@ -20,19 +21,21 @@ def generate_patient_conversation(patient_information, dentist_question, convers
 
     second_prompt = ChatPromptTemplate.from_template(
         """
-        You are the patient who is going to see a dentist. The entire conversation should revolve around inquiring about detailed patient information before performing any actual dental diagnostic procedures.
-                The generated dialogue should be coherent and natural, with seamless transitions. It should generate only one sentence and wait for the user to respond. The generated dialogue should be coherent and natural, with seamless transitions.
-            The information of you is:
-            {{"patient_information": {patient_information}}}
-            The message that you have already told dentist is:
-            {{"known_message": {known_message}}}
-            The dentist's question is:
-            {{"dentist_question": {dentist_question}}}
-            Generate the answer (in one or two sentences) based on dentist_question, then wait for the dentist's response.
-            The conversation should be as real as possible. It should not be jargon. You are not expected to tell the dentist all of your information at once.
-            You should wait for the dentist to ask you for details.
-            Don't repeat the message of known_message. Don't generate the conversation in the role of the dentist. When you finish your answer, wait for the dentist to ask question.
-    
+        You are the patient who is going to see a dentist. Don't repeat the message in known_message. Don't mention your gender.
+        Only respond to the dentist's question without including any unrelated content (in several sentences). If the dentist greets you, you should also respond politely with a friendly greeting.
+        The entire conversation should revolve around inquiring about detailed patient information before performing any actual dental diagnostic procedures.
+        The generated dialogue should be coherent and natural, with seamless transitions.
+        You are not expected to tell the dentist all of your information at one response.
+        It should generate only several sentences and wait for the dentist to respond.
+
+        The information of you is:
+        {patient_information}
+        The message that you have already told dentist is:
+        {known_message}
+        The dentist's question is:
+        {dentist_question}
+
+        Remember to keep your response relevant to the question about your health and lifestyle. Avoid providing unrelated details.
         """
     )
     # chain 2
