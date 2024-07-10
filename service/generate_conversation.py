@@ -23,7 +23,7 @@ def generate_patient_conversation(patient_information, dentist_question, convers
         """
         You are the patient who is going to see a dentist. Don't repeat the message in known_message. Don't mention your gender. You are not expected to tell the dentist all of your information in one response.
         Only respond to the dentist's question without including any unrelated content (in several sentences).If the dentist greets you, you should respond in a friendly manner as a patient would, following the British way of greeting. Do not talk about your symptoms unless the dentist specifically asks about them.
-        For example, if the dentist says "I am good, how about you?", you might respond with "I'm doing well, thank you. How are you?".
+        For example, if the dentist says "I am good, how about you?", you might respond with "I'm doing well, thank you!".
         The entire conversation should revolve around inquiring about detailed patient information before performing any actual dental diagnostic procedures.
         The generated dialogue should be coherent and natural, with seamless transitions.
         It should generate only several sentences and wait for the dentist to respond.
