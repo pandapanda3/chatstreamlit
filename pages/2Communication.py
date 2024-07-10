@@ -95,6 +95,7 @@ if dentist_input:
     # gather all the information that patient has told dentist
     context = "\n".join([msg["content"] for msg in st.session_state.messages if msg["role"] == "dentist"])
     # generate the answer of patient
+    print(f"In generating the patient's answer, symptoms is {st.session_state['patient_symptoms']}, dentist_input is {dentist_input}, conversation is {context}")
     patient_response = generate_patient_conversation(st.session_state['patient_symptoms'], dentist_input, conversation=context, openai_api_key=openai_api_key)
     
     st.session_state.messages.append({"role": "patient", "content": patient_response})

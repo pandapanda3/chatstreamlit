@@ -53,6 +53,7 @@ def generate_patient_conversation(patient_information, dentist_question, convers
         "patient_information": patient_information,
         "dentist_question": dentist_question
     })
+    print(f'The overall chain is :{overall_chain}')
 
     return response
 
