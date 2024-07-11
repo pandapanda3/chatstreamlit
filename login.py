@@ -53,7 +53,7 @@ Login, Register, Reset = st.tabs(["Login", "Register", "Reset Password"])
 
 with Login:
     username = st.text_input("Username")
-    student_number = st.text_input("Student Number")
+    student_number = st.text_input("Student Number", key='login_student_number')
     password = st.text_input("Password", type="password")
     
     if st.button("Log in"):
@@ -70,7 +70,7 @@ with Login:
             
 with Register:
     new_username = st.text_input("New Username", key="new_username")
-    student_number = st.text_input("Student Number")
+    student_number = st.text_input("Student Number", key='Register_student_number')
     new_password = st.text_input("New Password", type="password", key="Register_new_password")
     new_password_confirm = st.text_input("Confirm New Password", type="password", key="Register_new_password_confirm")
     if st.button("Register"):
@@ -80,7 +80,7 @@ with Register:
         
 with Reset:
     reset_username = st.text_input("Username for Password Reset", key="reset_username")
-    student_number = st.text_input("Student Number")
+    student_number = st.text_input("Student Number", key='Reset_student_number')
     new_password = st.text_input("New Password", type="password", key="new_password")
     new_password_confirm = st.text_input("Confirm New Password", type="password", key="new_password_confirm")
     if st.button("Update Password"):
