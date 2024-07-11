@@ -44,6 +44,7 @@ def increment_message_id():
 def get_feedback():
     message_id = st.session_state.message_id
     feedback_information = st.session_state.feedback
+    print(f'the feedback information is {feedback_information}')
     feedback_information_score = feedback_information.get('score', None)
 
     if feedback_information_score:
