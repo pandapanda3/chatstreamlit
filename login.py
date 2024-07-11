@@ -20,13 +20,13 @@ def authenticate_user(username, password, student_number):
         connection.close()
 
 
-def create_user(username, password, role='normal'):
+def create_user(username, password, student_number, role='normal'):
     connection = get_connection()
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     try:
         with connection.cursor() as cursor:
-            sql = "INSERT INTO users (username, password, role) VALUES (%s, %s, %s)"
-            cursor.execute(sql, (username, hashed_password, role))
+            sql = "INSERT INTO users (username, password, student_number, role) VALUES (%s, %s, %s, %s)"
+            cursor.execute(sql, (username, hashed_password, student_number, role))
             connection.commit()
     finally:
         connection.close()
