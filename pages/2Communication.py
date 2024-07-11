@@ -107,7 +107,7 @@ if dentist_input:
     
     # get feedback
     with st.form('form'):
-        streamlit_feedback(feedback_type="thumbs", align="flex-end", key='feedback')
+        streamlit_feedback(feedback_type="thumbs", optional_text_label="[Optional] Please provide the reason", align="flex-end", key='feedback')
         st.form_submit_button('Save feedback', on_click=get_feedback, use_container_width = True)
     
 
