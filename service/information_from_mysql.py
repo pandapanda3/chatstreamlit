@@ -165,3 +165,33 @@ def fetch_chat_history_data(user_id,role):
             return result
     finally:
         connection.close()
+
+
+# get all users' name, student_number, role
+def get_users_role():
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT username, student_number, role FROM users order by role"
+            cursor.execute(sql, )
+            result = cursor.fetchall()
+            return result
+    finally:
+        connection.close()
+        
+# get all users' name, student_number, role
+def update_users_role(user_name, k_number,role):
+    value = (role, user_name, k_number)
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            sql = "UPDATE users SET role = %s WHERE user_name = %s AND k_number = %s"
+            cursor.execute(sql, value)
+            connection.commit()
+            if cursor.rowcount > 0:
+                return True
+    except Exception as e:
+        print(f'An error occurred: {e}')
+        connection.rollback()
+    finally:
+        connection.close()
