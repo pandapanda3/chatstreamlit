@@ -2,12 +2,13 @@ import streamlit as st
 import pandas as pd
 from navigation import make_sidebar
 from service.information_from_mysql import get_users_role, update_users_role
+make_sidebar()
 
-current_user = st.session_state.get('user_info', {"user_id": None, "username": "unknown", "role": "dentist", "authority_role": "normal"})
+# current_user = st.session_state.get('user_info', {"user_id": None, "username": "unknown", "role": "dentist", "authority_role": "normal"})
 # be careful about the role
 user_info = st.session_state.user_info
 authority_role = user_info['authority_role']
-make_sidebar()
+
 if authority_role == 'admin':
     # create a container
     with st.container():
