@@ -185,7 +185,7 @@ def update_users_role(user_name, k_number,role):
     connection = get_connection()
     try:
         with connection.cursor() as cursor:
-            sql = "UPDATE users SET role = %s WHERE user_name = %s AND k_number = %s"
+            sql = "UPDATE users SET role = %s WHERE username = %s AND student_number = %s"
             cursor.execute(sql, value)
             connection.commit()
             if cursor.rowcount > 0:
