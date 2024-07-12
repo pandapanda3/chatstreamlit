@@ -56,6 +56,6 @@ else:
                     print(f'The input feedback is {performance}')
                     insert_performance_feedback(performance, session_id)
                 else:
-                    st.write_stream(performance_feedback)
+                    st.write(performance_feedback)
     else:
         st.write("No session ID provided.")
