@@ -50,11 +50,11 @@ else:
                     st.markdown(f"The quality of this conversation is: {conversation_score}")
                 else:
                     st.markdown(f"The quality of this conversation is: NULL")
-            # display feedback
-            if role == 'admin':
-                performance = st.text_area(placeholder="Please input the feedback of the user's performance. ", value=performance_feedback, label="Please input feedback")
-                insert_performance_feedback(performance_feedback, session_id)
-            else:
-                st.write_stream(performance_feedback)
+                # display feedback
+                if role == 'admin':
+                    performance = st.text_area(placeholder="Please input the feedback of the user's performance. ", value=performance_feedback, label="Please input feedback")
+                    insert_performance_feedback(performance_feedback, session_id)
+                else:
+                    st.write_stream(performance_feedback)
     else:
         st.write("No session ID provided.")
