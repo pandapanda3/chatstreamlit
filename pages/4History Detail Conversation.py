@@ -55,9 +55,9 @@ else:
                     performance = st.text_area(placeholder="Please input the feedback of the user's performance. ", value=performance_feedback, label="Please input feedback")
                     insert_result=insert_performance_feedback(performance, session_id)
                     if insert_result:
-                        st.write(f'The feedback has been submitted! Thank you!')
+                        st.toast(f'The feedback has been submitted! Thank you!')
                 else:
-                    st.write(f'The feedback of this conversation is :')
-                    st.write(performance_feedback)
+                    performance = st.text_area(disabled=True, value=performance_feedback, label="The feedback of user's performance")
+
     else:
         st.write("No session ID provided.")
