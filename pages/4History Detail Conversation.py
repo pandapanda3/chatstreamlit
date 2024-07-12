@@ -54,7 +54,7 @@ else:
                 if role == 'admin':
                     performance = st.text_area(placeholder="Please input the feedback of the user's performance. ", value=performance_feedback, label="Please input feedback")
                     print(f'The input feedback is {performance}')
-                    insert_performance_feedback(performance_feedback, session_id)
+                    insert_performance_feedback(performance, session_id)
                 else:
                     st.write_stream(performance_feedback)
     else:
