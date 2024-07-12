@@ -28,7 +28,7 @@ if role == 'admin':
             if st.button("submit", disabled=not all_fields_filled):
                 update_result = update_users_role(user_name, k_number,role)
                 if update_result:
-                    st.write(f"The user :{user_name} will be in the role of {role}")
+                    st.toast(f"The user :{user_name} will be in the role of {role}")
         if not all_fields_filled:
             st.warning("Please fill out all the fields before submitting.")
 
@@ -45,7 +45,7 @@ if role == 'admin':
                 help="The name of the user",
                 width="medium"
             ),
-            "student_number": st.column_config.NumberColumn(
+            "student_number": st.column_config.TextColumn(
                 "The k number of student",
                 help="The k number of student",
                 width="medium"
