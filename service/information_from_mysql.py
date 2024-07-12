@@ -25,7 +25,7 @@ def insert_performance_feedback(performance_feedback,session_id):
     
     try:
         with connection.cursor() as cursor:
-            sql = "UPDATE chat_records SET performance_feedback = %s WHERE session_id = %s"
+            sql = "UPDATE user_chat_history SET performance_feedback = %s WHERE session_id = %s"
             cursor.execute(sql, value)
             connection.commit()
     
