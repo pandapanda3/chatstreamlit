@@ -22,7 +22,7 @@ def get_session_chat_detail(session_id):
 def insert_performance_feedback(performance_feedback,session_id):
     value = (performance_feedback,session_id)
     connection = get_connection()
-    
+    print(f'Insert information: {session_id}: {performance_feedback}')
     try:
         with connection.cursor() as cursor:
             sql = "UPDATE user_chat_history SET performance_feedback = %s WHERE session_id = %s"
