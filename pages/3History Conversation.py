@@ -108,7 +108,7 @@ with col2:
     for index, row in chat_history_data_df.iterrows():
         session_id = row["session_id"]
         chat_count = row["chat_count"]
-        if st.button(f"Click me to jump into chat session: {chat_count}", key=chat_count):
+        if st.button(f"Click me to jump into chat session: {chat_count}", key=f'{chat_count}_{session_id}'):
             st.session_state.session_id = session_id
             st.session_state.chat_count = chat_count
             print(f'the current session id is {session_id}, chat count is {chat_count}')
