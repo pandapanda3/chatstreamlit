@@ -18,6 +18,20 @@ def get_session_chat_detail(session_id):
         connection.close()
 
 
+# insert into performance in the user_chat_history
+def insert_performance_feedback(performance_feedback,session_id):
+    value = (performance_feedback,session_id)
+    connection = get_connection()
+    
+    try:
+        with connection.cursor() as cursor:
+            sql = "UPDATE chat_records SET performance_feedback = %s WHERE session_id = %s"
+            cursor.execute(sql, value)
+            connection.commit()
+    
+    finally:
+        connection.close()
+
 # get patient symptoms of certain session_id
 def get_patient_symptoms_detail(session_id):
     value = (session_id,)
@@ -25,7 +39,7 @@ def get_patient_symptoms_detail(session_id):
     
     try:
         with connection.cursor() as cursor:
-            sql = "SELECT patient_details, conversation_score FROM user_chat_history WHERE session_id = %s"
+            sql = "SELECT patient_details, conversation_score, performance_feedback FROM user_chat_history WHERE session_id = %s"
             cursor.execute(sql, value)
             result = cursor.fetchall()
             
