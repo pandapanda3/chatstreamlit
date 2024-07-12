@@ -28,7 +28,8 @@ def insert_performance_feedback(performance_feedback,session_id):
             sql = "UPDATE user_chat_history SET performance_feedback = %s WHERE session_id = %s"
             cursor.execute(sql, value)
             connection.commit()
-    
+            if cursor.rowcount > 0:
+                return True
     finally:
         connection.close()
 
