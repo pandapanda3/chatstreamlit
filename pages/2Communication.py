@@ -16,9 +16,9 @@ if openai_api_key == '':
 
 st.title("💬 Communication")
 
-current_user = st.session_state.get('user_info', {"user_id": None, "username": "unknown", "role": "dentist"})
+current_user = st.session_state.get('user_info', {"user_id": None, "username": "unknown", "role": "dentist", "authority_role": "normal"})
 user_id = current_user["user_id"]
-user_role = current_user["role"]
+# user_role = current_user["role"]
 username = current_user["username"]
 print(f'st.session_state is :{st.session_state}')
 

@@ -34,7 +34,7 @@ else:
     session_id = st.session_state.session_id
     user_info = st.session_state.user_info
     user_id = user_info['user_id']
-    role = user_info['role']
+    role = user_info['authority_role']
     if session_id != '':
         display_chat(session_id)
         print(f'the session ID in history detail conversation is {session_id}')
