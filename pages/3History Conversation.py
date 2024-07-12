@@ -14,7 +14,7 @@ make_sidebar()
 st.title('History Conversation')
 user_info = st.session_state.user_info
 user_id = user_info['user_id']
-role = user_info['authority_role']
+role = user_info['role']
 
 # max_table_height = 1000
 

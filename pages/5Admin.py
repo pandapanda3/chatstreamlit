@@ -4,12 +4,11 @@ from navigation import make_sidebar
 from service.information_from_mysql import get_users_role, update_users_role
 make_sidebar()
 
-# current_user = st.session_state.get('user_info', {"user_id": None, "username": "unknown", "role": "dentist", "authority_role": "normal"})
 # be careful about the role
 user_info = st.session_state.user_info
-authority_role = user_info['authority_role']
+role = user_info['role']
 
-if authority_role == 'admin':
+if role == 'admin':
     # create a container
     with st.container():
         col1, col2, col3, col4 = st.columns(4)
