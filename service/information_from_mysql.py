@@ -1,6 +1,44 @@
 from service.mysql import get_connection
+import bcrypt
+
+def authenticate_user(username, password, student_number):
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT id, password, role FROM users WHERE username = %s and student_number = %s"
+            cursor.execute(sql, (username, student_number))
+            result = cursor.fetchone()
+            if result:
+                user_id, stored_password, role = result
+                if bcrypt.checkpw(password.encode('utf-8'), stored_password.encode('utf-8')):
+                    return {"user_id": user_id, "username": username, "role": role}
+            return None
+    finally:
+        connection.close()
 
 
+def create_user(username, password, student_number, role='normal'):
+    connection = get_connection()
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    try:
+        with connection.cursor() as cursor:
+            sql = "INSERT INTO users (username, password, student_number, role) VALUES (%s, %s, %s, %s)"
+            cursor.execute(sql, (username, hashed_password, student_number, role))
+            connection.commit()
+    finally:
+        connection.close()
+
+def update_password(username, new_password, student_number):
+    connection = get_connection()
+    hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+    try:
+        with connection.cursor() as cursor:
+            sql = "UPDATE users SET password = %s WHERE username = %s AND student_number = %s"
+            cursor.execute(sql, (hashed_password, username, student_number))
+            connection.commit()
+    finally:
+        connection.close()
+        
 # get all the chat history of certain session_id
 def get_session_chat_detail(session_id):
     value = (session_id,)
