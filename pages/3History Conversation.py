@@ -13,7 +13,7 @@ make_sidebar()
 st.title('History Conversation')
 user_info = st.session_state.user_info
 user_id = user_info['user_id']
-
+role = user_info['role']
 
 max_table_height = 1000
 
@@ -22,7 +22,12 @@ def fetch_chat_history_data(user_id):
     connection = get_connection()
     try:
         with connection.cursor() as cursor:
-            sql = "SELECT chat_count, user_name, patient_details, conversation_score, session_id FROM user_chat_history where user_id =  %s"
+            if role == 'admin':
+                # for the admin user , they can check the data of publish_conversation = 1 (agree to get feedback from lecturer)
+                sql = "SELECT chat_count, user_name, patient_details, conversation_score, session_id, performance_feedback FROM user_chat_history where publish_conversation =  1"
+            else:
+                sql = "SELECT chat_count, user_name, patient_details, conversation_score, session_id, performance_feedback FROM user_chat_history where user_id =  %s"
+
             cursor.execute(sql, (user_id,))
             result = cursor.fetchall()
             return result
@@ -33,7 +38,7 @@ def fetch_chat_history_data(user_id):
 chat_history_data = fetch_chat_history_data(user_id)
 
 chat_history_data_df = pd.DataFrame(chat_history_data,
-                                    columns=["chat_count", "user_name", "patient_details", "conversation_score", "session_id"])
+                                    columns=["chat_count", "user_name", "patient_details", "conversation_score", "session_id", "performance_feedback"])
 # Function to generate link button
 # def generate_link_button(session_id, chat_count):
 #     if st.button(f"Click to view session {chat_count}", key=f"{session_id}-{chat_count}"):
@@ -88,6 +93,11 @@ with col1:
                 "Tech Details (IGNORE IT)",
                 help="Tech Details (forget about it)",
                 width="small"
+            ),
+            "performance_feedback": st.column_config.TextColumn(
+                "Performance Feedback",
+                help="The feedback of the conversation given by lecturer",
+                width="large"
             ),
         },
         hide_index=True,
