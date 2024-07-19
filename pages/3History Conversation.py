@@ -96,3 +96,11 @@ with col2:
             st.session_state.chat_count = chat_count
             print(f'the current session id is {session_id}, chat count is {chat_count}')
             st.switch_page("pages/4History Detail Conversation.py")
+
+
+
+chat_history_data_df['session_id'] = chat_history_data_df.apply(
+    lambda row: '<a href="http://3.8.0.20:8501/History_Detail_Conversation/?chat_count={}&session_id={}">{}</a>'.format(row['chat_count'], row['session_id'], row['session_id']),
+    axis=1
+)
+st.write(chat_history_data_df.to_html(escape=False, index=False), unsafe_allow_html=True)
