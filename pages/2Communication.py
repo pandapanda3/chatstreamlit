@@ -150,4 +150,9 @@ if len(st.session_state.messages) > 1:
             chat_count_number = get_largest_chat_number(user_id)
             update_user_chat_history_quality(user_id, username, chat_count_number, conversation_score)
             st.session_state['conversation_score'] = conversation_score
+        on = st.toggle("I want to publish this conversation!")
+        if on:
+            st.write("The conversation has been published! The admin can now view the details of your conversation.")
+        else:
+            st.write("The conversation is private! The admin cannot access the details of your conversation.")
 
