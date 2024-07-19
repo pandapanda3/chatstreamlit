@@ -3,7 +3,7 @@ from navigation import make_sidebar
 from service.generate_conversation import generate_patient_conversation, generate_patient_Symptoms
 from service.information_from_mysql import generate_session_id, get_largest_chat_number, \
     insert_user_chat_history, insert_message, update_user_chat_history_quality, update_quality_of_each_message, \
-    get_scenarios
+    get_scenarios, get_emotions
 from service.mysql import get_secret
 from streamlit_feedback import streamlit_feedback
 
@@ -35,7 +35,10 @@ if 'message_id' not in st.session_state:
     st.session_state['message_id'] = 0
 if 'conversation_score' not in st.session_state:
     st.session_state['conversation_score'] = ''
-
+if 'scenario' not in st.session_state:
+    st.session_state['scenario'] = ''
+if 'emotion' not in st.session_state:
+    st.session_state['emotion'] = ''
     
 def increment_message_id():
     st.session_state['message_id'] += 1
@@ -72,11 +75,21 @@ dentist_input = st.chat_input("Input your question! ",)
 # Choose the scenario from sidebar
 all_scenario = get_scenarios()
 scenario_list = [scenario[0] for scenario in all_scenario]
+
+# Choose the emotion from sidebar
+all_emotion=get_emotions()
+emotion_list = [emotion[0] for emotion in all_emotion]
 with st.sidebar:
-    scenarios = st.selectbox(
+    scenario = st.selectbox(
         "Which scenarios would you like to choose?",
         scenario_list
     )
+    st.session_state['scenario'] = scenario
+    emotion = st.selectbox(
+        "Which emotions would you like to choose?",
+        emotion_list
+    )
+    st.session_state['emotion'] = emotion
     
     
 if dentist_input:

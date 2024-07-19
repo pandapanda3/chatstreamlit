@@ -245,3 +245,15 @@ def get_scenarios():
             return result
     finally:
         connection.close()
+
+# get emotion
+def get_emotions():
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT emotion_name FROM emotion"
+            cursor.execute(sql, )
+            result = cursor.fetchall()
+            return result
+    finally:
+        connection.close()
