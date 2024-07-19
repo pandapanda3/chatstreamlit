@@ -21,7 +21,7 @@ role = user_info['role']
 chat_history_data = fetch_chat_history_data(user_id, role)
 
 chat_history_data_df = pd.DataFrame(chat_history_data,
-                                    columns=["chat_count", "user_name", "patient_details", "conversation_score", "performance_feedback", "session_id"])
+                                    columns=["session_id", "chat_count", "user_name", "patient_details", "conversation_score", "performance_feedback"])
 # Function to generate link button
 # def generate_link_button(session_id, chat_count):
 #     if st.button(f"Click to view session {chat_count}", key=f"{session_id}-{chat_count}"):
@@ -91,16 +91,9 @@ with col2:
     for index, row in chat_history_data_df.iterrows():
         session_id = row["session_id"]
         chat_count = row["chat_count"]
-        if st.button(f"Click me to jump into chat session: {chat_count}", key=f'{chat_count}_{session_id}'):
+        if st.button(f"Click me to jump into chat session: {session_id}", key=f'{chat_count}_{session_id}'):
             st.session_state.session_id = session_id
             st.session_state.chat_count = chat_count
             print(f'the current session id is {session_id}, chat count is {chat_count}')
             st.switch_page("pages/4History Detail Conversation.py")
 
-
-
-chat_history_data_df['session_id'] = chat_history_data_df.apply(
-    lambda row: '<a href="http://3.8.0.20:8501/History_Detail_Conversation/?chat_count={}&session_id={}">{}</a>'.format(row['chat_count'], row['session_id'], row['session_id']),
-    axis=1
-)
-st.write(chat_history_data_df.to_html(escape=False, index=False), unsafe_allow_html=True)
