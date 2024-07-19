@@ -233,3 +233,15 @@ def update_users_role(user_name, k_number,role):
         connection.rollback()
     finally:
         connection.close()
+        
+# get scenarios
+def get_scenarios():
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT scenario_name FROM scenario"
+            cursor.execute(sql, )
+            result = cursor.fetchall()
+            return result
+    finally:
+        connection.close()

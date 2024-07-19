@@ -2,7 +2,8 @@ import streamlit as st
 from navigation import make_sidebar
 from service.generate_conversation import generate_patient_conversation, generate_patient_Symptoms
 from service.information_from_mysql import generate_session_id, get_largest_chat_number, \
-    insert_user_chat_history, insert_message, update_user_chat_history_quality, update_quality_of_each_message
+    insert_user_chat_history, insert_message, update_user_chat_history_quality, update_quality_of_each_message, \
+    get_scenarios
 from service.mysql import get_secret
 from streamlit_feedback import streamlit_feedback
 
@@ -68,6 +69,16 @@ for msg in st.session_state.messages:
 session_id = st.session_state['session_id']
 
 dentist_input = st.chat_input("Input your question! ",)
+# Choose the scenario from sidebar
+all_scenario = get_scenarios()
+scenario_list = [scenario[0] for scenario in all_scenario]
+with st.sidebar:
+    scenarios = st.selectbox(
+        "Which scenarios would you like to choose?",
+        scenario_list
+    )
+    
+    
 if dentist_input:
     if not openai_api_key:
         st.info("Please add your OpenAI API key to continue.")
