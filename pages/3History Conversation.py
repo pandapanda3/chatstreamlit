@@ -52,6 +52,11 @@ with col1:
     st.data_editor(
         chat_history_data_df,
         column_config={
+            "session_id": st.column_config.NumberColumn(
+                "Chat",
+                help="Tech Details , used for getting chat conversation",
+                width="small"
+            ),
             "chat_count": st.column_config.NumberColumn(
                 "The number of chat session",
                 help="The number of chats",
@@ -76,11 +81,6 @@ with col1:
                 "Performance Feedback",
                 help="The feedback of the conversation given by lecturer",
                 width="large"
-            ),
-            "session_id": st.column_config.NumberColumn(
-                "Tech Details (IGNORE IT)",
-                help="Tech Details (forget about it)",
-                width="small"
             ),
         },
         hide_index=True,
