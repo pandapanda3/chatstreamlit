@@ -1,6 +1,6 @@
 import time
 import numpy as np
-import faiss  # 确保已安装faiss库
+import faiss
 # from openai.embeddings_utils import get_embedding#, cosine_similarity
 from sklearn.metrics.pairwise import cosine_similarity
 import re
@@ -202,3 +202,48 @@ if __name__ == '__main__':
     # 搜索相关文本 - 每次一次prompt的时候，都从数据库里搜索相关的文本出来
     db.query_num("The location of the problem", 10, 0.1,True)
 
+
+
+
+
+
+st.title('1History Conversation')
+user_info = st.session_state.user_info
+user_id = user_info['user_id']
+role = user_info['role']
+
+
+chat_history_data = fetch_chat_history_data(user_id, role)
+
+chat_history_data_df = pd.DataFrame(chat_history_data,
+                                    columns=["number", "publish"])
+
+col1, col2 = st.columns([5, 1])
+
+with col1:
+
+    # Display the data in Streamlit
+    st.data_editor(
+        chat_history_data_df,
+        column_config={
+            "number": st.column_config.NumberColumn(
+                "The number of chat session",
+                help="The number of chats",
+                width="small"
+            ),
+            "publish": st.column_config.TextColumn(
+                "Publish",
+                help="The name of the user",
+                width="medium"
+            ),
+    )
+
+with col2:
+    # when click the button, jump to another page to get the detail message
+    for index, row in chat_history_data_df.iterrows():
+        session_id = row["session_id"]
+        chat_count = row["chat_count"]
+        if st.button(f"Click me to jump into chat session: {chat_count}", key=f'{chat_count}_{session_id}'):
+            st.session_state.session_id = session_id
+            st.session_state.chat_count = chat_count
+            st.switch_page("pages/2History Detail Conversation.py")
