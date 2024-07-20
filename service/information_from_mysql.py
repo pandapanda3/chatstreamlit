@@ -170,6 +170,23 @@ def update_user_chat_history_quality(user_id, user_name, chat_count, conversatio
     finally:
         connection.close()
 
+# update the quality of the conversation of a session
+def update_user_chat_history_publish(user_id, user_name, chat_count, publish):
+    value = (publish, user_id, user_name, chat_count)
+    connection = get_connection()
+    print(f'UPDATE the quality of user_chat_history: publish {publish}: {type(publish)}, user_id {user_id} : {type(user_id)}, user_name {user_name} : {type(user_name)}, chat_count {chat_count}:{type(chat_count)}\n')
+    try:
+        with connection.cursor() as cursor:
+            sql = "UPDATE user_chat_history SET publish_conversation = %s WHERE user_id = %s AND user_name = %s AND chat_count = %s"
+            result = cursor.execute(sql, value)
+            print(f'the result is {result}')
+            connection.commit()
+    except Exception as e:
+        print(f'An error occurred: {e}')
+        connection.rollback()
+    finally:
+        connection.close()
+
 # generate session id
 def generate_session_id():
     connection = get_connection()

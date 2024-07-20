@@ -3,7 +3,7 @@ from navigation import make_sidebar
 from service.generate_conversation import generate_patient_conversation, generate_patient_Symptoms
 from service.information_from_mysql import generate_session_id, get_largest_chat_number, \
     insert_user_chat_history, insert_message, update_user_chat_history_quality, update_quality_of_each_message, \
-    get_scenarios, get_emotions
+    get_scenarios, get_emotions, update_user_chat_history_publish
 from service.mysql import get_secret
 from streamlit_feedback import streamlit_feedback
 
@@ -39,6 +39,8 @@ if 'scenario' not in st.session_state:
     st.session_state['scenario'] = ''
 if 'emotion' not in st.session_state:
     st.session_state['emotion'] = ''
+if 'publish' not in st.session_state:
+    st.session_state['publish'] = ''
     
 def increment_message_id():
     st.session_state['message_id'] += 1
@@ -150,9 +152,18 @@ if len(st.session_state.messages) > 1:
             chat_count_number = get_largest_chat_number(user_id)
             update_user_chat_history_quality(user_id, username, chat_count_number, conversation_score)
             st.session_state['conversation_score'] = conversation_score
-        on = st.toggle("I want to publish this conversation!")
-        if on:
-            st.write("The conversation has been published! The admin can now view the details of your conversation.")
+        # determine to publish conversation or not
+        if st.session_state['publish'] != '':
+            on = st.toggle("I want to publish this conversation!", value=st.session_state.publish)
         else:
-            st.write("The conversation is private! The admin cannot access the details of your conversation.")
+            on = st.toggle("I want to publish this conversation!")
+        
+        if on:
+            st.session_state['publish'] = True
+            update_user_chat_history_publish(user_id, username, chat_count_number, 1)
+            st.toast("The conversation has been published! The admin can now view the details of your conversation.")
+        else:
+            st.session_state['publish'] = False
+            update_user_chat_history_publish(user_id, username, chat_count_number, 0)
+            st.toast("The conversation is private! The admin cannot access the details of your conversation.")
 
