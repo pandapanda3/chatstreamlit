@@ -4,6 +4,7 @@ from navigation import make_sidebar
 from service.information_from_mysql import get_users_role, update_users_role, get_quality, get_conversation_score
 import matplotlib.pyplot as plt
 
+st.set_page_config(layout="wide")
 make_sidebar()
 
 # be careful about the role
