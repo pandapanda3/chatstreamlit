@@ -78,7 +78,7 @@ def get_patient_symptoms_detail(session_id):
     
     try:
         with connection.cursor() as cursor:
-            sql = "SELECT patient_details, conversation_score, performance_feedback，scenario，emotion, publish_conversation FROM user_chat_history WHERE session_id = %s"
+            sql = "SELECT patient_details, conversation_score, performance_feedback,scenario, emotion, publish_conversation FROM user_chat_history WHERE session_id = %s"
             cursor.execute(sql, value)
             result = cursor.fetchall()
             
