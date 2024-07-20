@@ -67,7 +67,7 @@ if role == 'admin':
     with col1:
         quality_list=get_quality()
         print(f'The quality_list is{quality_list}')
-        quality_list_df = pd.DataFrame(quality_list)
+        quality_list_df = pd.DataFrame(quality_list, columns=['quality'])
         counts = quality_list_df['quality'].value_counts()
         labels = counts.index.tolist()
         sizes = counts.values.tolist()
@@ -78,7 +78,7 @@ if role == 'admin':
     with col2:
         conversation_score_list = get_conversation_score()
         print(f'The conversation_score_list is{conversation_score_list}')
-        conversation_score_list_df = pd.DataFrame(conversation_score_list)
+        conversation_score_list_df = pd.DataFrame(conversation_score_list, columns=['conversation_score'])
         score_counts = conversation_score_list_df['conversation_score'].value_counts().sort_index()
         fig, ax = plt.subplots()
         bars = ax.bar(score_counts.index, score_counts.values)
