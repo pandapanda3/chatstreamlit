@@ -72,8 +72,9 @@ if role == 'admin':
         labels = counts.index.tolist()
         sizes = counts.values.tolist()
         fig1, ax1 = plt.subplots()
-        ax1.pie(sizes, labels=labels, autopct='%1.1f%%', shadow=True, startangle=90)
+        ax1.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90)
         ax1.axis('equal')
+        ax1.set_title('The quality of the answers provided by the model in each response.')
         st.pyplot(fig1)
     with col2:
         conversation_score_list = get_conversation_score()
@@ -83,8 +84,8 @@ if role == 'admin':
         fig, ax = plt.subplots()
         bars = ax.bar(score_counts.index, score_counts.values)
         ax.set_xlabel('Conversation Score')
-        ax.set_ylabel('Count')
-        ax.set_title('Distribution of Conversation Scores')
+        ax.set_ylabel('The number of the score')
+        ax.set_title('The quality rating of each complete conversation.')
         ax.bar_label(bars)
         st.pyplot(fig)
 
