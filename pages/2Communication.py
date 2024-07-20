@@ -164,10 +164,10 @@ if len(st.session_state.messages) > 1:
         
         if on:
             st.session_state['publish'] = True
-            update_user_chat_history(user_id, username, chat_count_number,'publish_concversation',1)
+            update_user_chat_history(user_id, username, chat_count_number,'publish_conversation',1)
             st.toast("The conversation has been published! The admin can now view the details of your conversation.")
         else:
             st.session_state['publish'] = False
-            update_user_chat_history(user_id, username, chat_count_number,'publish_concversation',0)
+            update_user_chat_history(user_id, username, chat_count_number,'publish_conversation',0)
             st.toast("The conversation is private! The admin cannot access the details of your conversation.")
 
