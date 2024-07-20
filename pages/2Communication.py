@@ -2,8 +2,8 @@ import streamlit as st
 from navigation import make_sidebar
 from service.generate_conversation import generate_patient_conversation, generate_patient_Symptoms
 from service.information_from_mysql import generate_session_id, get_largest_chat_number, \
-    insert_user_chat_history, insert_message, update_user_chat_history_quality, update_quality_of_each_message, \
-    get_scenarios, get_emotions, update_user_chat_history_publish
+    insert_user_chat_history, insert_message, update_quality_of_each_message, \
+    get_scenarios, get_emotions, update_user_chat_history
 from service.mysql import get_secret
 from streamlit_feedback import streamlit_feedback
 
@@ -19,16 +19,12 @@ st.title("💬 Communication")
 
 current_user = st.session_state.get('user_info', {"user_id": None, "username": "unknown", "role": "normal"})
 user_id = current_user["user_id"]
-# user_role = current_user["role"]
 username = current_user["username"]
 print(f'st.session_state is :{st.session_state}')
 
+# Initialization value
 if "messages" not in st.session_state or not st.session_state["messages"]:
     st.session_state["messages"] = [{"role": "patient", "content": "Hello, doctor. How are you today?"}]
-
-# generate session id from chat_records
-if 'session_id' not in st.session_state or st.session_state['session_id'] is None:
-    st.session_state['session_id'] = generate_session_id()
 if 'patient_symptoms' not in st.session_state:
     st.session_state['patient_symptoms'] = ''
 if 'message_id' not in st.session_state:
@@ -42,6 +38,10 @@ if 'emotion' not in st.session_state:
 if 'publish' not in st.session_state:
     st.session_state['publish'] = ''
     
+# generate session id from chat_records
+if 'session_id' not in st.session_state or st.session_state['session_id'] is None:
+    st.session_state['session_id'] = generate_session_id()
+
 def increment_message_id():
     st.session_state['message_id'] += 1
     return st.session_state['message_id']
@@ -148,9 +148,14 @@ if len(st.session_state.messages) > 1:
         chat_count_number = get_largest_chat_number(user_id)
         if conversation_score is not None and conversation_score != st.session_state['conversation_score']:
             st.write("The quality of this conversation is ", conversation_score)
-            update_user_chat_history_quality(user_id, username, chat_count_number, conversation_score)
+            update_user_chat_history(user_id, username, chat_count_number, 'conversation_score',conversation_score)
             st.session_state['conversation_score'] = conversation_score
         
+        if st.session_state['scenario'] != '':
+            update_user_chat_history(user_id, username, chat_count_number, 'scenario',scenario)
+        if st.session_state['emotion'] != '':
+            update_user_chat_history(user_id, username, chat_count_number, 'emotion',emotion)
+            
         # determine to publish conversation or not
         if st.session_state['publish'] != '':
             on = st.toggle("I want to publish this conversation!", value=st.session_state.publish)
@@ -159,10 +164,10 @@ if len(st.session_state.messages) > 1:
         
         if on:
             st.session_state['publish'] = True
-            update_user_chat_history_publish(user_id, username, chat_count_number, 1)
+            update_user_chat_history(user_id, username, chat_count_number,'publish_concversation',1)
             st.toast("The conversation has been published! The admin can now view the details of your conversation.")
         else:
             st.session_state['publish'] = False
-            update_user_chat_history_publish(user_id, username, chat_count_number, 0)
+            update_user_chat_history(user_id, username, chat_count_number,'publish_concversation',0)
             st.toast("The conversation is private! The admin cannot access the details of your conversation.")
 
