@@ -92,7 +92,7 @@ with col1:
                 help="The feedback of the conversation given by lecturer",
                 width="large"
             ),
-            "publish_conversation": st.column_config.TextColumn(
+            "publish_conversation": st.column_config.NumberColumn(
                 "Publish Conversation",
                 help="It determines whether this conversation can be viewed by the admin user. 1 represents published, 0 represents private.",
                 width="small"
