@@ -21,7 +21,7 @@ role = user_info['role']
 chat_history_data = fetch_chat_history_data(user_id, role)
 
 chat_history_data_df = pd.DataFrame(chat_history_data,
-                                    columns=["session_id", "chat_count", "user_name", "patient_details", "conversation_score", "performance_feedback"])
+                                    columns=["session_id", "chat_count", "user_name",  "scenario", "emotion", "patient_details", "conversation_score", "performance_feedback"])
 # Function to generate link button
 # def generate_link_button(session_id, chat_count):
 #     if st.button(f"Click to view session {chat_count}", key=f"{session_id}-{chat_count}"):
@@ -65,6 +65,16 @@ with col1:
             "user_name": st.column_config.TextColumn(
                 "User Name",
                 help="The name of the user",
+                width="medium"
+            ),
+            "scenario": st.column_config.TextColumn(
+                "Scenario",
+                help="The Scenario",
+                width="medium"
+            ),
+            "emotion": st.column_config.TextColumn(
+                "Emotion",
+                help="The emotion of the patient",
                 width="medium"
             ),
             "patient_details": st.column_config.TextColumn(

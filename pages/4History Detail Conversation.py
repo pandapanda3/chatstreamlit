@@ -22,7 +22,13 @@ def display_chat(session_id):
         elif user_role == "dentist":
             st.chat_message("dentist").write(message)
 
-
+# message display in sidebar
+def sidebar_display(name, value):
+    if name:
+        st.markdown(f"The {name} of this conversation is: {value}")
+    else:
+        st.markdown(f"The {name} of this conversation is: NULL")
+        
 make_sidebar()
 
 st.title("💬 History Detail Conversation For a Session")
@@ -43,14 +49,18 @@ else:
             patient_symptoms_detai_result = get_patient_symptoms_detail(session_id)
             for result in patient_symptoms_detai_result:
                 print(f'patient_symptoms_detai_result is {patient_symptoms_detai_result}')
-                patient_symptoms, conversation_score, performance_feedback = result
+                patient_symptoms, conversation_score, performance_feedback,scenario,emotion, publish_conversation = result
                 print(f'patient_symptoms: {patient_symptoms}, conversation_score :{conversation_score}')
+                sidebar_display('scenario', scenario)
+                sidebar_display('emotion', emotion)
                 if patient_symptoms:
                     st.markdown(patient_symptoms)
-                if conversation_score:
-                    st.markdown(f"The quality of this conversation is: {conversation_score}")
+                sidebar_display('quality', conversation_score)
+                if publish_conversation == 1:
+                    st.markdown(f"The conversation has been published!")
                 else:
-                    st.markdown(f"The quality of this conversation is: NULL")
+                    st.markdown(f"The conversation is privacy!")
+                
                 # display feedback
                 if role == 'admin':
                     performance = st.text_area(placeholder="Please input the feedback of the user's performance. ", value=performance_feedback, label="Please input feedback")
