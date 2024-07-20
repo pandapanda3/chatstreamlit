@@ -1,7 +1,9 @@
 import streamlit as st
 import pandas as pd
 from navigation import make_sidebar
-from service.information_from_mysql import get_users_role, update_users_role
+from service.information_from_mysql import get_users_role, update_users_role, get_quality, get_conversation_score
+import matplotlib.pyplot as plt
+
 make_sidebar()
 
 # be careful about the role
@@ -60,6 +62,32 @@ if role == 'admin':
         },
         
     )
+
+    col1, col2 = st.columns([1, 1])
+    with col1:
+        quality_list=get_quality()
+        print(f'The quality_list is{quality_list}')
+        quality_list_df = pd.DataFrame(quality_list)
+        counts = quality_list_df['quality'].value_counts()
+        labels = counts.index.tolist()
+        sizes = counts.values.tolist()
+        fig1, ax1 = plt.subplots()
+        ax1.pie(sizes, labels=labels, autopct='%1.1f%%', shadow=True, startangle=90)
+        ax1.axis('equal')
+        st.pyplot(fig1)
+    with col2:
+        conversation_score_list = get_conversation_score()
+        print(f'The conversation_score_list is{conversation_score_list}')
+        conversation_score_list_df = pd.DataFrame(conversation_score_list)
+        score_counts = conversation_score_list_df['conversation_score'].value_counts().sort_index()
+        fig, ax = plt.subplots()
+        bars = ax.bar(score_counts.index, score_counts.values)
+        ax.set_xlabel('Conversation Score')
+        ax.set_ylabel('Count')
+        ax.set_title('Distribution of Conversation Scores')
+        ax.bar_label(bars)
+        st.pyplot(fig)
+
 
 else:
     st.title("This page is for Admin users only. It is exclusively used for setting roles. You do not have the necessary permissions to access this function.")

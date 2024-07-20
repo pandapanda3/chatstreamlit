@@ -257,3 +257,27 @@ def get_emotions():
             return result
     finally:
         connection.close()
+        
+# get quality
+def get_quality():
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT quality FROM chat_records where quality != ''"
+            cursor.execute(sql, )
+            result = cursor.fetchall()
+            return result
+    finally:
+        connection.close()
+        
+# get CONVERSATION SCORE
+def get_conversation_score():
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT conversation_score FROM user_chat_history where conversation_score != ''"
+            cursor.execute(sql, )
+            result = cursor.fetchall()
+            return result
+    finally:
+        connection.close()

@@ -16,3 +16,4 @@ streamlit-aggrid
 qrcode
 faiss
 tiktoken
+matplotlib
