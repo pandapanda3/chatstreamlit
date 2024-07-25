@@ -17,7 +17,8 @@ def load_docx_from_dir(directory):
     return all_document_text
 
 def store_data(OPENAI_API_KEY):
-    document_direction = "document"
+    document_direction = "/home/ec2-user/chatstreamlit/src/document"
+    print(f'当前文件：{os.listdir(os.path.abspath(__file__))}')
     document_texts = load_docx_from_dir(document_direction)
     
     # Preprocess the text to tag dentist questions and patient answers
