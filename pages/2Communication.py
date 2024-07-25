@@ -38,14 +38,16 @@ if 'emotion' not in st.session_state:
     st.session_state['emotion'] = ''
 if 'publish' not in st.session_state:
     st.session_state['publish'] = ''
-    
+
 # generate session id from chat_records
 if 'session_id' not in st.session_state or st.session_state['session_id'] is None:
     st.session_state['session_id'] = generate_session_id()
 
+
 def increment_message_id():
     st.session_state['message_id'] += 1
     return st.session_state['message_id']
+
 
 # get feed back for the generation of the model
 def get_feedback():
@@ -53,7 +55,7 @@ def get_feedback():
     feedback_information = st.session_state.feedback
     print(f'the feedback information is {feedback_information}')
     feedback_information_score = feedback_information.get('score', None)
-
+    
     if feedback_information_score:
         st.toast(":red[ Feedback received! ]", icon="🔥")
         print(f'After the  feed back, the session state is :{st.session_state} ')
@@ -74,13 +76,13 @@ for msg in st.session_state.messages:
 
 session_id = st.session_state['session_id']
 
-dentist_input = st.chat_input("Input your question! ",)
+dentist_input = st.chat_input("Input your question! ", )
 # Choose the scenario from sidebar
 all_scenario = get_scenarios()
 scenario_list = [scenario[0] for scenario in all_scenario]
 
 # Choose the emotion from sidebar
-all_emotion=get_emotions()
+all_emotion = get_emotions()
 emotion_list = [emotion[0] for emotion in all_emotion]
 with st.sidebar:
     scenario = st.selectbox(
@@ -93,8 +95,7 @@ with st.sidebar:
         emotion_list
     )
     st.session_state['emotion'] = emotion
-    
-    
+
 if dentist_input:
     if not openai_api_key:
         st.info("Please add your OpenAI API key to continue.")
@@ -110,12 +111,11 @@ if dentist_input:
         patient_Symptoms = generate_patient_Symptoms(openai_api_key)
         st.session_state['patient_symptoms'] = patient_Symptoms
         insert_user_chat_history(user_id, username, chat_count, patient_Symptoms, session_id)
-
-        
+    
     st.session_state.messages.append({"role": "dentist", "content": dentist_input})
     # show the message in the streamlit
     st.chat_message("dentist").write(dentist_input)
-
+    
     # save the conversation
     message_id = increment_message_id()
     insert_message(session_id, user_id, dentist_input, "dentist", message_id)
@@ -123,45 +123,48 @@ if dentist_input:
     # gather all the information that patient has told dentist
     context = "\n".join([msg["content"] for msg in st.session_state.messages if msg["role"] == "dentist"])
     # generate the answer of patient
-    print(f"In generating the patient's answer, symptoms is {st.session_state['patient_symptoms']}, dentist_input is {dentist_input}, conversation is {context}")
+    print(
+        f"In generating the patient's answer, symptoms is {st.session_state['patient_symptoms']}, dentist_input is {dentist_input}, conversation is {context}")
     
     # Separate the greeting and medical inquires
-    if message_id < 4:
-        patient_response=generate_greeting_conversation(dentist_input, openai_api_key=openai_api_key)
+    if message_id < 2:
+        patient_response = generate_greeting_conversation(dentist_input, openai_api_key=openai_api_key)
     else:
-        patient_response = generate_patient_conversation(st.session_state['patient_symptoms'], dentist_input, conversation=context, openai_api_key=openai_api_key)
+        patient_response = generate_patient_conversation(st.session_state['patient_symptoms'], dentist_input,
+                                                         conversation=context, openai_api_key=openai_api_key)
     
     st.session_state.messages.append({"role": "patient", "content": patient_response})
     # show the message in the streamlit
     st.chat_message("patient").write(patient_response)
-
+    
     message_id = increment_message_id()
     insert_message(session_id, user_id, patient_response, "patient", message_id)
     
     # get feedback
     with st.form('form'):
         streamlit_feedback(feedback_type="thumbs", align="flex-end", key='feedback')
-        st.form_submit_button('Save feedback', on_click=get_feedback, use_container_width = True)
-    
+        st.form_submit_button('Save feedback', on_click=get_feedback, use_container_width=True)
 
 # if it has already generate the patient_information, show it in the sidebar
 if len(st.session_state.messages) > 1:
     print(f'communication the last one, session id is :{session_id}, session state is {st.session_state}')
     with st.sidebar:
-        formatted_symptoms=st.session_state['patient_symptoms'].replace('\n', '<br>')
+        formatted_symptoms = st.session_state['patient_symptoms'].replace('\n', '<br>')
         st.markdown(formatted_symptoms, unsafe_allow_html=True)
-        conversation_score = st.number_input("How would you rate the quality of this conversation?", min_value=0, max_value=100, step=1, format="%d", value=None, placeholder="Number between 0 to 100")
+        conversation_score = st.number_input("How would you rate the quality of this conversation?", min_value=0,
+                                             max_value=100, step=1, format="%d", value=None,
+                                             placeholder="Number between 0 to 100")
         chat_count_number = get_largest_chat_number(user_id)
         if conversation_score is not None and conversation_score != st.session_state['conversation_score']:
             st.write("The quality of this conversation is ", conversation_score)
-            update_user_chat_history(user_id, username, chat_count_number, 'conversation_score',conversation_score)
+            update_user_chat_history(user_id, username, chat_count_number, 'conversation_score', conversation_score)
             st.session_state['conversation_score'] = conversation_score
         
         if st.session_state['scenario'] != '':
-            update_user_chat_history(user_id, username, chat_count_number, 'scenario',scenario)
+            update_user_chat_history(user_id, username, chat_count_number, 'scenario', scenario)
         if st.session_state['emotion'] != '':
-            update_user_chat_history(user_id, username, chat_count_number, 'emotion',emotion)
-            
+            update_user_chat_history(user_id, username, chat_count_number, 'emotion', emotion)
+        
         # determine to publish conversation or not
         if st.session_state['publish'] != '':
             on = st.toggle("I want to publish this conversation!", value=st.session_state.publish)
@@ -170,10 +173,9 @@ if len(st.session_state.messages) > 1:
         
         if on:
             st.session_state['publish'] = True
-            update_user_chat_history(user_id, username, chat_count_number,'publish_conversation',1)
+            update_user_chat_history(user_id, username, chat_count_number, 'publish_conversation', 1)
             st.toast("The conversation has been published! The admin can now view the details of your conversation.")
         else:
             st.session_state['publish'] = False
-            update_user_chat_history(user_id, username, chat_count_number,'publish_conversation',0)
+            update_user_chat_history(user_id, username, chat_count_number, 'publish_conversation', 0)
             st.toast("The conversation is private! The admin cannot access the details of your conversation.")
-

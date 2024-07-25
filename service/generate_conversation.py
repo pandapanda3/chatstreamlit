@@ -22,7 +22,7 @@ def generate_greeting_conversation(dentist_input, openai_api_key=""):
     search_greeting_prompt = (
         """
         You are a highly skilled retriever tasked with searching for responses related to the patient's input.
-        Use the following pieces of retrieved context to create a similar response through imitation.
+        Use the following pieces of retrieved context to create patient's response through imitation.
         ###
         {context}
         ###
