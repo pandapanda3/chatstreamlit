@@ -17,7 +17,7 @@ def load_docx_from_dir(directory):
     return all_document_text
 
 def store_data(OPENAI_API_KEY):
-    document_direction = "src/document"
+    document_direction = "../src/document"
     document_texts = load_docx_from_dir(document_direction)
     
     # Preprocess the text to tag dentist questions and patient answers
