@@ -18,3 +18,4 @@ matplotlib
 python-docx
 chromadb
 langchain_openai
+langchain_chroma
