@@ -21,13 +21,16 @@ def generate_greeting_conversation(dentist_input, openai_api_key=""):
     retriever=store_data(openai_api_key)
     search_greeting_prompt = (
         """
-        You are a highly skilled retriever tasked with searching for responses related to the patient's input.
-        Use the following pieces of retrieved context to create patient's response through imitation.
+        You are a highly skilled retriever tasked with searching for answers related to the user's input question.
+        Retrieve the question closest to the current user input, then get the corresponding answer to that question.
+        Use the following pieces of retrieved context to create a new answer through imitation.
+        Ensure the context retrieved includes both the closest question and its following answer.
         ###
         {context}
         ###
-        Retrieve the most relevant document from the database. The output should remove "Patient:".
-        If no relevant documents are found, generate a greeting response based on the dentist's input.
+        The output should include only the answer to the retrieved question.
+        If you have the retrieved context, please mimic its answer to create a new one.
+        If no relevant documents are found, only generate sentences where a patient greets a dentist, responding as the patient.
         """
     )
     greeting_prompt = ChatPromptTemplate.from_messages(
@@ -44,7 +47,7 @@ def generate_greeting_conversation(dentist_input, openai_api_key=""):
     print(f'The chain is {greeting_answer}, The greeting answer is {answer}')
     return answer
 
-def generate_patient_conversation(patient_information, dentist_question, conversation="", openai_api_key=""):
+def generate_patient_conversation(patient_information, dentist_question, scenario, emotion, conversation="", openai_api_key=""):
     
     llm = define_model(openai_api_key)
     first_prompt = ChatPromptTemplate.from_template(
@@ -60,21 +63,37 @@ def generate_patient_conversation(patient_information, dentist_question, convers
 
     second_prompt = ChatPromptTemplate.from_template(
         """
-        You are the patient who is going to see a dentist. Don't repeat the message in known_message. Don't mention your gender. You are not expected to tell the dentist all of your information in one response.
-        Only respond to the dentist's question without including any unrelated content (in several sentences).If the dentist greets you, you should respond in a friendly manner as a patient would, following the British way of greeting. Do not talk about your symptoms unless the dentist specifically asks about them.
-        For example, if the dentist says "I am good, how about you?", you might respond with "I'm doing well, thank you!".
+        You are the patient who is going to see a dentist. what you response should base on your personality.
+        The conversation will base on scenario. If the message has been told (known_message) to the dentist,
+        and when the dentist repeate again the question, you should explain in detail for your previous response.
+        If the dentist ask whether you have any question, you should ask the patient's question about what you concern about or anything related to the conversation.
+        Only respond to the dentist's question without including any unrelated content (in several sentences).
         The entire conversation should revolve around inquiring about detailed patient information before performing any actual dental diagnostic procedures.
         The generated dialogue should be coherent and natural, with seamless transitions.
+        As the patient visiting a dentist, follow the scenario below to answer the dentist's question in a few sentences from the patient's perspective.
         It should generate only several sentences and wait for the dentist to respond.
-
+        
         The information of you is:
+        ###
         {patient_information}
+        ###
         The message that you have already told dentist is:
+        ###
         {known_message}
+        ###
         The dentist's question is:
+        ###
         {dentist_question}
-
-        Remember to keep your response relevant to the dentist's question about your health and lifestyle. Avoid providing unrelated details.
+        The personality of you is:
+        ###
+        {emotion}
+        ###
+        The scenario of you is:
+        ###
+        {scenario}
+        ###
+    
+        Remember to keep your response relevant to the dentist's question from the patient's perspective.
         """
     )
     # chain 2
@@ -82,7 +101,7 @@ def generate_patient_conversation(patient_information, dentist_question, convers
     # Create the SequentialChain
     overall_chain = SequentialChain(
         chains=[chain_one, chain_two],
-        input_variables=["conversation", "patient_information", "dentist_question"],
+        input_variables=["conversation", "patient_information", "dentist_question","emotion","scenario"],
         output_variables=["answer"],
         verbose=True
     )
@@ -90,7 +109,9 @@ def generate_patient_conversation(patient_information, dentist_question, convers
     response = overall_chain.run({
         "conversation": conversation,
         "patient_information": patient_information,
-        "dentist_question": dentist_question
+        "dentist_question": dentist_question,
+        "emotion": emotion,
+        "scenario": scenario
     })
     print(f'The overall chain is :{overall_chain}')
 
@@ -110,7 +131,7 @@ def generate_patient_Symptoms(openai_api_key=""):
     # prompt template 1: generate information of patient into json format
     first_prompt = ChatPromptTemplate.from_template(
         """
-        Please generate information for a patient visiting the dentist in JSON format. The patient's information should include the following:  {patient_detail}.
+        Please generate information for a patient visiting the dentist in JSON format. The patient's information should include the following: ### {patient_detail} ###.
         For Age, Randomly select a value within a given age range, not just the middle value.
         For Symptoms, include one or two symptoms. briefly describe the symptoms without jargon.
         For Allergy history, it can be either "no allergy" or one specific allergy.
