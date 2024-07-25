@@ -66,8 +66,8 @@ if role == 'admin':
 
     col1, col2 = st.columns([1, 1])
     with col1:
+        # Display the quality
         quality_list=get_quality()
-        print(f'The quality_list is{quality_list}')
         quality_list_df = pd.DataFrame(quality_list, columns=['quality'])
         counts = quality_list_df['quality'].value_counts()
         labels = counts.index.tolist()
@@ -78,8 +78,8 @@ if role == 'admin':
         ax1.set_title('The quality of the answers provided by the model in each response.')
         st.pyplot(fig1)
     with col2:
+        # Display the conversation_score
         conversation_score_list = get_conversation_score()
-        print(f'The conversation_score_list is{conversation_score_list}')
         conversation_score_list_df = pd.DataFrame(conversation_score_list, columns=['conversation_score'])
         score_counts = conversation_score_list_df['conversation_score'].value_counts().sort_index()
         fig, ax = plt.subplots()

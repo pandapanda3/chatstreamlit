@@ -1,6 +1,7 @@
 import streamlit as st
 from navigation import make_sidebar
-from service.generate_conversation import generate_patient_conversation, generate_patient_Symptoms
+from service.generate_conversation import generate_patient_conversation, generate_patient_Symptoms, \
+    generate_greeting_conversation
 from service.information_from_mysql import generate_session_id, get_largest_chat_number, \
     insert_user_chat_history, insert_message, update_quality_of_each_message, \
     get_scenarios, get_emotions, update_user_chat_history
@@ -24,7 +25,7 @@ print(f'st.session_state is :{st.session_state}')
 
 # Initialization value
 if "messages" not in st.session_state or not st.session_state["messages"]:
-    st.session_state["messages"] = [{"role": "patient", "content": "Hello, doctor. How are you today?"}]
+    st.session_state["messages"] = [{"role": "patient", "content": "Hi, what's your day today?"}]
 if 'patient_symptoms' not in st.session_state:
     st.session_state['patient_symptoms'] = ''
 if 'message_id' not in st.session_state:
@@ -123,7 +124,12 @@ if dentist_input:
     context = "\n".join([msg["content"] for msg in st.session_state.messages if msg["role"] == "dentist"])
     # generate the answer of patient
     print(f"In generating the patient's answer, symptoms is {st.session_state['patient_symptoms']}, dentist_input is {dentist_input}, conversation is {context}")
-    patient_response = generate_patient_conversation(st.session_state['patient_symptoms'], dentist_input, conversation=context, openai_api_key=openai_api_key)
+    
+    # Separate the greeting and medical inquires
+    if message_id < 4:
+        patient_response=generate_greeting_conversation(dentist_input, openai_api_key=openai_api_key)
+    else:
+        patient_response = generate_patient_conversation(st.session_state['patient_symptoms'], dentist_input, conversation=context, openai_api_key=openai_api_key)
     
     st.session_state.messages.append({"role": "patient", "content": patient_response})
     # show the message in the streamlit

@@ -3,11 +3,50 @@ from langchain.prompts import ChatPromptTemplate
 from langchain.chains import SequentialChain
 from langchain.chains import LLMChain
 from langchain.chains import SimpleSequentialChain
+from langchain.chains import create_retrieval_chain
+from langchain.chains.combine_documents import create_stuff_documents_chain
 
-def generate_patient_conversation(patient_information, dentist_question, conversation="", openai_api_key=""):
+from service.rag import store_data
+
+# using the same model
+def define_model(openai_api_key=""):
     llm_model = "gpt-3.5-turbo"
     
     llm = ChatOpenAI(temperature=0.9, model=llm_model, openai_api_key=openai_api_key)
+    return llm
+
+# generate the greeting answer
+def generate_greeting_conversation(dentist_input, openai_api_key=""):
+    llm = define_model(openai_api_key)
+    retriever=store_data(openai_api_key)
+    search_greeting_prompt = (
+        """
+        You are a highly skilled retriever tasked with searching for responses related to the patient's input.
+        Use the following pieces of retrieved context to create a similar response through imitation.
+        ###
+        {context}
+        ###
+        Retrieve the most relevant document from the database. The output should remove "Patient:".
+        If no relevant documents are found, generate a greeting response based on the dentist's input.
+        """
+    )
+    greeting_prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", search_greeting_prompt),
+            ("human", "{input}")
+        ]
+    )
+    
+    greeting_prompt_chain = create_stuff_documents_chain(llm, greeting_prompt)
+    rag_greeting_prompt_chain = create_retrieval_chain(retriever, greeting_prompt_chain)
+    greeting_answer = rag_greeting_prompt_chain.invoke({"input": dentist_input})
+    answer = greeting_answer['answer']
+    print(f'The chain is {greeting_answer}, The greeting answer is {answer}')
+    return answer
+
+def generate_patient_conversation(patient_information, dentist_question, conversation="", openai_api_key=""):
+    
+    llm = define_model(openai_api_key)
     first_prompt = ChatPromptTemplate.from_template(
         """
         Based on the conversation context, summarize the key points in a known_message.
@@ -58,8 +97,7 @@ def generate_patient_conversation(patient_information, dentist_question, convers
     return response
 
 def generate_patient_Symptoms(openai_api_key=""):
-    llm_model = "gpt-3.5-turbo"
-    llm = ChatOpenAI(temperature=0.9, model=llm_model, openai_api_key=openai_api_key)
+    llm = define_model(openai_api_key)
     patient_detail = """
             Age: between 20 and 80 years old
             Gender: male or female or other
