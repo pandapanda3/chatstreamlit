@@ -18,7 +18,7 @@ def load_docx_from_dir(directory):
     return all_document_text
 
 def store_data(OPENAI_API_KEY):
-    document_direction = "../../src/document"
+    document_direction = "."
     print(f'当前文件：{document_direction}')
     document_texts = load_docx_from_dir(document_direction)
     
