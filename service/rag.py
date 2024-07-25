@@ -17,7 +17,7 @@ def load_docx_from_dir(directory):
     return all_document_text
 
 def store_data(OPENAI_API_KEY):
-    current_file_path = os.path.abspath(__file__)
+    current_file_path = os.getcwd()
     
     
     current_directory = os.path.dirname(current_file_path)
