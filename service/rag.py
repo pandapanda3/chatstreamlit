@@ -1,10 +1,9 @@
 import os
-from docx import Document
-from langchain.embeddings import OpenAIEmbeddings
-from langchain.document_loaders import LangchainDocument
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_chroma import Chroma
-
+from langchain_openai import OpenAIEmbeddings
+from langchain.schema import Document as LangchainDocument
+from docx import Document
 
 # Load documents from a directory
 def load_docx_from_dir(directory):
