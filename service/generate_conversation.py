@@ -15,10 +15,27 @@ def define_model(openai_api_key=""):
     llm = ChatOpenAI(temperature=0.9, model=llm_model, openai_api_key=openai_api_key)
     return llm
 
+# retrive information from document
+def retrive_document(prompt, dentist_input, openai_api_key=""):
+    llm = define_model(openai_api_key)
+    retriever = store_data(openai_api_key)
+    document_prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", prompt),
+            ("human", "{input}")
+        ]
+    )
+
+    document_prompt_chain = create_stuff_documents_chain(llm, document_prompt)
+    rag_document_prompt_chain = create_retrieval_chain(retriever, document_prompt_chain)
+    document_answer = rag_document_prompt_chain.invoke({"input": dentist_input})
+    answer = document_answer['answer']
+    print(f'The chain is {document_answer}. After retrive the document, the answer is {answer}')
+    return answer
+
 # generate the greeting answer
 def generate_greeting_conversation(dentist_input, openai_api_key=""):
-    llm = define_model(openai_api_key)
-    retriever=store_data(openai_api_key)
+    
     search_greeting_prompt = (
         """
         You are a highly skilled retriever tasked with searching for answers related to the user's input question.
@@ -33,19 +50,29 @@ def generate_greeting_conversation(dentist_input, openai_api_key=""):
         If no relevant documents are found, only generate sentences where a patient greets a dentist, responding as the patient.
         """
     )
-    greeting_prompt = ChatPromptTemplate.from_messages(
-        [
-            ("system", search_greeting_prompt),
-            ("human", "{input}")
-        ]
-    )
-    
-    greeting_prompt_chain = create_stuff_documents_chain(llm, greeting_prompt)
-    rag_greeting_prompt_chain = create_retrieval_chain(retriever, greeting_prompt_chain)
-    greeting_answer = rag_greeting_prompt_chain.invoke({"input": dentist_input})
-    answer = greeting_answer['answer']
-    print(f'The chain is {greeting_answer}, The greeting answer is {answer}')
+    answer= retrive_document(search_greeting_prompt, dentist_input, openai_api_key=openai_api_key)
     return answer
+
+
+# get the relative document base on conversation
+def retrive_dentist_patient_document(dentist_input, openai_api_key=""):
+    search_medical_information_prompt = (
+        """
+        You are a highly skilled retriever tasked with searching for the most relevant context of the dentist's input in a conversation.
+        Retrieve the most relevant conversation snippet related to the current user input.
+        Extract the two sentences before and the two sentences after the user's input to provide the full context.
+        ###
+        {context}
+        ###
+        The output of answer should include only the two sentences before the user's input, the user's input itself, and the two sentences after the user's input, in that order.
+        The output should include both dentist and patient's response in the document.
+        If no relevant documents are found, explain that no relevant context could be retrieved.
+
+        """
+    )
+    answer = retrive_document(search_medical_information_prompt, dentist_input, openai_api_key=openai_api_key)
+    return answer
+    
 
 def generate_patient_conversation(patient_information, dentist_question, scenario, emotion, conversation="", openai_api_key=""):
     
@@ -60,7 +87,9 @@ def generate_patient_conversation(patient_information, dentist_question, scenari
     )
     # Chain 1: input=conversation, output=known_message
     chain_one = LLMChain(llm=llm, prompt=first_prompt, output_key="known_message")
-
+    
+    # get example from document
+    example=generate_greeting_conversation(dentist_question, openai_api_key=openai_api_key)
     second_prompt = ChatPromptTemplate.from_template(
         """
         You are the patient who is going to see a dentist. what you response should base on your personality.
@@ -92,6 +121,10 @@ def generate_patient_conversation(patient_information, dentist_question, scenari
         ###
         {scenario}
         ###
+        The example is:
+        ###
+        {example}
+        ###
     
         Remember to keep your response relevant to the dentist's question from the patient's perspective.
         """
@@ -101,7 +134,7 @@ def generate_patient_conversation(patient_information, dentist_question, scenari
     # Create the SequentialChain
     overall_chain = SequentialChain(
         chains=[chain_one, chain_two],
-        input_variables=["conversation", "patient_information", "dentist_question","emotion","scenario"],
+        input_variables=["conversation", "patient_information", "dentist_question","emotion","scenario","example"],
         output_variables=["answer"],
         verbose=True
     )
@@ -111,7 +144,8 @@ def generate_patient_conversation(patient_information, dentist_question, scenari
         "patient_information": patient_information,
         "dentist_question": dentist_question,
         "emotion": emotion,
-        "scenario": scenario
+        "scenario": scenario,
+        "example":example
     })
     print(f'The overall chain is :{overall_chain}')
 
