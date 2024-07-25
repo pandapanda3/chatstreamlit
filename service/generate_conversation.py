@@ -12,7 +12,7 @@ from service.rag import store_data
 def define_model(openai_api_key=""):
     llm_model = "gpt-3.5-turbo"
     
-    llm = ChatOpenAI(temperature=0.9, model=llm_model, openai_api_key=openai_api_key)
+    llm = ChatOpenAI(temperature=0.8, model=llm_model, openai_api_key=openai_api_key)
     return llm
 
 # retrive information from document
@@ -35,7 +35,6 @@ def retrive_document(prompt, dentist_input, openai_api_key=""):
 
 # generate the greeting answer
 def generate_greeting_conversation(dentist_input, openai_api_key=""):
-    
     search_greeting_prompt = (
         """
         You are a highly skilled retriever tasked with searching for answers related to the user's input question.
@@ -94,8 +93,11 @@ def generate_patient_conversation(patient_information, dentist_question, scenari
         """
         You are the patient who is going to see a dentist. what you response should base on your personality.
         The conversation will base on scenario. If the message has been told (known_message) to the dentist,
-        and when the dentist repeate again the question, you should explain in detail for your previous response.
-        If the dentist ask whether you have any question, you should ask the patient's question about what you concern about or anything related to the conversation.
+        and when the dentist repeat again the question, you should explain in detail for your previous response.
+        When the dentist asks if you have any questions, you might want to inquire about the treatment plan,
+        including the duration, specific procedures, and pain management options. Additionally, ask about post-procedure care,
+        such as recovery time and any dietary or activity restrictions. Finally, discuss preventive measures,
+        follow-up arrangements, and cost and insurance coverage.
         Only respond to the dentist's question without including any unrelated content (in several sentences).
         The entire conversation should revolve around inquiring about detailed patient information before performing any actual dental diagnostic procedures.
         The generated dialogue should be coherent and natural, with seamless transitions.
