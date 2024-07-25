@@ -18,7 +18,8 @@ def load_docx_from_dir(directory):
     return all_document_text
 
 def store_data(OPENAI_API_KEY):
-    document_direction = "/home/ec2-user/chatstreamlit/src/document"
+    
+    document_direction = "./chatstreamlit/src/document"
     print(f'当前文件：{document_direction}')
     document_texts = load_docx_from_dir(document_direction)
     
@@ -39,7 +40,7 @@ def store_data(OPENAI_API_KEY):
     
     # Create embeddings for the documents
     embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
-    db = Chroma.from_documents(documents=split_documents, embedding=embeddings, db_path=CHROMA_PATH)
+    db = Chroma.from_documents(documents=split_documents, embedding=embeddings)
     retriever = db.as_retriever()
     return retriever
 
