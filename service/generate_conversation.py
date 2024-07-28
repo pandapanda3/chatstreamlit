@@ -88,7 +88,7 @@ def generate_patient_conversation(patient_information, dentist_question, scenari
     chain_one = LLMChain(llm=llm, prompt=first_prompt, output_key="known_message")
     
     # get example from document
-    example=generate_greeting_conversation(dentist_question, openai_api_key=openai_api_key)
+    example=retrive_dentist_patient_document(dentist_question, openai_api_key=openai_api_key)
     second_prompt = ChatPromptTemplate.from_template(
         """
         You are the patient who is going to see a dentist. what you response should base on your personality.

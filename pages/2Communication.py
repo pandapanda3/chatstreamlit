@@ -25,7 +25,7 @@ print(f'st.session_state is :{st.session_state}')
 
 # Initialization value
 if "messages" not in st.session_state or not st.session_state["messages"]:
-    st.session_state["messages"] = [{"role": "patient", "content": "Hi, what's your day today?"}]
+    st.session_state["messages"] = [{"role": "patient", "content": "Hi! How's your day going?"}]
 if 'patient_symptoms' not in st.session_state:
     st.session_state['patient_symptoms'] = ''
 if 'message_id' not in st.session_state:

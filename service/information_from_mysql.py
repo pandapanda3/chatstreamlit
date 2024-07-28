@@ -16,7 +16,22 @@ def authenticate_user(username, password, student_number):
     finally:
         connection.close()
 
-
+# check if the user exist
+def existing_user(username, student_number):
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT id, password, role FROM users WHERE username = %s and student_number = %s"
+            cursor.execute(sql, (username, student_number))
+            result = cursor.fetchone()
+            print(f'the user is {result}')
+            if result:
+                return True
+            else:
+                return False
+    finally:
+        connection.close()
+        
 def create_user(username, password, student_number, role='normal'):
     connection = get_connection()
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())

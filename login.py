@@ -1,6 +1,6 @@
 import streamlit as st
 from navigation import make_sidebar
-from service.information_from_mysql import authenticate_user, create_user, update_password
+from service.information_from_mysql import authenticate_user, create_user, update_password, existing_user
 
 make_sidebar()
 
@@ -33,8 +33,12 @@ with Register:
     new_password = st.text_input("New Password", type="password", key="Register_new_password")
     new_password_confirm = st.text_input("Confirm New Password", type="password", key="Register_new_password_confirm")
     if st.button("Register"):
-        create_user(new_username, new_password,student_number)
-        st.success("Account created successfully!")
+        existing=existing_user(username, student_number)
+        if existing:
+            st.success("The Account already exist!")
+        else:
+            create_user(new_username, new_password,student_number)
+            st.success("Account created successfully!")
         
         
 with Reset:
@@ -44,7 +48,11 @@ with Reset:
     new_password_confirm = st.text_input("Confirm New Password", type="password", key="new_password_confirm")
     if st.button("Update Password"):
         if new_password == new_password_confirm:
-            update_password(reset_username, new_password,student_number)
-            st.success("Password updated successfully!")
+            existing = existing_user(username, student_number)
+            if existing:
+                update_password(reset_username, new_password,student_number)
+                st.success("Password updated successfully!")
+            else:
+                st.success("Make sure you input the correct Username and Student Number, or ensure that you have registered.")
         else:
             st.error("Passwords do not match. Please try again.")

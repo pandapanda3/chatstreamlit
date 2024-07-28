@@ -31,7 +31,7 @@ def store_data(OPENAI_API_KEY):
     documents = [LangchainDocument(page_content=text) for text in tagged_texts]
     
     # Split the documents into manageable chunks
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=150)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=150, add_start_index=True)
     split_documents = text_splitter.split_documents(documents)
     # for i, doc in enumerate(split_documents):
     #     print(f"Chunk {i+1}: {doc.page_content}\n")
@@ -40,6 +40,7 @@ def store_data(OPENAI_API_KEY):
     embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
     db = Chroma.from_documents(documents=split_documents, embedding=embeddings)
     retriever = db.as_retriever()
+    print(f'Finish store_data : {retriever}')
     return retriever
 
 if __name__ == '__main__':
