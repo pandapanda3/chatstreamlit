@@ -128,10 +128,11 @@ if dentist_input:
         f"In generating the patient's answer, symptoms is {st.session_state['patient_symptoms']}, dentist_input is {dentist_input}, conversation is {context}")
     
     # Separate the greeting and medical inquires
-    if message_id < 2:
-        patient_response = generate_greeting_conversation(dentist_input, openai_api_key=openai_api_key)
-    else:
-        patient_response = generate_patient_conversation(st.session_state['patient_symptoms'], dentist_input, st.session_state['scenario'], st.session_state['emotion'],
+    # if message_id < 2:
+    #     patient_response = generate_greeting_conversation(dentist_input, openai_api_key=openai_api_key)
+    # else:
+    #     patient_response = generate_patient_conversation(st.session_state['patient_symptoms'], dentist_input, st.session_state['scenario'], st.session_state['emotion'],
+    patient_response = generate_patient_conversation(st.session_state['patient_symptoms'], dentist_input, st.session_state['scenario'], st.session_state['emotion'],
                                                          conversation=context, openai_api_key=openai_api_key)
     
     st.session_state.messages.append({"role": "patient", "content": patient_response})
