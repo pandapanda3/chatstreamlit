@@ -103,6 +103,7 @@ def generate_patient_conversation(patient_information, dentist_question, scenari
         The generated dialogue should be coherent and natural, with seamless transitions.
         As the patient visiting a dentist, follow the scenario below to answer the dentist's question in a few sentences from the patient's perspective.
         It should generate only several sentences and wait for the dentist to respond.
+        The answer should remove "Patient:"
         
         The information of you is:
         ###
