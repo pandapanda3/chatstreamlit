@@ -28,7 +28,7 @@ with Login:
             st.error("Incorrect username or password")
             
 with Register:
-    new_username = st.text_input("New Username", key="new_username")
+    new_username = st.text_input("New Username", key="Register_username")
     student_number = st.text_input("Student Number", key='Register_student_number')
     new_password = st.text_input("New Password", type="password", key="Register_new_password")
     new_password_confirm = st.text_input("Confirm New Password", type="password", key="Register_new_password_confirm")
@@ -38,15 +38,18 @@ with Register:
         if existing:
             st.error("The Account already exist!")
         else:
-            create_user(new_username, new_password,student_number)
-            st.success("Account created successfully!")
+            if new_password == new_password_confirm:
+                create_user(new_username, new_password,student_number)
+                st.success("Account created successfully!")
+            else:
+                st.error("Passwords do not match. Please try again.")
         
         
 with Reset:
-    reset_username = st.text_input("Username for Password Reset", key="reset_username")
+    reset_username = st.text_input("Username for Password Reset", key="Reset_username")
     student_number = st.text_input("Student Number", key='Reset_student_number')
-    new_password = st.text_input("New Password", type="password", key="new_password")
-    new_password_confirm = st.text_input("Confirm New Password", type="password", key="new_password_confirm")
+    new_password = st.text_input("New Password", type="password", key="Reset_new_password")
+    new_password_confirm = st.text_input("Confirm New Password", type="password", key="Reset_new_password_confirm")
     if st.button("Update Password"):
         if new_password == new_password_confirm:
             existing = existing_user(username, student_number)
