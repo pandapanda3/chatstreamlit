@@ -28,12 +28,12 @@ with Login:
             st.error("Incorrect username or password")
             
 with Register:
-    new_username = st.text_input("New Username", key="Register_username")
+    new_username = st.text_input("Username", key="Register_username")
     student_number = st.text_input("Student Number", key='Register_student_number')
     new_password = st.text_input("New Password", type="password", key="Register_new_password")
     new_password_confirm = st.text_input("Confirm New Password", type="password", key="Register_new_password_confirm")
     if st.button("Register"):
-        existing=existing_user(username, student_number)
+        existing=existing_user(new_username, student_number)
         print(f'Register - existing value :{existing}')
         if existing:
             st.error("The Account already exist!")
@@ -46,17 +46,17 @@ with Register:
         
         
 with Reset:
-    reset_username = st.text_input("Username for Password Reset", key="Reset_username")
+    reset_username = st.text_input("Username", key="Reset_username")
     student_number = st.text_input("Student Number", key='Reset_student_number')
     new_password = st.text_input("New Password", type="password", key="Reset_new_password")
     new_password_confirm = st.text_input("Confirm New Password", type="password", key="Reset_new_password_confirm")
     if st.button("Update Password"):
-        if new_password == new_password_confirm:
-            existing = existing_user(username, student_number)
-            if existing:
+        existing = existing_user(reset_username, student_number)
+        if existing:
+            if new_password == new_password_confirm:
                 update_password(reset_username, new_password,student_number)
                 st.success("Password updated successfully!")
             else:
-                st.error("Make sure you input the correct Username and Student Number, or ensure that you have registered.")
+                st.error("Passwords do not match. Please try again.")
         else:
-            st.error("Passwords do not match. Please try again.")
+            st.error("Make sure you input the correct Username and Student Number, or ensure that you have registered.")
