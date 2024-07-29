@@ -24,7 +24,7 @@ def existing_user(username, student_number):
             sql = "SELECT id, password, role FROM users WHERE username = %s and student_number = %s"
             cursor.execute(sql, (username, student_number))
             result = cursor.fetchone()
-            print(f'the user is {result}')
+            print(f'the existing_user is {result}')
             if result:
                 return True
             else:

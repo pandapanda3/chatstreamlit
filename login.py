@@ -34,8 +34,9 @@ with Register:
     new_password_confirm = st.text_input("Confirm New Password", type="password", key="Register_new_password_confirm")
     if st.button("Register"):
         existing=existing_user(username, student_number)
+        print(f'Register - existing value :{existing}')
         if existing:
-            st.success("The Account already exist!")
+            st.error("The Account already exist!")
         else:
             create_user(new_username, new_password,student_number)
             st.success("Account created successfully!")
@@ -53,6 +54,6 @@ with Reset:
                 update_password(reset_username, new_password,student_number)
                 st.success("Password updated successfully!")
             else:
-                st.success("Make sure you input the correct Username and Student Number, or ensure that you have registered.")
+                st.error("Make sure you input the correct Username and Student Number, or ensure that you have registered.")
         else:
             st.error("Passwords do not match. Please try again.")
