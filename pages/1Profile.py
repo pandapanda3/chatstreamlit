@@ -102,8 +102,7 @@ def main():
     
     # Suggestion Form
     st.markdown("### Feedback and Suggestion")
-
-    
+ 
     suggestion = st.text_area("Write your suggestion here...", help="Is there any suggestion?")
 
     if st.button("Submit"):
@@ -112,12 +111,8 @@ def main():
             # Insert into database
             insert_suggestion(user, suggestion_content)
             st.success("Suggestion submitted successfully!")
-            # Clear the suggestion text
-
         else:
             st.warning("Please write a suggestion before submitting.")
     
-
-
 if __name__ == "__main__":
     main()

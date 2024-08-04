@@ -9,7 +9,7 @@ st.title("Welcome to The Platform")
 st.write("Please log in to continue.")
 
 Login, Register, Reset = st.tabs(["Login", "Register", "Reset Password"])
-
+# Login
 with Login:
     username = st.text_input("Username")
     student_number = st.text_input("Student Number", key='login_student_number')
@@ -26,7 +26,7 @@ with Login:
             st.switch_page("pages/2Communication.py")
         else:
             st.error("Incorrect username or password")
-            
+# Register
 with Register:
     new_username = st.text_input("Username", key="Register_username")
     student_number = st.text_input("Student Number", key='Register_student_number')
@@ -44,7 +44,7 @@ with Register:
             else:
                 st.error("Passwords do not match. Please try again.")
         
-        
+# Reset
 with Reset:
     reset_username = st.text_input("Username", key="Reset_username")
     student_number = st.text_input("Student Number", key='Reset_student_number')

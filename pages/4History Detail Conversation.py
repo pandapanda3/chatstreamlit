@@ -3,7 +3,6 @@ from navigation import make_sidebar
 from service.information_from_mysql import get_session_chat_detail, get_patient_symptoms_detail, \
     insert_performance_feedback
 
-
 # display the chat detail
 def display_chat(session_id):
     chat_history = get_session_chat_detail(session_id)

@@ -3,7 +3,6 @@ import boto3
 from botocore.exceptions import ClientError
 import json
 
-
 # get the information of mysql and openai key
 def get_secret():
 
@@ -42,6 +41,3 @@ def get_connection():
         port=secret_dict['port'],
         charset='utf8mb4'
     )
-   
-
-
