@@ -39,6 +39,7 @@ nohup streamlit run chatstreamlit/login.py &
 ```
 ## Results
 The Excel files in the "results" folder contain detailed data from running the code for each model.
+The "Ethical_Clearance_Letter.pdf" is in the "book" folder.
 
 ## The Newest Version of the Code
 https://github.com/pandapanda3/chatstreamlit
