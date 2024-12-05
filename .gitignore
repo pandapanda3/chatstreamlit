@@ -8,6 +8,7 @@ __pycache__/
 .secreate
 .env
 ./service/test.py
+key_pair_text_for_text.pem
 # C extensions
 *.so
 
