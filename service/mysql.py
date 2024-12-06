@@ -32,7 +32,6 @@ def get_secret():
 # connect to the database
 def get_connection():
     secret_dict = get_secret()
-    print(secret_dict['host'])
     return pymysql.connect(
         host=secret_dict['host'],
         user=secret_dict['username'],
