@@ -23,8 +23,6 @@ def make_sidebar():
             st.page_link("pages/4History Detail Conversation.py", label="History Detail Conversation")
             st.page_link("pages/5Admin.py", label="Admin")
 
-            st.write("")
-            st.write("")
 
             if st.button("Log out"):
                 logout()

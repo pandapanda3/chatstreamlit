@@ -26,7 +26,9 @@ def retrive_document(prompt, dentist_input, openai_api_key=""):
         ]
     )
 
+    # Combine documents and retrieved information with llm and document_prompt.
     document_prompt_chain = create_stuff_documents_chain(llm, document_prompt)
+    # Combine retriever with document_prompt_chain
     rag_document_prompt_chain = create_retrieval_chain(retriever, document_prompt_chain)
     document_answer = rag_document_prompt_chain.invoke({"input": dentist_input})
     answer = document_answer['answer']
