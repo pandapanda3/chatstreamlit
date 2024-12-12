@@ -27,7 +27,7 @@ if not st.session_state.get('logged_in', False):
                 st.session_state['session_id'] = None
                 st.session_state['messages'] = []
                 st.success("Logged in successfully!")
-                st.experimental_rerun()
+                st.switch_page("pages/2Communication.py")
             else:
                 st.error("Incorrect username or password")
 
