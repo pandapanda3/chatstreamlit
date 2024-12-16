@@ -132,9 +132,9 @@ if dentist_input:
     #     patient_response = generate_greeting_conversation(dentist_input, openai_api_key=openai_api_key)
     # else:
     #     patient_response = generate_patient_conversation(st.session_state['patient_symptoms'], dentist_input, st.session_state['scenario'], st.session_state['emotion'],
-    patient_response = generate_patient_conversation(st.session_state['patient_symptoms'], dentist_input, st.session_state['scenario'], st.session_state['emotion'],
-                                                         conversation=context, openai_api_key=openai_api_key)
-    
+    # patient_response = generate_patient_conversation(st.session_state['patient_symptoms'], dentist_input, st.session_state['scenario'], st.session_state['emotion'],
+    #                                                      conversation=context, openai_api_key=openai_api_key)
+    patient_response = generate_greeting_conversation(dentist_input, openai_api_key=openai_api_key)
     st.session_state.messages.append({"role": "patient", "content": patient_response})
     # show the message in the streamlit
     st.chat_message("patient").write(patient_response)
