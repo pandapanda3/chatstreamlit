@@ -112,3 +112,17 @@ Import data into the emotion table and the scenario table
 # Service
 
 http://18.133.23.50:8501
+
+# Langchain
+## set up environment
+{your_env} can be check by `conda env list`
+`mkdir -p {your_env}/etc/conda/activate.d`
+`cd {your_env}/etc/conda/activate.d`
+`vi env_vars.sh`
+
+input the content:
+`export LANGCHAIN_TRACING_V2=true
+export LANGCHAIN_API_KEY=<your-api-key>
+export OPENAI_API_KEY=<your-openai-api-key>
+`
+
