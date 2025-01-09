@@ -172,8 +172,7 @@ def Rag_chain(question, prompt, llm, OPENAI_API_KEY, patient_information, known_
     embedding_function = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
     
     persist_directory = './chatstreamlit/src/chroma'
-    if not os.access(persist_directory, os.R_OK | os.W_OK):
-        raise PermissionError(f"Persist directory is not accessible from conversation: {persist_directory}")
+    
     custom_retriever = DentistPatientRetriever(
         embedding_function=embedding_function,
         persist_directory=persist_directory
