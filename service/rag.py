@@ -1,5 +1,5 @@
 import os
-from langchain_text_splitters import RecursiveCharacterTextSplitter
+from dotenv import load_dotenv
 from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
 from langchain.schema import Document as LangchainDocument
@@ -13,13 +13,12 @@ from langchain.retrievers import ContextualCompressionRetriever
 from langsmith import traceable
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
-# Load documents from a directory
 from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains import create_retrieval_chain
 from service.custom_retriever import DentistPatientRetriever
-from dotenv import load_dotenv
-import os
+
+
 
 
 def load_docx_from_dir(directory):
@@ -187,7 +186,7 @@ def retrive_memory_and_prompt(question,OPENAI_API_KEY):
 def format_docs(docs):
     return "\n\n".join(doc.page_content for doc in docs)
 
-def Rag_chain(question,prompt, llm, OPENAI_API_KEY):
+def Rag_chain(question, prompt, llm, OPENAI_API_KEY, patient_information, known_message, emotion, scenario):
     embedding_function = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
     # vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedding_function)
     # retriever = vectordb.as_retriever()
@@ -195,13 +194,30 @@ def Rag_chain(question,prompt, llm, OPENAI_API_KEY):
         embedding_function=embedding_function,
         persist_directory=persist_directory
     )
+    retrieved_docs = custom_retriever._get_relevant_documents(question)
+    context = format_docs(retrieved_docs)
+    print(f"\nFormatted Context: {context}")
     rag_chain = (
-            {"context": custom_retriever | format_docs, "question": RunnablePassthrough()}
+            {
+                "context": RunnablePassthrough(),
+                "patient_information": RunnablePassthrough(),
+                "known_message": RunnablePassthrough(),
+                "dentist_question": RunnablePassthrough(),
+                "emotion": RunnablePassthrough(),
+                "scenario": RunnablePassthrough()
+            }
             | prompt
             | llm
             | StrOutputParser()
     )
-    answer = rag_chain.invoke(question)
+    answer = rag_chain.invoke({
+        "context": context,
+        "patient_information": patient_information,
+        "known_message": known_message,
+        "dentist_question": question,
+        "emotion": emotion,
+        "scenario": scenario
+    })
 
     
     print(f'The answer is {answer}')
@@ -214,33 +230,61 @@ if __name__ == '__main__':
     
     # retriever=store_data(OPENAI_API_KEY)
     question='Is there anything you not clear and want to ask me today?'
-    # response = rertrive_data(question, OPENAI_API_KEY, persist_directory)
-    # print(response)
-    # question_list=['And how have you been feeling?',
-    #                'Has someone come with you? I mean you can call the attendant in.',
-    #                'The results have come back. Well, I am afraid the news today is not very good for you. The biopsy confirmed that the lesion on your right buccal mucosa is grade 3 squamous cell carcinoma which is a type of oral cancer.',
-    #                'Yes, I am afraid so. The biopsy has confirmed it.']
-    # for question in question_list:
-    #     print(f' the qustion is {question}')
-    #     response=retrive_memory_and_prompt(question, OPENAI_API_KEY)
+    
     llm = ChatOpenAI(model="gpt-3.5-turbo", openai_api_key=OPENAI_API_KEY)
     prompt="""You are the patient who is going to see a dentist. what you response should base on your personality.
-        The conversation will base on scenario. If the message has been told (known_message) to the dentist,
-        and when the dentist repeat again the question, you should explain in detail for your previous response.
-        When the dentist asks if you have any questions, you might want to inquire about the treatment plan,
-        including the duration, specific procedures, and pain management options. Additionally, ask about post-procedure care,
-        such as recovery time and any dietary or activity restrictions. Finally, discuss preventive measures,
-        follow-up arrangements, and cost and insurance coverage.
-        Only respond to the dentist's question without including any unrelated content (in several sentences).
-        The entire conversation should revolve around inquiring about detailed patient information before performing any actual dental diagnostic procedures.
-        The generated dialogue should be coherent and natural, with seamless transitions.
-        As the patient visiting a dentist, follow the scenario below to answer the dentist's question in a few sentences from the patient's perspective.
-        It should generate only several sentences and wait for the dentist to respond.
-        Remember to keep your response relevant to the dentist's question from the patient's perspective.
-    {context}
-    Question: {question}
-    patient's Answer:"""
+    The conversation will base on scenario. If the message has been told (known_message) to the dentist,
+    and when the dentist repeat again the question, you should explain in detail for your previous response.
+    When the dentist asks if you have any questions, you might want to inquire about the treatment plan,
+    including the duration, specific procedures, and pain management options. Additionally, ask about post-procedure care,
+    such as recovery time and any dietary or activity restrictions. Finally, discuss preventive measures,
+    follow-up arrangements, and cost and insurance coverage.
+    Only respond to the dentist's question without including any unrelated content (in several sentences).
+    The entire conversation should revolve around inquiring about detailed patient information before performing any actual dental diagnostic procedures.
+    The generated dialogue should be coherent and natural, with seamless transitions.
+    As the patient visiting a dentist, follow the scenario below to answer the dentist's question in a few sentences from the patient's perspective.
+    It should generate only several sentences and wait for the dentist to respond.
+    The answer should remove "Patient:"
+    
+    The information of you is:
+    ###
+    {patient_information}
+    ###
+    The message that you have already told dentist is:
+    ###
+    {known_message}
+    ###
+    The dentist's question is:
+    ###
+    {dentist_question}
+    ###
+    The personality of you is:
+    ###
+    {emotion}
+    ###
+    The scenario of you is:
+    ###
+    {scenario}
+    ###
+    
+    Remember to keep your response relevant to the dentist's question from the patient's perspective.
+    """
+
+    patient_information = "You are 30 years old with no known allergies."
+    known_message = "You told the dentist that you have been experiencing tooth pain for two weeks."
+    emotion = "You are feeling anxious about the procedure."
+    scenario = "You are at a dentist's office for a root canal consultation."
+    
     prompt_template = ChatPromptTemplate.from_messages([
         HumanMessagePromptTemplate.from_template(prompt)
     ])
-    response = Rag_chain(question,prompt_template, llm, OPENAI_API_KEY)
+    response = Rag_chain(
+        question=question,
+        prompt=prompt_template,
+        llm=llm,
+        OPENAI_API_KEY=OPENAI_API_KEY,
+        patient_information=patient_information,
+        known_message=known_message,
+        emotion=emotion,
+        scenario=scenario
+    )
