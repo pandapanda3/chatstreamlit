@@ -121,12 +121,7 @@ if dentist_input:
     message_id = increment_message_id()
     insert_message(session_id, user_id, dentist_input, "dentist", message_id)
     
-    # gather all the information that patient has told dentist
-    # context = "\n".join([msg["content"] for msg in st.session_state.messages if msg["role"] == "dentist"])
-    # generate the answer of patient
-    print(
-        f"In generating the patient's answer, symptoms is {st.session_state['patient_symptoms']}, dentist_input is {dentist_input}, conversation is {context}")
-    
+     
     # Separate the greeting and medical inquires
     if message_id < 2:
         patient_response = generate_greeting_conversation(dentist_input, openai_api_key=openai_api_key)
