@@ -14,7 +14,12 @@ from langsmith import traceable
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 # Load documents from a directory
+
+from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain.chains import create_retrieval_chain
 from service.custom_retriever import DentistPatientRetriever
+from dotenv import load_dotenv
+import os
 
 
 def load_docx_from_dir(directory):
@@ -186,22 +191,34 @@ def Rag_chain(question,prompt, llm, OPENAI_API_KEY):
     embedding_function = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
     vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedding_function)
     retriever = vectordb.as_retriever()
-    custom_retriever = DentistPatientRetriever(
-        embedding_function=embedding_function,
-        persist_directory=persist_directory
+    # custom_retriever = DentistPatientRetriever(
+    #     embedding_function=embedding_function,
+    #     persist_directory=persist_directory
+    # )
+    # rag_chain = (
+    #         {"context": retriever | format_docs, "question": RunnablePassthrough()}
+    #         | prompt
+    #         | llm
+    #         | StrOutputParser()
+    # )
+    # answer = rag_chain.invoke(question)
+
+    retrieval_qa_chat_prompt = prompt
+    
+    combine_docs_chain = create_stuff_documents_chain(
+        llm, retrieval_qa_chat_prompt
     )
-    rag_chain = (
-            {"context": retriever | format_docs, "question": RunnablePassthrough()}
-            | prompt
-            | llm
-            | StrOutputParser()
-    )
-    answer = rag_chain.invoke(question)
+    retrieval_chain = create_retrieval_chain(retriever, combine_docs_chain)
+
+    answer=retrieval_chain.invoke({"input": question})
+    
     print(f'The answer is {answer}')
 
 if __name__ == '__main__':
     persist_directory='./chatstreamlit/src/chroma'
-    OPENAI_API_KEY='XXX'
+    load_dotenv()
+    OPENAI_API_KEY=os.getenv("OPENAI_API_KEY")
+    
     # retriever=store_data(OPENAI_API_KEY)
     question='Is there anything you not clear and want to ask me today?'
     # response = rertrive_data(question, OPENAI_API_KEY, persist_directory)
