@@ -1,12 +1,15 @@
 from langchain.chat_models import ChatOpenAI
-from langchain.prompts import ChatPromptTemplate
+from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
 from langchain.chains import SequentialChain
 from langchain.chains import LLMChain
 from langchain.chains import SimpleSequentialChain
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
-
+from langchain_openai import OpenAIEmbeddings
 from service.rag import store_data
+from langchain_core.runnables import RunnablePassthrough
+from service.custom_retriever import DentistPatientRetriever
+from langchain_core.output_parsers import StrOutputParser
 
 # using the same model
 def define_model(openai_api_key=""):
@@ -75,7 +78,7 @@ def retrive_dentist_patient_document(dentist_input, openai_api_key=""):
     return answer
     
 
-def generate_patient_conversation(patient_information, dentist_question, scenario, emotion, conversation="", openai_api_key=""):
+def generate_patient_conversation_without_RAG(patient_information, dentist_question, scenario, emotion, conversation="", openai_api_key=""):
     
     llm = define_model(openai_api_key)
     first_prompt = ChatPromptTemplate.from_template(
@@ -157,6 +160,100 @@ def generate_patient_conversation(patient_information, dentist_question, scenari
 
     return response
 
+
+# format the docs for RAG
+def format_docs(docs):
+    return "\n\n".join(doc.page_content for doc in docs)
+
+
+def Rag_chain(question, prompt, llm, OPENAI_API_KEY, patient_information, known_message, emotion, scenario):
+    embedding_function = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
+    custom_retriever = DentistPatientRetriever(
+        embedding_function=embedding_function,
+        persist_directory='./chatstreamlit/src/chroma'
+    )
+    retrieved_docs = custom_retriever._get_relevant_documents(question)
+    context = format_docs(retrieved_docs)
+    print(f"\nFormatted Context: {context}")
+    rag_chain = (
+            {
+                "context": RunnablePassthrough(),
+                "patient_information": RunnablePassthrough(),
+                "known_message": RunnablePassthrough(),
+                "dentist_question": RunnablePassthrough(),
+                "emotion": RunnablePassthrough(),
+                "scenario": RunnablePassthrough()
+            }
+            | prompt
+            | llm
+            | StrOutputParser()
+    )
+    answer = rag_chain.invoke({
+        "context": context,
+        "patient_information": patient_information,
+        "known_message": known_message,
+        "dentist_question": question,
+        "emotion": emotion,
+        "scenario": scenario
+    })
+    
+    print(f'The answer is {answer}')
+    return answer
+
+def generate_patient_conversation_with_RAG(patient_information, dentist_question, scenario, emotion, conversation="", openai_api_key=""):
+    llm = define_model(openai_api_key)
+    prompt = """You are the patient who is going to see a dentist. what you response should base on your personality.
+        The conversation will base on scenario. If the message has been told (known_message) to the dentist,
+        and when the dentist repeat again the question, you should explain in detail for your previous response.
+        When the dentist asks if you have any questions, you might want to inquire about the treatment plan,
+        including the duration, specific procedures, and pain management options. Additionally, ask about post-procedure care,
+        such as recovery time and any dietary or activity restrictions. Finally, discuss preventive measures,
+        follow-up arrangements, and cost and insurance coverage.
+        Only respond to the dentist's question without including any unrelated content (in several sentences).
+        The entire conversation should revolve around inquiring about detailed patient information before performing any actual dental diagnostic procedures.
+        The generated dialogue should be coherent and natural, with seamless transitions.
+        As the patient visiting a dentist, follow the scenario below to answer the dentist's question in a few sentences from the patient's perspective.
+        It should generate only several sentences and wait for the dentist to respond.
+        The answer should remove "Patient:"
+
+        The information of you is:
+        ###
+        {patient_information}
+        ###
+        The message that you have already told dentist is:
+        ###
+        {known_message}
+        ###
+        The dentist's question is:
+        ###
+        {dentist_question}
+        ###
+        The personality of you is:
+        ###
+        {emotion}
+        ###
+        The scenario of you is:
+        ###
+        {scenario}
+        ###
+
+        Remember to keep your response relevant to the dentist's question from the patient's perspective.
+        """
+    prompt_template = ChatPromptTemplate.from_messages([
+        HumanMessagePromptTemplate.from_template(prompt)
+    ])
+    response = Rag_chain(
+        question=dentist_question,
+        prompt=prompt_template,
+        llm=llm,
+        OPENAI_API_KEY=openai_api_key,
+        patient_information=patient_information,
+        known_message=conversation,
+        emotion=emotion,
+        scenario=scenario
+    )
+    return response
+    
 def generate_patient_Symptoms(openai_api_key=""):
     llm = define_model(openai_api_key)
     patient_detail = """
@@ -205,4 +302,3 @@ if __name__ == '__main__':
     dentist_question = 'I see, thank you for letting me know. Before we proceed with any diagnostic procedures, may I ask for some detailed information about your health?'
     openai_api_key = 'your_openai_api_key'
     
-    print(generate_patient_conversation(dentist_question, openai_api_key=openai_api_key))

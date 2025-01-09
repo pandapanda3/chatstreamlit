@@ -1,7 +1,7 @@
 import streamlit as st
 from navigation import make_sidebar
-from service.generate_conversation import generate_patient_conversation, generate_patient_Symptoms, \
-    generate_greeting_conversation
+from service.generate_conversation import generate_patient_Symptoms, \
+    generate_greeting_conversation, generate_patient_conversation_without_RAG, generate_patient_conversation_with_RAG
 from service.information_from_mysql import generate_session_id, get_largest_chat_number, \
     insert_user_chat_history, insert_message, update_quality_of_each_message, \
     get_scenarios, get_emotions, update_user_chat_history
@@ -131,7 +131,8 @@ if dentist_input:
     if message_id < 2:
         patient_response = generate_greeting_conversation(dentist_input, openai_api_key=openai_api_key)
     else:
-        patient_response = generate_patient_conversation(st.session_state['patient_symptoms'], dentist_input, st.session_state['scenario'], st.session_state['emotion'],conversation=st.session_state.messages, openai_api_key=openai_api_key)
+        # patient_response = generate_patient_conversation_without_RAG(st.session_state['patient_symptoms'], dentist_input, st.session_state['scenario'], st.session_state['emotion'],conversation=st.session_state.messages, openai_api_key=openai_api_key)
+        patient_response = generate_patient_conversation_with_RAG(st.session_state['patient_symptoms'], dentist_input, st.session_state['scenario'], st.session_state['emotion'],conversation=st.session_state.messages, openai_api_key=openai_api_key)
     # patient_response = generate_patient_conversation(st.session_state['patient_symptoms'], dentist_input, st.session_state['scenario'], st.session_state['emotion'],
     #                                                      conversation=context, openai_api_key=openai_api_key)
     # patient_response = generate_greeting_conversation(dentist_input, openai_api_key=openai_api_key)
