@@ -41,26 +41,12 @@ class DentistPatientRetriever(BaseRetriever):
         Returns:
             List[Document]: A list of relevant documents with extracted content.
         """
-        
+
 
         # Step 1: Perform similarity search to retrieve documents
         documents = self.db.similarity_search(query, k=3)
         # documents = self.db.similarity_search_with_score(query, k=3)
         print(f"documents is {documents}.")
 
-        
-        return documents
 
-    # def __call__(self, query: str) -> Dict[str, str]:
-    #     """
-    #     Format the retrieved documents into a dict for the RAG chain.
-    #
-    #     Args:
-    #         query (str): User's query.
-    #
-    #     Returns:
-    #         Dict[str, str]: A dictionary with a key "context" containing the formatted document content.
-    #     """
-    #     docs = self._get_relevant_documents(query)
-    #     formatted_content = "\n\n".join(doc.page_content for doc in docs)
-    #     return {"context": formatted_content}
+        return documents

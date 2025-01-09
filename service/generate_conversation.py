@@ -169,10 +169,11 @@ def format_docs(docs):
 
 def Rag_chain(question, prompt, llm, OPENAI_API_KEY, patient_information, known_message, emotion, scenario):
     embedding_function = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
-    print(f"Current working directory: {os.getcwd()}")
+    
+    persist_directory = './chatstreamlit/src/chroma'
     custom_retriever = DentistPatientRetriever(
         embedding_function=embedding_function,
-        persist_directory='./chatstreamlit/src/chroma'
+        persist_directory=persist_directory
     )
     retrieved_docs = custom_retriever._get_relevant_documents(question)
     context = format_docs(retrieved_docs)
