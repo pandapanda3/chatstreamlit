@@ -10,6 +10,7 @@ from service.rag import store_data
 from langchain_core.runnables import RunnablePassthrough
 from service.custom_retriever import DentistPatientRetriever
 from langchain_core.output_parsers import StrOutputParser
+import os
 
 # using the same model
 def define_model(openai_api_key=""):
@@ -168,6 +169,7 @@ def format_docs(docs):
 
 def Rag_chain(question, prompt, llm, OPENAI_API_KEY, patient_information, known_message, emotion, scenario):
     embedding_function = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
+    print(f"Current working directory: {os.getcwd()}")
     custom_retriever = DentistPatientRetriever(
         embedding_function=embedding_function,
         persist_directory='./chatstreamlit/src/chroma'
