@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict
 from langchain_core.documents import Document
 from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_chroma import Chroma
@@ -50,3 +50,17 @@ class DentistPatientRetriever(BaseRetriever):
 
         
         return documents
+
+    # def __call__(self, query: str) -> Dict[str, str]:
+    #     """
+    #     Format the retrieved documents into a dict for the RAG chain.
+    #
+    #     Args:
+    #         query (str): User's query.
+    #
+    #     Returns:
+    #         Dict[str, str]: A dictionary with a key "context" containing the formatted document content.
+    #     """
+    #     docs = self._get_relevant_documents(query)
+    #     formatted_content = "\n\n".join(doc.page_content for doc in docs)
+    #     return {"context": formatted_content}
