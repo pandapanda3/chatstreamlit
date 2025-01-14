@@ -125,7 +125,7 @@ event = st.dataframe(
     on_select=single_row_selection_callback,  # Callback when a row is selected
     selection_mode="single-row",  # Enable single-row selection
     hide_index=True,
-    height=100,
+    height=2000,
     column_config={
         "session_id": st.column_config.NumberColumn(
             "Chat",
