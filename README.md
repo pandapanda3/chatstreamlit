@@ -30,11 +30,13 @@ Log in to the AWS platform, set up the database service on RDS (https://eu-west-
 and set up the service on EC2 (https://eu-west-2.console.aws.amazon.com/ec2/home?region=eu-west-2#Instances:). 
 Then, connect to the server and execute the following operations:
 ```sh
-1. python3 -m venv venv
-2. source venv/bin/activate
-3. python3 -m pip install -r chatstreamlit/requirements.txt
-(If it raises permission denied issue, use the command : sudo /home/ec2-user/venv/bin/pip install XXX )
-4. streamlit run chatstreamlit/login.py or
+1. sudo su
+2. python3 -m venv venv
+3. source venv/bin/activate
+4. python3 -m pip install -r chatstreamlit/requirements.txt
+(If it raises permission denied issue, use the command : sudo /home/ec2-user/venv/bin/pip install XXX)
+(This step is not always necessary.)
+5. streamlit run chatstreamlit/login.py or
 nohup streamlit run chatstreamlit/login.py &
 ```
 ## Results
