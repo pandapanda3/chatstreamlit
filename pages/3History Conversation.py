@@ -124,7 +124,54 @@ event = st.dataframe(
     chat_history_data_df,
     on_select=single_row_selection_callback,  # Callback when a row is selected
     selection_mode="single-row",  # Enable single-row selection
-    hide_index=True
+    hide_index=True,
+    column_config={
+        "session_id": st.column_config.NumberColumn(
+            "Chat",
+            help="Tech Details , used for getting chat conversation",
+            width="small"
+        ),
+        "chat_count": st.column_config.NumberColumn(
+            "The number of chat session",
+            help="The number of chats",
+            width="small"
+        ),
+        "user_name": st.column_config.TextColumn(
+            "User Name",
+            help="The name of the user",
+            width="medium"
+        ),
+        "scenario": st.column_config.TextColumn(
+            "Scenario",
+            help="The Scenario",
+            width="medium"
+        ),
+        "emotion": st.column_config.TextColumn(
+            "Emotion",
+            help="The emotion of the patient",
+            width="medium"
+        ),
+        "patient_details": st.column_config.TextColumn(
+            "Patient Details",
+            help="Details of the patient",
+            width="large"
+        ),
+        "conversation_score": st.column_config.NumberColumn(
+            "Conversation Score",
+            help="The score of this chat session",
+            width="small"
+        ),
+        "performance_feedback": st.column_config.TextColumn(
+            "Performance Feedback",
+            help="The feedback of the conversation given by lecturer",
+            width="large"
+        ),
+        "publish_conversation": st.column_config.NumberColumn(
+            "Publish Conversation",
+            help="It determines whether this conversation can be viewed by the admin user. 1 represents published, 0 represents private.",
+            width="small"
+        ),
+    },
 )
 
 # Retrieve selected rows
