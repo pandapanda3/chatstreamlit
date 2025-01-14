@@ -19,62 +19,68 @@ from langchain.chains import create_retrieval_chain
 from service.custom_retriever import DentistPatientRetriever
 
 
-
-
-def load_docx_from_dir(directory):
-    all_document_text = []
-    for filename in os.listdir(directory):
-        if filename.endswith(".docx"):
-            document_path = os.path.join(directory, filename)
-            each_document = Document(document_path)
-            texts = [para.text for para in each_document.paragraphs if para.text.strip()]
-            all_document_text.extend(texts)
-    return all_document_text
-
-
-def split_conversations_into_chunks(document_texts, group_size=3):
+def load_docx_from_dir(document_direction):
     """
-    Split conversations into chunks where each chunk contains `group_size` groups
-    of Dentist and Patient conversations.
+    Load .docx files from a directory and extract their content into a dictionary.
+
+    Args:
+        document_direction (str): Directory path containing .docx files.
+
+    Returns:
+        Dict[str, List[str]]: Dictionary with file names as keys and lists of extracted text as values.
     """
-    chunks = []
-    current_chunk = []
-    group_count = 0
-    
-    for line in document_texts:
-        # Add the line to the current chunk
-        current_chunk.append(line)
-        
-        # Check if the line is a Dentist or Patient line
-        if "Dentist:" in line or "Patient:" in line:
-            group_count += 0.5  # Count each line as half a group
-        
-        # Once group_count reaches group_size, create a new chunk
-        if group_count >= group_size:
-            chunk_content = "\n".join(current_chunk)
-            chunks.append(LangchainDocument(page_content=chunk_content))
-            current_chunk = []  # Reset current chunk
-            group_count = 0  # Reset group count
-    
-    # Add remaining lines as the last chunk
-    if current_chunk:
-        chunk_content = "\n".join(current_chunk)
-        chunks.append(LangchainDocument(page_content=chunk_content))
-    
-    return chunks
+    document_texts = {}
+
+    for file_name in os.listdir(document_direction):
+        if file_name.endswith('.docx'):
+            file_path = os.path.join(document_direction, file_name)
+            doc = Document(file_path)
+
+            # Parse the document to extract relevant text
+            parsed_text = []
+            for paragraph in doc.paragraphs:
+                text = paragraph.text.strip()
+                if text:  # Include all lines, not just those with ":"
+                    parsed_text.extend([line.strip() for line in text.splitlines() if line.strip()])
+
+            document_texts[file_name.split('.')[0]] = parsed_text
+    print(document_texts)
+    return document_texts
+
+
+
+def split_conversations_into_chunks(document_texts, group_size = 6):
+    """
+    Split document text into chunks of a specified size.
+
+    Args:
+        document_texts (Dict[str, List[str]]): Dictionary with file names as keys and lists of extracted text as values.
+        group_size (int): Number of items per chunk.
+
+    Returns:
+        Dict[str, List[List[str]]]: Dictionary with file names as keys and chunked lists of text as values.
+    """
+    chunked_texts = {}
+
+    for doc_name, text_list in document_texts.items():
+        chunks = [text_list[i:i + group_size] for i in range(0, len(text_list), group_size)]
+        chunked_texts[doc_name] = chunks
+
+    return chunked_texts
 
 def store_data(OPENAI_API_KEY):
     
     document_direction = "./chatstreamlit/src/document"
     document_texts = load_docx_from_dir(document_direction)
 
-    # Split documents into conversational chunks
-    split_documents = split_conversations_into_chunks(document_texts, group_size=3)
+    chunked_data=split_conversations_into_chunks(document_texts, group_size = 6)
 
-    # Print the chunks for debugging
-    for i, doc in enumerate(split_documents):
-        print(f"Chunk {i + 1}: {doc.page_content}\n")
-
+    split_documents = []
+    for doc_name, chunks in chunked_data.items():
+        for chunk in chunks:
+            content = "\n".join(chunk)
+            split_documents.append(LangchainDocument(page_content=content))
+    print(split_documents)
     # Create embeddings for the documents
     embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY, model="text-embedding-ada-002")
     db = Chroma.from_documents(documents=split_documents, embedding=embeddings,
@@ -228,63 +234,63 @@ if __name__ == '__main__':
     load_dotenv()
     OPENAI_API_KEY=os.getenv("OPENAI_API_KEY")
     
-    # retriever=store_data(OPENAI_API_KEY)
-    question='Is there anything you not clear and want to ask me today?'
-    
-    llm = ChatOpenAI(model="gpt-3.5-turbo", openai_api_key=OPENAI_API_KEY)
-    prompt="""You are the patient who is going to see a dentist. what you response should base on your personality.
-    The conversation will base on scenario. If the message has been told (known_message) to the dentist,
-    and when the dentist repeat again the question, you should explain in detail for your previous response.
-    When the dentist asks if you have any questions, you might want to inquire about the treatment plan,
-    including the duration, specific procedures, and pain management options. Additionally, ask about post-procedure care,
-    such as recovery time and any dietary or activity restrictions. Finally, discuss preventive measures,
-    follow-up arrangements, and cost and insurance coverage.
-    Only respond to the dentist's question without including any unrelated content (in several sentences).
-    The entire conversation should revolve around inquiring about detailed patient information before performing any actual dental diagnostic procedures.
-    The generated dialogue should be coherent and natural, with seamless transitions.
-    As the patient visiting a dentist, follow the scenario below to answer the dentist's question in a few sentences from the patient's perspective.
-    It should generate only several sentences and wait for the dentist to respond.
-    The answer should remove "Patient:"
-    
-    The information of you is:
-    ###
-    {patient_information}
-    ###
-    The message that you have already told dentist is:
-    ###
-    {known_message}
-    ###
-    The dentist's question is:
-    ###
-    {dentist_question}
-    ###
-    The personality of you is:
-    ###
-    {emotion}
-    ###
-    The scenario of you is:
-    ###
-    {scenario}
-    ###
-    
-    Remember to keep your response relevant to the dentist's question from the patient's perspective.
-    """
-
-    patient_information = "You are 30 years old with no known allergies."
-    known_message = "You told the dentist that you have been experiencing tooth pain for two weeks."
-    emotion = "You are feeling anxious about the procedure."
-    scenario = "You are at a dentist's office for a root canal consultation."
-    
-    prompt_template = ChatPromptTemplate.from_messages([
-        HumanMessagePromptTemplate.from_template(prompt)
-    ])
-    response = Rag_chain(
-        question=question,
-        prompt=prompt_template,
-        llm=llm,
-        OPENAI_API_KEY=OPENAI_API_KEY,
-        patient_information=patient_information,
-        known_message=known_message,
-        emotion=emotion,
-        scenario=scenario
-    )
+    retriever=store_data(OPENAI_API_KEY)
+    # question='Is there anything you not clear and want to ask me today?'
+    #
+    # llm = ChatOpenAI(model="gpt-3.5-turbo", openai_api_key=OPENAI_API_KEY)
+    # prompt="""You are the patient who is going to see a dentist. what you response should base on your personality.
+    # The conversation will base on scenario. If the message has been told (known_message) to the dentist,
+    # and when the dentist repeat again the question, you should explain in detail for your previous response.
+    # When the dentist asks if you have any questions, you might want to inquire about the treatment plan,
+    # including the duration, specific procedures, and pain management options. Additionally, ask about post-procedure care,
+    # such as recovery time and any dietary or activity restrictions. Finally, discuss preventive measures,
+    # follow-up arrangements, and cost and insurance coverage.
+    # Only respond to the dentist's question without including any unrelated content (in several sentences).
+    # The entire conversation should revolve around inquiring about detailed patient information before performing any actual dental diagnostic procedures.
+    # The generated dialogue should be coherent and natural, with seamless transitions.
+    # As the patient visiting a dentist, follow the scenario below to answer the dentist's question in a few sentences from the patient's perspective.
+    # It should generate only several sentences and wait for the dentist to respond.
+    # The answer should remove "Patient:"
+    #
+    # The information of you is:
+    # ###
+    # {patient_information}
+    # ###
+    # The message that you have already told dentist is:
+    # ###
+    # {known_message}
+    # ###
+    # The dentist's question is:
+    # ###
+    # {dentist_question}
+    # ###
+    # The personality of you is:
+    # ###
+    # {emotion}
+    # ###
+    # The scenario of you is:
+    # ###
+    # {scenario}
+    # ###
+    #
+    # Remember to keep your response relevant to the dentist's question from the patient's perspective.
+    # """
+    #
+    # patient_information = "You are 30 years old with no known allergies."
+    # known_message = "You told the dentist that you have been experiencing tooth pain for two weeks."
+    # emotion = "You are feeling anxious about the procedure."
+    # scenario = "You are at a dentist's office for a root canal consultation."
+    #
+    # prompt_template = ChatPromptTemplate.from_messages([
+    #     HumanMessagePromptTemplate.from_template(prompt)
+    # ])
+    # response = Rag_chain(
+    #     question=question,
+    #     prompt=prompt_template,
+    #     llm=llm,
+    #     OPENAI_API_KEY=OPENAI_API_KEY,
+    #     patient_information=patient_information,
+    #     known_message=known_message,
+    #     emotion=emotion,
+    #     scenario=scenario
+    # )

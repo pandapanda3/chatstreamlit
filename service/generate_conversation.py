@@ -214,11 +214,11 @@ def generate_patient_conversation_with_RAG(patient_information, dentist_question
         including the duration, specific procedures, and pain management options. Additionally, ask about post-procedure care,
         such as recovery time and any dietary or activity restrictions. Finally, discuss preventive measures,
         follow-up arrangements, and cost and insurance coverage.
-        Only respond to the dentist's question without including any unrelated content (in several sentences).
+        Only respond to the dentist's question without including any unrelated content.
         The entire conversation should revolve around inquiring about detailed patient information before performing any actual dental diagnostic procedures.
         The generated dialogue should be coherent and natural, with seamless transitions.
         As the patient visiting a dentist, follow the scenario below to answer the dentist's question in a few sentences from the patient's perspective.
-        It should generate only several sentences and wait for the dentist to respond.
+        It should generate only ONE TO FOUR sentences and wait for the dentist to respond.
         The answer should remove "Patient:"
 
         The information of you is:
