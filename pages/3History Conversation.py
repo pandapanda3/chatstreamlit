@@ -123,7 +123,8 @@ def single_row_selection_callback():
 event = st.dataframe(
     chat_history_data_df,
     on_select=single_row_selection_callback,  # Callback when a row is selected
-    selection_mode="single-row"  # Enable single-row selection
+    selection_mode="single-row",  # Enable single-row selection
+    hide_index=True
 )
 
 # Retrieve selected rows
