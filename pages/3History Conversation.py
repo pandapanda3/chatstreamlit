@@ -129,48 +129,39 @@ event = st.dataframe(
     column_config={
         "session_id": st.column_config.NumberColumn(
             "Chat",
-            help="Tech Details , used for getting chat conversation",
-            width="small"
+            help="Tech Details , used for getting chat conversation"
         ),
         "chat_count": st.column_config.NumberColumn(
             "The number of chat session",
-            help="The number of chats",
-            width="small"
+            help="The number of chats"
         ),
         "user_name": st.column_config.TextColumn(
             "User Name",
-            help="The name of the user",
-            width="medium"
+            help="The name of the user"
         ),
         "scenario": st.column_config.TextColumn(
             "Scenario",
-            help="The Scenario",
-            width="medium"
+            help="The Scenario"
         ),
         "emotion": st.column_config.TextColumn(
             "Emotion",
-            help="The emotion of the patient",
-            width="medium"
+            help="The emotion of the patient"
         ),
         "patient_details": st.column_config.TextColumn(
             "Patient Details",
-            help="Details of the patient",
-            width="large"
+            help="Details of the patient"
         ),
         "conversation_score": st.column_config.NumberColumn(
             "Conversation Score",
-            help="The score of this chat session",
-            width="small"
+            help="The score of this chat session"
         ),
         "performance_feedback": st.column_config.TextColumn(
             "Performance Feedback",
-            help="The feedback of the conversation given by lecturer",
-            width="large"
+            help="The feedback of the conversation given by lecturer"
         ),
         "publish_conversation": st.column_config.NumberColumn(
             "Publish Conversation",
-            help="It determines whether this conversation can be viewed by the admin user. 1 represents published, 0 represents private.",
-            width="small"
+            help="It determines whether this conversation can be viewed by the admin user. 1 represents published, 0 represents private."
         ),
     },
 )
