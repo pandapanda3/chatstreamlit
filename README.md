@@ -43,3 +43,22 @@ The "Ethical_Clearance_Letter.pdf" is in the "book" folder.
 
 ## The Newest Version of the Code
 https://github.com/pandapanda3/chatstreamlit
+
+## Note
+
+When writing dialogues for each character in a document, ensure that the dialogue remains in a single, uninterrupted paragraph without blank lines before continuing.
+For example:
+
+**Avoid:**
+```
+Patient: I brush twice a day, but I rarely floss.
+I know I should do it more often, but I just forget or don’t have the time.
+Dentist: Flossing is crucial for removing food particles and plaque that your toothbrush can’t reach. Do you use any mouthwash?
+```
+
+
+**Correct format:**
+```
+Patient: I brush twice a day, but I rarely floss. I know I should do it more often, but I just forget or don’t have the time.
+Dentist: Flossing is crucial for removing food particles and plaque that your toothbrush can’t reach. Do you use any mouthwash?
+```

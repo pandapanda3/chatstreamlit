@@ -234,63 +234,63 @@ if __name__ == '__main__':
     load_dotenv()
     OPENAI_API_KEY=os.getenv("OPENAI_API_KEY")
     
-    retriever=store_data(OPENAI_API_KEY)
-    # question='Is there anything you not clear and want to ask me today?'
-    #
-    # llm = ChatOpenAI(model="gpt-3.5-turbo", openai_api_key=OPENAI_API_KEY)
-    # prompt="""You are the patient who is going to see a dentist. what you response should base on your personality.
-    # The conversation will base on scenario. If the message has been told (known_message) to the dentist,
-    # and when the dentist repeat again the question, you should explain in detail for your previous response.
-    # When the dentist asks if you have any questions, you might want to inquire about the treatment plan,
-    # including the duration, specific procedures, and pain management options. Additionally, ask about post-procedure care,
-    # such as recovery time and any dietary or activity restrictions. Finally, discuss preventive measures,
-    # follow-up arrangements, and cost and insurance coverage.
-    # Only respond to the dentist's question without including any unrelated content (in several sentences).
-    # The entire conversation should revolve around inquiring about detailed patient information before performing any actual dental diagnostic procedures.
-    # The generated dialogue should be coherent and natural, with seamless transitions.
-    # As the patient visiting a dentist, follow the scenario below to answer the dentist's question in a few sentences from the patient's perspective.
-    # It should generate only several sentences and wait for the dentist to respond.
-    # The answer should remove "Patient:"
-    #
-    # The information of you is:
-    # ###
-    # {patient_information}
-    # ###
-    # The message that you have already told dentist is:
-    # ###
-    # {known_message}
-    # ###
-    # The dentist's question is:
-    # ###
-    # {dentist_question}
-    # ###
-    # The personality of you is:
-    # ###
-    # {emotion}
-    # ###
-    # The scenario of you is:
-    # ###
-    # {scenario}
-    # ###
-    #
-    # Remember to keep your response relevant to the dentist's question from the patient's perspective.
-    # """
-    #
-    # patient_information = "You are 30 years old with no known allergies."
-    # known_message = "You told the dentist that you have been experiencing tooth pain for two weeks."
-    # emotion = "You are feeling anxious about the procedure."
-    # scenario = "You are at a dentist's office for a root canal consultation."
-    #
-    # prompt_template = ChatPromptTemplate.from_messages([
-    #     HumanMessagePromptTemplate.from_template(prompt)
-    # ])
-    # response = Rag_chain(
-    #     question=question,
-    #     prompt=prompt_template,
-    #     llm=llm,
-    #     OPENAI_API_KEY=OPENAI_API_KEY,
-    #     patient_information=patient_information,
-    #     known_message=known_message,
-    #     emotion=emotion,
-    #     scenario=scenario
-    # )
+    # retriever=store_data(OPENAI_API_KEY)
+    question='Is there anything you not clear and want to ask me today?'
+
+    llm = ChatOpenAI(model="gpt-3.5-turbo", openai_api_key=OPENAI_API_KEY)
+    prompt="""You are the patient who is going to see a dentist. what you response should base on your personality.
+    The conversation will base on scenario. If the message has been told (known_message) to the dentist,
+    and when the dentist repeat again the question, you should explain in detail for your previous response.
+    When the dentist asks if you have any questions, you might want to inquire about the treatment plan,
+    including the duration, specific procedures, and pain management options. Additionally, ask about post-procedure care,
+    such as recovery time and any dietary or activity restrictions. Finally, discuss preventive measures,
+    follow-up arrangements, and cost and insurance coverage.
+    Only respond to the dentist's question without including any unrelated content (in several sentences).
+    The entire conversation should revolve around inquiring about detailed patient information before performing any actual dental diagnostic procedures.
+    The generated dialogue should be coherent and natural, with seamless transitions.
+    As the patient visiting a dentist, follow the scenario below to answer the dentist's question in a few sentences from the patient's perspective.
+    It should generate only several sentences and wait for the dentist to respond.
+    The answer should remove "Patient:"
+
+    The information of you is:
+    ###
+    {patient_information}
+    ###
+    The message that you have already told dentist is:
+    ###
+    {known_message}
+    ###
+    The dentist's question is:
+    ###
+    {dentist_question}
+    ###
+    The personality of you is:
+    ###
+    {emotion}
+    ###
+    The scenario of you is:
+    ###
+    {scenario}
+    ###
+
+    Remember to keep your response relevant to the dentist's question from the patient's perspective.
+    """
+
+    patient_information = "You are 30 years old with no known allergies."
+    known_message = "You told the dentist that you have been experiencing tooth pain for two weeks."
+    emotion = "You are feeling anxious about the procedure."
+    scenario = "You are at a dentist's office for a root canal consultation."
+
+    prompt_template = ChatPromptTemplate.from_messages([
+        HumanMessagePromptTemplate.from_template(prompt)
+    ])
+    response = Rag_chain(
+        question=question,
+        prompt=prompt_template,
+        llm=llm,
+        OPENAI_API_KEY=OPENAI_API_KEY,
+        patient_information=patient_information,
+        known_message=known_message,
+        emotion=emotion,
+        scenario=scenario
+    )
