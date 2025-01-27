@@ -94,10 +94,11 @@ I’m a recent graduate from the **Department of Informatics**. It’s a pleasur
 Thank you for your cooperation!
 """)
 
-current_dir = os.getcwd()
-st.write(f"Current working directory: {current_dir}")
-current_dir = os.path.dirname(os.path.abspath(__file__))
-image_path = os.path.join(current_dir, "platform_qr_code.png")
-st.write(f"Current image_path : {image_path}")
-st.image(image_path, caption="QR Code for Platform", width=30)
-st.image('/chatstreamlit/platform_qr_code.png', caption="QR Code for Platform", width=30)
+# current_dir = os.getcwd()
+# st.write(f"Current working directory: {current_dir}")
+# current_dir = os.path.dirname(os.path.abspath(__file__))
+# image_path = os.path.join(current_dir, "platform_qr_code.png")
+# st.write(f"Current image_path : {image_path}")
+# st.image(image_path, caption="QR Code for Platform", width=30)
+st.image('/chatstreamlit/platform_qr_code.png', caption="QR Code for Platform", width=60)
+st.image('/chatstreamlit/platform_qr_code.png', caption="QR Code for Questionnaire", width=60)
