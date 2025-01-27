@@ -128,6 +128,16 @@ jobs
 fg %1
 ### Stop the Task
 press `Ctrl+C` to stop it
+### Verify that the service has stopped
+Run the following command, and if there is no related output, it indicates that the service has been successfully stopped.
+
+`ps aux | grep streamlit`
+
+If it has not yet stopped, terminate the process by running:
+
+`kill <PID>`
+
+Replace <PID> with the Process ID of the Streamlit service.
 
 # Langchain
 ## set up environment
