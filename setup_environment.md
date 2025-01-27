@@ -113,6 +113,22 @@ Import data into the emotion table and the scenario table
 
 http://18.133.23.50:8501
 
+## turn on service
+sudo su
+python3 -m venv venv
+source venv/bin/activate
+
+streamlit run chatstreamlit/login.py
+nohup streamlit run chatstreamlit/login.py &
+
+### Check Background Tasks
+jobs
+
+### Bring the Task to the Foreground
+fg %1
+### Stop the Task
+press `Ctrl+C` to stop it
+
 # Langchain
 ## set up environment
 {your_env} can be check by `conda env list`

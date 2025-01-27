@@ -67,3 +67,33 @@ if not st.session_state.get('logged_in', False):
                 st.error("Make sure you input the correct Username and Student Number, or ensure that you have registered.")
 else:
     st.write("You are already logged in.")
+
+st.markdown("""
+# Hi everyone,
+
+I’m a recent graduate from the **Department of Informatics**. It’s a pleasure to see you all using this platform. I hope everyone can actively share their valuable suggestions.
+
+---
+
+### **Important Notes:**
+
+1. Using this platform on a computer offers a more user-friendly experience. When accessing the platform on a mobile device, navigate to the Communication Page and click the button in the top-left corner to open the sidebar, where you can view patient details and other information.
+
+2. If you encounter instances where the chatbot simulates a dentist’s tone during conversations, or if you discover other bugs:
+   - Please try logging out and then logging back in to see if the issue persists.
+   - If the problem continues, you can provide feedback via the suggestion box on your **profile page**.
+     Make sure to include:
+     - Details about the actions you took.
+     - The errors you encountered.
+
+3. Before you leave, we kindly ask you to:
+   - Scan the QR code on the right.
+   - Provide your feedback through the **AI-based portal evaluation questionnaire**.
+
+---
+
+Thank you for your cooperation!
+""")
+
+
+st.image('../src/platform_qr_code.png', caption="QR Code for Platform", use_container_width=True)
