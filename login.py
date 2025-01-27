@@ -96,5 +96,5 @@ Thank you for your cooperation!
 """)
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
-image_path = os.path.join(current_dir, "../src/platform_qr_code.png")
+image_path = os.path.join(current_dir, "/src/platform_qr_code.png")
 st.image(image_path, caption="QR Code for Platform", use_container_width=True)
