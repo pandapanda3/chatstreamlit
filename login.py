@@ -1,7 +1,7 @@
 import streamlit as st
 from navigation import make_sidebar
 from service.information_from_mysql import authenticate_user, create_user, update_password, existing_user
-
+import os
 if st.session_state.get('logged_in', False):
     make_sidebar()
 
@@ -94,4 +94,9 @@ I’m a recent graduate from the **Department of Informatics**. It’s a pleasur
 Thank you for your cooperation!
 """)
 
-st.image('platform_qr_code.png', caption="QR Code for Platform", use_container_width=True)
+current_dir = os.getcwd()
+st.write(f"Current working directory: {current_dir}")
+current_dir = os.path.dirname(os.path.abspath(__file__))
+image_path = os.path.join(current_dir, "platform_qr_code.png")
+st.write(f"Current image_path : {image_path}")
+st.image(image_path, caption="QR Code for Platform", use_container_width=True)
