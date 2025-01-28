@@ -68,9 +68,7 @@ else:
     st.write("You are already logged in.")
 
 st.markdown("""
-# Hi everyone,
-
-I’m a recent graduate from the **Department of Informatics**. It’s a pleasure to see you all using this platform. I hope everyone can actively share their valuable suggestions.
+Hi everyone, I’m a recent graduate from the **Department of Informatics**. It’s a pleasure to see you all using this platform. I hope everyone can actively share their valuable suggestions.
 
 ---
 
@@ -103,5 +101,4 @@ questionnaire_image_path = os.path.join(current_dir, "questionnaire_qr_code.png"
 
 print(f"Current image_path : {platform_image_path}")
 st.sidebar.image(platform_image_path, caption="QR Code for Platform", width=200)
-# st.image('/chatstreamlit/platform_qr_code.png', caption="QR Code for Platform", width=60)
 st.sidebar.image(platform_image_path, caption="QR Code for Questionnaire", width=200)
