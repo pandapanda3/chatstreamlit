@@ -101,4 +101,4 @@ questionnaire_image_path = os.path.join(current_dir, "questionnaire_qr_code.png"
 
 print(f"Current image_path : {platform_image_path}")
 st.sidebar.image(platform_image_path, caption="QR Code for Platform", width=200)
-st.sidebar.image(platform_image_path, caption="QR Code for Questionnaire", width=200)
+st.sidebar.image(questionnaire_image_path, caption="QR Code for Questionnaire", width=200)
