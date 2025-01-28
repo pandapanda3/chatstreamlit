@@ -102,6 +102,6 @@ platform_image_path = os.path.join(current_dir, "platform_qr_code.png")
 questionnaire_image_path = os.path.join(current_dir, "questionnaire_qr_code.png")
 
 print(f"Current image_path : {platform_image_path}")
-st.image(platform_image_path, caption="QR Code for Platform", width=100)
+st.image(platform_image_path, caption="QR Code for Platform", width=200)
 # st.image('/chatstreamlit/platform_qr_code.png', caption="QR Code for Platform", width=60)
-st.image('platform_image_path', caption="QR Code for Questionnaire", width=100)
+st.image(platform_image_path, caption="QR Code for Questionnaire", width=200)
