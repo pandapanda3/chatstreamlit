@@ -86,7 +86,7 @@ I’m a recent graduate from the **Department of Informatics**. It’s a pleasur
      - The errors you encountered.
 
 3. Before you leave, we kindly ask you to:
-   - Scan the QR code on the right.
+   - Scan the QR code of the questionnaire.
    - Provide your feedback through the **AI-based portal evaluation questionnaire**.
 
 ---
@@ -98,9 +98,10 @@ current_dir = os.getcwd()
 print(f"Current working directory: {current_dir}")
 current_dir = os.path.dirname(os.path.abspath(__file__))
 print(f"second working directory: {current_dir}")
-image_path = os.path.join(current_dir, "platform_qr_code.png")
+platform_image_path = os.path.join(current_dir, "platform_qr_code.png")
+questionnaire_image_path = os.path.join(current_dir, "questionnaire_qr_code.png")
 
-print(f"Current image_path : {image_path}")
-st.image(image_path, caption="QR Code for Platform", width=60)
+print(f"Current image_path : {platform_image_path}")
+st.image(platform_image_path, caption="QR Code for Platform", width=100)
 # st.image('/chatstreamlit/platform_qr_code.png', caption="QR Code for Platform", width=60)
-st.image('/chatstreamlit/platform_qr_code.png', caption="QR Code for Questionnaire", width=60)
+st.image('platform_image_path', caption="QR Code for Questionnaire", width=100)
