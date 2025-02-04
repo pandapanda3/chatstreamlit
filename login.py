@@ -68,7 +68,7 @@ else:
     st.write("You are already logged in.")
 
 st.markdown("""
-Hi everyone, I’m a recent graduate from the **Department of Informatics**. It’s a pleasure to see you all using this platform. I hope everyone can actively share their valuable suggestions.
+Hi everyone, I’m a recent graduate from the **Department of Informatics**. It’s a pleasure to see you all using this platform. I hope everyone can actively share their valuable suggestions. In this platform, **you** will act as the **dentist**, and the **AI** will play the role of the **patient**.
 
 ---
 
@@ -86,6 +86,12 @@ Hi everyone, I’m a recent graduate from the **Department of Informatics**. It�
 3. Before you leave, we kindly ask you to:
    - Scan the QR code of the questionnaire.
    - Provide your feedback through the **AI-based portal evaluation questionnaire**.
+   
+4. **Potential Bugs**:
+
+    - After logging in, if you encounter a duplicate primary key issue when entering the Communication Page, please log out and log back in. Sometimes, this issue may occur multiple times; just log out and log in again.
+    - Occasionally, during a conversation, the model may take on the role of a dentist. Just ignore it and continue asking questions about the patient's symptoms.
+    - If the model keeps repeating previous questions or providing meaningless responses, try logging out and logging back in.
 
 ---
 
