@@ -106,5 +106,8 @@ platform_image_path = os.path.join(current_dir, "platform_qr_code.png")
 questionnaire_image_path = os.path.join(current_dir, "questionnaire_qr_code.png")
 
 print(f"Current image_path : {platform_image_path}")
-st.sidebar.image(platform_image_path, caption="QR Code for Platform", width=200)
-st.sidebar.image(questionnaire_image_path, caption="QR Code for Questionnaire", width=200)
+st.sidebar.image(platform_image_path,  width=200)
+st.sidebar.markdown(f"[Click here to visit the Platform](http://18.133.23.50:8501/)", unsafe_allow_html=True)
+
+st.sidebar.image(questionnaire_image_path, width=200)
+st.sidebar.markdown(f"[Click here to fill out the Questionnaire](https://forms.office.com/Pages/ResponsePage.aspx?id=FM9wg_MWFky4PHJAcWVDVjmQyI33t55Ch-24lIq1xThURFkyTEE4SjVWRkpHMzJKREQzTk0wSFlMVC4u&origin=QRCode)", unsafe_allow_html=True)
