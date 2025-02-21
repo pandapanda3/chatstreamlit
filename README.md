@@ -18,9 +18,8 @@ Current pages include:
 - Admin Page
 
 ## Where to Acess It?
-1. Open the link of http://3.8.0.20:8501/ (When the service is up and running)
-2. Open the link and click the button of Open app: https://dashboard.heroku.com/apps/chatstreamlit (The platform is about to be deleted.)
-
+Open the link of http://18.133.23.50:8501/ (When the service is up and running)
+Or just scan the QR code in the platform.
 ## How to Setup the Environment?
 Refer to the 'Setting Up The Environment' section in the report
 
