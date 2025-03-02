@@ -1,6 +1,6 @@
 from service.mysql import get_connection
 import bcrypt
-
+from service.locker_manager import session_id_lock, insert_chat_history_lock
 def authenticate_user(username, password, student_number):
     connection = get_connection()
     try:
@@ -157,15 +157,15 @@ def get_largest_chat_number(user_id):
 def insert_user_chat_history(user_id, user_name, chat_count, patient_details, session_id):
     value = (user_id, user_name, chat_count, patient_details, session_id)
     connection = get_connection()
-    
-    try:
-        with connection.cursor() as cursor:
-            sql = "INSERT INTO user_chat_history (user_id, user_name, chat_count, patient_details, session_id) VALUES (%s, %s, %s, %s, %s)"
-            cursor.execute(sql, value)
-            connection.commit()
-    
-    finally:
-        connection.close()
+    with insert_chat_history_lock:
+        try:
+            with connection.cursor() as cursor:
+                sql = "INSERT INTO user_chat_history (user_id, user_name, chat_count, patient_details, session_id) VALUES (%s, %s, %s, %s, %s)"
+                cursor.execute(sql, value)
+                connection.commit()
+        
+        finally:
+            connection.close()
 
 
 # update the information of the conversation of a session
@@ -187,20 +187,21 @@ def update_user_chat_history(user_id, user_name, chat_count, certain_column_name
 
 # generate session id
 def generate_session_id():
-    connection = get_connection()
-    try:
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT MAX(session_id) FROM chat_records")
-            result = cursor.fetchone()
-            print(f'')
-            if result and len(result) > 0:
-                max_session_id = result[0] if result[0] is not None else 0
-            else:
-                max_session_id = 0
-            print(f'generate session id is {max_session_id + 1}')
-            return max_session_id + 1
-    finally:
-        connection.close()
+    with session_id_lock:
+        connection = get_connection()
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT MAX(session_id) FROM chat_records")
+                result = cursor.fetchone()
+                print(f'')
+                if result and len(result) > 0:
+                    max_session_id = result[0] if result[0] is not None else 0
+                else:
+                    max_session_id = 0
+                print(f'generate session id is {max_session_id + 1}')
+                return max_session_id + 1
+        finally:
+            connection.close()
         
 #  Fetch data from user_chat_history
 def fetch_chat_history_data(user_id,role):
