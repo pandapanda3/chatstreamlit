@@ -20,7 +20,7 @@ def define_model(openai_api_key=""):
     llm = ChatOpenAI(temperature=0.8, model=llm_model, openai_api_key=openai_api_key)
     return llm
 
-# retrive information from document
+# retrive greeting information from document
 def retrive_document(prompt, dentist_input, openai_api_key=""):
     llm = define_model(openai_api_key)
     retriever = store_data(openai_api_key)
@@ -37,7 +37,7 @@ def retrive_document(prompt, dentist_input, openai_api_key=""):
     rag_document_prompt_chain = create_retrieval_chain(retriever, document_prompt_chain)
     document_answer = rag_document_prompt_chain.invoke({"input": dentist_input})
     answer = document_answer['answer']
-    print(f'The chain is {document_answer}. After retrive the document, the answer is {answer}')
+    print(f'The chain is {document_answer}. After retrieve the document, the answer is {answer}')
     return answer
 
 # generate the greeting answer
@@ -218,7 +218,7 @@ def generate_patient_conversation_with_RAG(patient_information, dentist_question
         The entire conversation should revolve around inquiring about detailed patient information before performing any actual dental diagnostic procedures.
         The generated dialogue should be coherent and natural, with seamless transitions.
         As the patient visiting a dentist, follow the scenario below to answer the dentist's question in a few sentences from the patient's perspective.
-        It should generate only ONE TO FOUR sentences and wait for the dentist to respond.
+        
         The answer should remove "Patient:"
 
         The information of you is:
@@ -306,4 +306,3 @@ def generate_patient_Symptoms(openai_api_key=""):
 if __name__ == '__main__':
     dentist_question = 'I see, thank you for letting me know. Before we proceed with any diagnostic procedures, may I ask for some detailed information about your health?'
     openai_api_key = 'your_openai_api_key'
-    

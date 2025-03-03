@@ -21,7 +21,7 @@ st.title("💬 Communication")
 current_user = st.session_state.get('user_info', {"user_id": None, "username": "unknown", "role": "normal"})
 user_id = current_user["user_id"]
 username = current_user["username"]
-print(f'st.session_state is :{st.session_state}')
+print(f'st.session_state in communicaction.py is :{st.session_state}')
 
 # Initialization value
 if "messages" not in st.session_state or not st.session_state["messages"]:
@@ -63,11 +63,9 @@ def get_feedback():
         feedback_score = st.session_state.feedback['score']
         
         if feedback_score == '👍':
-            print(f'insert good')
             update_quality_of_each_message(session_id, user_id, message_id, 'good')
         elif feedback_score == '👎':
             update_quality_of_each_message(session_id, user_id, message_id, 'bad')
-            print(f'insert bad')
     else:
         st.toast(":red[ Please provide feedback by clicking thumbs up or thumbs down. ]", icon="⚠️")
 

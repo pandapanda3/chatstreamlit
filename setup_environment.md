@@ -139,6 +139,10 @@ If it has not yet stopped, terminate the process by running:
 
 Replace <PID> with the Process ID of the Streamlit service.
 
+# UPDATE THE CODE:
+sudo rm -rf chatstreamlit
+git clone https://github.com/pandapanda3/chatstreamlit.git
+
 # Langchain
 ## set up environment
 {your_env} can be check by `conda env list`

@@ -18,7 +18,7 @@ Current pages include:
 - Admin Page
 
 ## Where to Acess It?
-Open the link of http://18.133.23.50:8501/ (When the service is up and running)
+Open the link of http://18.133.23.50:8501 (When the service is up and running)
 Or just scan the QR code in the platform.
 ## How to Setup the Environment?
 Refer to the 'Setting Up The Environment' section in the report
